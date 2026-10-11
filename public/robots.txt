@@ -1,0 +1,19 @@
+# User-agent rules for Mastergas Saudi Arabia Search Optimization
+User-agent: *
+Allow: /
+Allow: /products
+Allow: /offers
+Allow: /about
+Allow: /contact
+Allow: /product/*
+
+# Disallow private user & admin paths
+Disallow: /admin/
+Disallow: /admin
+Disallow: /cart
+Disallow: /checkout
+Disallow: /profile
+Disallow: /payment/
+
+# Sitemap Location
+Sitemap: https://mastergas.sa/sitemap.xml

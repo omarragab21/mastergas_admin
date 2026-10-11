@@ -1,0 +1,2156 @@
+{
+  "generated_at": "2026-10-05T10:02:23.365Z",
+  "source": "https://backend-mastergas.be-kite.com/api",
+  "products": [
+    {
+      "id": "25",
+      "name": "Mastergas 90cm Italian Built-in Gas Oven Full Safety Rotisserie",
+      "name_i18n": {
+        "ar": "فرن غاز مدمج إيطالي ماسترجاز 90 سم أمان كامل شواية دوارة",
+        "en": "Mastergas 90cm Italian Built-in Gas Oven Full Safety Rotisserie"
+      },
+      "description": "Luxury 90cm 85L Italian built-in gas oven featuring fingerprint-proof stainless steel, dual reflective glass door, instant flame failure safety, and motorized rotisserie turnspit.",
+      "description_i18n": {
+        "ar": "فرن غاز مدمج إيطالي فاخر مقاس 90 سم سعة 85 لتر، مصنع من الستانلس ستيل المقاوم للبصمات مع زجاج عاكس مزدوج، أمان إيطالي كامل فوري، إشعال إلكتروني وشواية دائرية دوارة متطورة.",
+        "en": "Luxury 90cm 85L Italian built-in gas oven featuring fingerprint-proof stainless steel, dual reflective glass door, instant flame failure safety, and motorized rotisserie turnspit."
+      },
+      "category_id": 57,
+      "subcategory_id": null,
+      "category": "Gas Stoves & Built-in Hobs",
+      "category_parent_id": null,
+      "subcategory": null,
+      "brand": null,
+      "price": 3899,
+      "discount": "1364.65",
+      "stock": 25,
+      "quantity": 25,
+      "sales": 0,
+      "status": "active",
+      "is_featured": false,
+      "images": [
+        "/local-assets/products/25-cover.jpg",
+        "/local-assets/products/25-2.jpg",
+        "/local-assets/products/25-3.jpg"
+      ],
+      "image": "/local-assets/products/25-cover.jpg",
+      "attributes": {
+        "السعة": [
+          "85 لتر",
+          "65 لتر",
+          "10 لتر / دقيقة",
+          "5 شعلات غاز",
+          "4 شعلات غاز"
+        ],
+        "العرض": [
+          "89.5 سم",
+          "135 سم"
+        ],
+        "العمق": [
+          "56 سم"
+        ],
+        "الألوان": [
+          "أسود ملكي|#111827",
+          "فضي|#9ca3af",
+          "أسود ملكي / فضي|#111827",
+          "أبيض|#ffffff",
+          "ستانلس ستيل|#111827"
+        ],
+        "الارتفاع": [
+          "59.5 سم",
+          "12 سم",
+          "4.5 سم",
+          "70-105 سم",
+          "55 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "غاز طبيعي / مسال"
+        ],
+        "صمام الأمان": [
+          "أمان كامل فوري"
+        ],
+        "وظائف الطهي": [
+          "6 وظائف",
+          "7 وظائف",
+          "4 وظائف"
+        ],
+        "نظام الإشعال": [
+          "أوتوماتيكي عند فتح صنبور المياه",
+          "إلكتروني مدمج بالمفتاح",
+          "إلكتروني ذاتي"
+        ],
+        "المؤقت الرقمي": [
+          "شاشة رقمية LED"
+        ],
+        "الجهد الكهربائي": [
+          "220-240 فولت"
+        ]
+      },
+      "color_options": [
+        "أسود ملكي|#111827",
+        "فضي|#9ca3af",
+        "أسود ملكي / فضي|#111827",
+        "أبيض|#ffffff",
+        "ستانلس ستيل|#111827"
+      ],
+      "size_options": [],
+      "raw_attributes": {
+        "السعة": [
+          "85 لتر",
+          "65 لتر",
+          "10 لتر / دقيقة",
+          "5 شعلات غاز",
+          "4 شعلات غاز"
+        ],
+        "العرض": [
+          "89.5 سم",
+          "135 سم"
+        ],
+        "العمق": [
+          "56 سم"
+        ],
+        "الألوان": [
+          "أسود ملكي|#111827",
+          "فضي|#9ca3af",
+          "أسود ملكي / فضي|#111827",
+          "أبيض|#ffffff",
+          "ستانلس ستيل|#111827"
+        ],
+        "الارتفاع": [
+          "59.5 سم",
+          "12 سم",
+          "4.5 سم",
+          "70-105 سم",
+          "55 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "غاز طبيعي / مسال"
+        ],
+        "صمام الأمان": [
+          "أمان كامل فوري"
+        ],
+        "وظائف الطهي": [
+          "6 وظائف",
+          "7 وظائف",
+          "4 وظائف"
+        ],
+        "نظام الإشعال": [
+          "أوتوماتيكي عند فتح صنبور المياه",
+          "إلكتروني مدمج بالمفتاح",
+          "إلكتروني ذاتي"
+        ],
+        "المؤقت الرقمي": [
+          "شاشة رقمية LED"
+        ],
+        "الجهد الكهربائي": [
+          "220-240 فولت"
+        ]
+      },
+      "features": "Spacious 85L cavity capacity for large family meals\nMotorized rotisserie for even professional browning\nInstantaneous Italian flame safety shutdown system\n3D Turbo convection fan for rapid heat distribution\nSmart digital LED timer display\nTriple-glazed cool-touch glass door",
+      "features_i18n": {
+        "ar": "سعة داخلية عملاقة 85 لتر تكفي للعزائم الكبيرة\nشواية دائرية دوارة لتحمير متساوي واحترافي\nنظام أمان إيطالي كامل يقطع الغاز فور انطفاء اللهب\nمروحة توزيع حراري تيربو ثلاثية الأبعاد\nشاشة ديجيتال LED مع مؤقت ذكي لضبط وقت الطهي\nباب زجاجي ثلاثي الطبقات بارد الملمس من الخارج",
+        "en": "Spacious 85L cavity capacity for large family meals\nMotorized rotisserie for even professional browning\nInstantaneous Italian flame safety shutdown system\n3D Turbo convection fan for rapid heat distribution\nSmart digital LED timer display\nTriple-glazed cool-touch glass door"
+      },
+      "tips": "Preheat the oven for 10 minutes prior to baking for optimal and uniform results.",
+      "tips_i18n": {
+        "ar": "ينصح بتسخين الفرن مسبقاً لمدة 10 دقائق قبل إدخال الصواني لضمان نضج متجانس.",
+        "en": "Preheat the oven for 10 minutes prior to baking for optimal and uniform results."
+      },
+      "additionalInfo": "",
+      "shipping_info": "Free express delivery, certified Mastergas installation, and 3-year full warranty.",
+      "shipping_info_i18n": {
+        "ar": "شحن مجاني سريع مع خدمة التركيب المعتمدة من ماسترجاز وضمان 3 سنوات.",
+        "en": "Free express delivery, certified Mastergas installation, and 3-year full warranty."
+      },
+      "sku": "MG-OVEN90-LUX",
+      "created_at": "2026-10-01 12:13:33",
+      "updated_at": "2026-10-01 13:58:21"
+    },
+    {
+      "id": "26",
+      "name": "Mastergas 90cm 5-Burner Tempered Glass Built-in Gas Hob with Wok",
+      "name_i18n": {
+        "ar": "مسطح غاز زجاجي بلت إن ماسترجاز 5 شعلات 90 سم مع شعلة ووك",
+        "en": "Mastergas 90cm 5-Burner Tempered Glass Built-in Gas Hob with Wok"
+      },
+      "description": "Premium 90cm 5-burner tempered black glass built-in gas hob equipped with a powerful triple-flame wok burner, heavy cast-iron supports, and automatic safety valves.",
+      "description_i18n": {
+        "ar": "مسطح غاز بلت إن فاخر 90 سم مصنوع من الزجاج الحراري المقسّى الأسود المقاوم للصدمات، 5 شعلات غاز متطورة مع شعلة ووك ثلاثية وحوامل حديد زهر ثقيلة وأمان كامل.",
+        "en": "Premium 90cm 5-burner tempered black glass built-in gas hob equipped with a powerful triple-flame wok burner, heavy cast-iron supports, and automatic safety valves."
+      },
+      "category_id": 57,
+      "subcategory_id": null,
+      "category": "Gas Stoves & Built-in Hobs",
+      "category_parent_id": null,
+      "subcategory": null,
+      "brand": null,
+      "price": 2349,
+      "discount": "822.15",
+      "stock": 30,
+      "quantity": 30,
+      "sales": 0,
+      "status": "active",
+      "is_featured": false,
+      "images": [
+        "/local-assets/products/26-cover.jpg",
+        "/local-assets/products/26-2.jpg",
+        "/local-assets/products/26-3.jpg"
+      ],
+      "image": "/local-assets/products/26-cover.jpg",
+      "attributes": {
+        "السعة": [
+          "5 شعلات غاز"
+        ],
+        "العرض": [
+          "86 سم"
+        ],
+        "العمق": [
+          "51 سم"
+        ],
+        "الألوان": [
+          "أسود ملكي",
+          "ستانلس ستيل"
+        ],
+        "الارتفاع": [
+          "5 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "غاز مسال"
+        ],
+        "صمام الأمان": [
+          "حماية ثلاثية متكاملة"
+        ],
+        "نظام الإشعال": [
+          "إلكتروني أوتوماتيكي فوري"
+        ],
+        "اللون والمظهر": [
+          "زجاج حراري مقسّى أسود"
+        ],
+        "المؤقت الرقمي": [
+          "لا"
+        ],
+        "الجهد الكهربائي": [
+          "220-240 فولت"
+        ]
+      },
+      "color_options": [
+        "أسود ملكي",
+        "ستانلس ستيل"
+      ],
+      "size_options": [],
+      "raw_attributes": {
+        "السعة": [
+          "5 شعلات غاز"
+        ],
+        "العرض": [
+          "86 سم"
+        ],
+        "العمق": [
+          "51 سم"
+        ],
+        "الألوان": [
+          "أسود ملكي",
+          "ستانلس ستيل"
+        ],
+        "الارتفاع": [
+          "5 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "غاز مسال"
+        ],
+        "صمام الأمان": [
+          "حماية ثلاثية متكاملة"
+        ],
+        "نظام الإشعال": [
+          "إلكتروني أوتوماتيكي فوري"
+        ],
+        "اللون والمظهر": [
+          "زجاج حراري مقسّى أسود"
+        ],
+        "المؤقت الرقمي": [
+          "لا"
+        ],
+        "الجهد الكهربائي": [
+          "220-240 فولت"
+        ]
+      },
+      "features": "Heavy-duty 8mm tempered scratch-resistant thermal glass\nTriple-flame 4.2kW high-output wok burner\nHeavy-duty cast iron pan supports for absolute stability\nIntegrated triple safety protection with instant cutoff\nAutomatic one-touch knob ignition",
+      "features_i18n": {
+        "ar": "زجاج حراري أسود مقسّى مقاوم للحرارة والخدش 8 مم\nشعلة ووك ثلاثية التاج بقدرة 4.2kW للطهي فائق السرعة\nشبك ثقيل من حديد الزهر يوفر أقصى ثبات للأواني\nنظام حماية ثلاثية متكاملة لقطع الغاز الفوري\nإشعال إلكتروني أوتوماتيكي فوري مدمج بالمقابض",
+        "en": "Heavy-duty 8mm tempered scratch-resistant thermal glass\nTriple-flame 4.2kW high-output wok burner\nHeavy-duty cast iron pan supports for absolute stability\nIntegrated triple safety protection with instant cutoff\nAutomatic one-touch knob ignition"
+      },
+      "tips": "Use a soft microfiber cloth to clean the glass surface once cooled to maintain its pristine shine.",
+      "tips_i18n": {
+        "ar": "استخدم قطعة قماش ميكروفايبر ناعمة لتنظيف السطح الزجاجي بعد أن يبرد للحفاظ على لمعانه.",
+        "en": "Use a soft microfiber cloth to clean the glass surface once cooled to maintain its pristine shine."
+      },
+      "additionalInfo": "",
+      "shipping_info": "Insured shipping across the Kingdom with a comprehensive 2-year warranty.",
+      "shipping_info_i18n": {
+        "ar": "شحن آمن لكافة مناطق المملكة مع ضمان شامل لمدة سنتين.",
+        "en": "Insured shipping across the Kingdom with a comprehensive 2-year warranty."
+      },
+      "sku": "MG-HOB90-5B-GLASS",
+      "created_at": "2026-10-01 12:13:36",
+      "updated_at": "2026-10-01 12:13:36"
+    },
+    {
+      "id": "27",
+      "name": "Mastergas 90cm Italian Pyramid Cooker Hood 1200 m³/h Suction",
+      "name_i18n": {
+        "ar": "شفاط مطبخ هرمي إيطالي ماسترجاز 90 سم بقوة شفط 1200 م³/ساعة",
+        "en": "Mastergas 90cm Italian Pyramid Cooker Hood 1200 m³/h Suction"
+      },
+      "description": "Mastergas 90cm Italian pyramid chimney hood with heavy 1200 m³/h suction capacity, washable 5-layer aluminum filters, dual LED lighting, and digital temperature indicator.",
+      "description_i18n": {
+        "ar": "شفاط مطبخ هرمي جداري 90 سم بتصميم إيطالي عصري ومحرك توربيني قوي بقوة سحب 1200 م³/ساعة، فلاتر ألمنيوم 5 طبقات قابلة للغسيل وإضاءة LED نقية ومؤشر حرارة رقمي.",
+        "en": "Mastergas 90cm Italian pyramid chimney hood with heavy 1200 m³/h suction capacity, washable 5-layer aluminum filters, dual LED lighting, and digital temperature indicator."
+      },
+      "category_id": 57,
+      "subcategory_id": null,
+      "category": "Gas Stoves & Built-in Hobs",
+      "category_parent_id": null,
+      "subcategory": null,
+      "brand": null,
+      "price": 1799,
+      "discount": "629.65",
+      "stock": 20,
+      "quantity": 20,
+      "sales": 0,
+      "status": "active",
+      "is_featured": false,
+      "images": [
+        "/local-assets/products/27-cover.jpg",
+        "/local-assets/products/27-2.jpg",
+        "/local-assets/products/27-3.jpg"
+      ],
+      "image": "/local-assets/products/27-cover.jpg",
+      "attributes": {
+        "السعة": [
+          "قوة شفط 1200 م³/ساعة"
+        ],
+        "العرض": [
+          "90 سم"
+        ],
+        "العمق": [
+          "50 سم"
+        ],
+        "الألوان": [
+          "فضي",
+          "ستانلس ستيل"
+        ],
+        "الارتفاع": [
+          "115 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "كهرباء 230 واط"
+        ],
+        "صمام الأمان": [
+          "أمان كامل"
+        ],
+        "اللون والمظهر": [
+          "ستانلس ستيل وأسود"
+        ],
+        "المؤقت الرقمي": [
+          "مؤشر حرارة رقمي"
+        ],
+        "الجهد الكهربائي": [
+          "220-240 فولت"
+        ]
+      },
+      "color_options": [
+        "فضي",
+        "ستانلس ستيل"
+      ],
+      "size_options": [],
+      "raw_attributes": {
+        "السعة": [
+          "قوة شفط 1200 م³/ساعة"
+        ],
+        "العرض": [
+          "90 سم"
+        ],
+        "العمق": [
+          "50 سم"
+        ],
+        "الألوان": [
+          "فضي",
+          "ستانلس ستيل"
+        ],
+        "الارتفاع": [
+          "115 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "كهرباء 230 واط"
+        ],
+        "صمام الأمان": [
+          "أمان كامل"
+        ],
+        "اللون والمظهر": [
+          "ستانلس ستيل وأسود"
+        ],
+        "المؤقت الرقمي": [
+          "مؤشر حرارة رقمي"
+        ],
+        "الجهد الكهربائي": [
+          "220-240 فولت"
+        ]
+      },
+      "features": "Ultra-powerful turbo blower extracting 1200 m³/h\n3 speed settings plus intensive boost mode\n5-layer washable aluminum grease filters\nDual energy-efficient bright white LED spots\nDigital touch interface with temperature readout",
+      "features_i18n": {
+        "ar": "محرك توربيني فائق القوة لسحب 1200 متر مكعب/ساعة\n3 سرعات تشغيل مع خاصية التربو المكثف\nفلاتر ألمنيوم خماسية الطبقات لحجز الدهون بنسبة 99%\nإضاءة LED بيضاء ساطعة موفرة للطاقة\nشاشة تحكم ديجيتال مع مؤشر حرارة رقمي",
+        "en": "Ultra-powerful turbo blower extracting 1200 m³/h\n3 speed settings plus intensive boost mode\n5-layer washable aluminum grease filters\nDual energy-efficient bright white LED spots\nDigital touch interface with temperature readout"
+      },
+      "tips": "Wash aluminum filters monthly in the dishwasher for maximum extraction efficiency.",
+      "tips_i18n": {
+        "ar": "اغسل الفلاتر في غسالة الأطباق مرة كل شهر للحفاظ على كفاءة الشفط القصوى.",
+        "en": "Wash aluminum filters monthly in the dishwasher for maximum extraction efficiency."
+      },
+      "additionalInfo": "",
+      "shipping_info": "Express delivery with chimney ducting kit included and 2-year warranty.",
+      "shipping_info_i18n": {
+        "ar": "توصيل سريع مع كافة ملحقات التركيب والمدخنة وضمان سنتان.",
+        "en": "Express delivery with chimney ducting kit included and 2-year warranty."
+      },
+      "sku": "MG-HOOD90-PYRAMID",
+      "created_at": "2026-10-01 12:13:39",
+      "updated_at": "2026-10-01 12:13:39"
+    },
+    {
+      "id": "28",
+      "name": "Mastergas 60cm 4-Burner Built-in Stainless Steel Gas Hob",
+      "name_i18n": {
+        "ar": "مسطح غاز ستانلس ستيل بلت إن ماسترجاز 4 شعلات 60 سم",
+        "en": "Mastergas 60cm 4-Burner Built-in Stainless Steel Gas Hob"
+      },
+      "description": "Compact 60cm 4-burner built-in gas hob engineered from premium 304 stainless steel, featuring cast-iron grids, one-hand knob ignition, and certified safety valves.",
+      "description_i18n": {
+        "ar": "مسطح غاز مدمج 60 سم من الستانلس ستيل المقاوم للصدأ 304، يحتوي على 4 شعلات غاز إيطالية متوازنة، حوامل حديد زهر صلبة، إشعال إلكتروني مدمج بالمفتاح وصمامات أمان كاملة معتمدة.",
+        "en": "Compact 60cm 4-burner built-in gas hob engineered from premium 304 stainless steel, featuring cast-iron grids, one-hand knob ignition, and certified safety valves."
+      },
+      "category_id": 57,
+      "subcategory_id": null,
+      "category": "Gas Stoves & Built-in Hobs",
+      "category_parent_id": null,
+      "subcategory": null,
+      "brand": null,
+      "price": 1499,
+      "discount": "524.65",
+      "stock": 35,
+      "quantity": 35,
+      "sales": 0,
+      "status": "active",
+      "is_featured": false,
+      "images": [
+        "/local-assets/products/28-cover.jpg",
+        "/local-assets/products/28-2.jpg",
+        "/local-assets/products/28-3.jpg"
+      ],
+      "image": "/local-assets/products/28-cover.jpg",
+      "attributes": {
+        "السعة": [
+          "4 شعلات غاز"
+        ],
+        "العرض": [
+          "58 سم"
+        ],
+        "العمق": [
+          "50 سم"
+        ],
+        "الألوان": [
+          "ستانلس ستيل|#111827",
+          "أسود ملكي|#111827"
+        ],
+        "الارتفاع": [
+          "4.5 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "غاز طبيعي / مسال"
+        ],
+        "صمام الأمان": [
+          "صمامات أمان معتمدة"
+        ],
+        "نظام الإشعال": [
+          "إلكتروني مدمج بالمفتاح"
+        ],
+        "الجهد الكهربائي": [
+          "220-240 فولت"
+        ]
+      },
+      "color_options": [
+        "ستانلس ستيل|#111827",
+        "أسود ملكي|#111827"
+      ],
+      "size_options": [],
+      "raw_attributes": {
+        "السعة": [
+          "4 شعلات غاز"
+        ],
+        "العرض": [
+          "58 سم"
+        ],
+        "العمق": [
+          "50 سم"
+        ],
+        "الألوان": [
+          "ستانلس ستيل|#111827",
+          "أسود ملكي|#111827"
+        ],
+        "الارتفاع": [
+          "4.5 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "غاز طبيعي / مسال"
+        ],
+        "صمام الأمان": [
+          "صمامات أمان معتمدة"
+        ],
+        "نظام الإشعال": [
+          "إلكتروني مدمج بالمفتاح"
+        ],
+        "الجهد الكهربائي": [
+          "220-240 فولت"
+        ]
+      },
+      "features": "Thick 304 stainless steel body resistant to high heat and corrosion\n4 Italian burners accommodating diverse cookware sizes\nCertified flame safety valves preventing gas leaks automatically\nIntegrated one-hand rotary electronic ignition\nSleek 60cm space-efficient modern footprint",
+      "features_i18n": {
+        "ar": "سطح ستانلس ستيل 304 سميك ومقاوم للحرارة والتآكل\n4 شعلات غاز إيطالية تناسب مختلف أحجام أواني الطهي\nصمامات أمان معتمدة تمنع تسرب الغاز تلقائياً\nإشعال إلكتروني مدمج بالمفتاح لسهولة الاستخدام بيد واحدة\nتصميم مدمج عصري يناسب المطابخ الحديثة 60 سم",
+        "en": "Thick 304 stainless steel body resistant to high heat and corrosion\n4 Italian burners accommodating diverse cookware sizes\nCertified flame safety valves preventing gas leaks automatically\nIntegrated one-hand rotary electronic ignition\nSleek 60cm space-efficient modern footprint"
+      },
+      "tips": "Wipe down after each use with non-abrasive stainless cleaner to retain pristine sheen.",
+      "tips_i18n": {
+        "ar": "نظف السطح بعد كل استخدام بمنظف ستانلس ستيل غير كاشط للحفاظ على لمعان المعدن.",
+        "en": "Wipe down after each use with non-abrasive stainless cleaner to retain pristine sheen."
+      },
+      "additionalInfo": "",
+      "shipping_info": "2-day express courier dispatch with instant exchange guarantee and 2 years warranty.",
+      "shipping_info_i18n": {
+        "ar": "شحن سريع خلال يومين مع ضمان استبدال فوري وضمان سنتين.",
+        "en": "2-day express courier dispatch with instant exchange guarantee and 2 years warranty."
+      },
+      "sku": "MG-HOB60-4B-SS",
+      "created_at": "2026-10-01 12:13:41",
+      "updated_at": "2026-10-01 14:03:07"
+    },
+    {
+      "id": "29",
+      "name": "Mastergas Premium 4-Burner Outdoor Gas BBQ Grill with Thermometer",
+      "name_i18n": {
+        "ar": "شواية باربيكيو غاز فاخرة 4 شعلات للحدائق والمزارع مع مقياس حرارة",
+        "en": "Mastergas Premium 4-Burner Outdoor Gas BBQ Grill with Thermometer"
+      },
+      "description": "Luxury 4-burner outdoor gas BBQ grill crafted for patios and gardens with heavy-duty cooking grates, lid-mounted temperature gauge, smooth mobility casters, and prep shelves.",
+      "description_i18n": {
+        "ar": "شواية غاز خارجية فاخرة للحدائق والاستراحات مزودة بـ 4 شعلات رئيسية وشبكات طهي واسعة من الستانلس ستيل المقاوم للصدأ، مقياس حرارة مدمج بالغطاء، عجلات قوية لنقل سلس، وأرفف جانبية للتحضير.",
+        "en": "Luxury 4-burner outdoor gas BBQ grill crafted for patios and gardens with heavy-duty cooking grates, lid-mounted temperature gauge, smooth mobility casters, and prep shelves."
+      },
+      "category_id": 59,
+      "subcategory_id": null,
+      "category": "Outdoor Gas Grills & BBQs",
+      "category_parent_id": null,
+      "subcategory": null,
+      "brand": null,
+      "price": 4499,
+      "discount": "1574.65",
+      "stock": 15,
+      "quantity": 15,
+      "sales": 0,
+      "status": "active",
+      "is_featured": false,
+      "images": [
+        "/local-assets/products/29-cover.jpg",
+        "/local-assets/products/29-2.jpg",
+        "/local-assets/products/29-3.jpg"
+      ],
+      "image": "/local-assets/products/29-cover.jpg",
+      "attributes": {
+        "السعة": [
+          "مساحة شواء 70 × 45 سم"
+        ],
+        "العرض": [
+          "135 سم"
+        ],
+        "العمق": [
+          "58 سم"
+        ],
+        "الألوان": [
+          "أسود ملكي|#111827",
+          "فضي|#9ca3af"
+        ],
+        "الارتفاع": [
+          "115 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "غاز مسال"
+        ],
+        "صمام الأمان": [
+          "صمامات نحاسية آمنة"
+        ],
+        "نظام الإشعال": [
+          "إشعال بيزو ذاتي"
+        ],
+        "المؤقت الرقمي": [
+          "مقياس حرارة مدمج بالغطاء"
+        ],
+        "الجهد الكهربائي": [
+          "لا يتطلب كهرباء"
+        ]
+      },
+      "color_options": [
+        "أسود ملكي|#111827",
+        "فضي|#9ca3af"
+      ],
+      "size_options": [],
+      "raw_attributes": {
+        "السعة": [
+          "مساحة شواء 70 × 45 سم"
+        ],
+        "العرض": [
+          "135 سم"
+        ],
+        "العمق": [
+          "58 سم"
+        ],
+        "الألوان": [
+          "أسود ملكي|#111827",
+          "فضي|#9ca3af"
+        ],
+        "الارتفاع": [
+          "115 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "غاز مسال"
+        ],
+        "صمام الأمان": [
+          "صمامات نحاسية آمنة"
+        ],
+        "نظام الإشعال": [
+          "إشعال بيزو ذاتي"
+        ],
+        "المؤقت الرقمي": [
+          "مقياس حرارة مدمج بالغطاء"
+        ],
+        "الجهد الكهربائي": [
+          "لا يتطلب كهرباء"
+        ]
+      },
+      "features": "4 heavy stainless steel tubular burners delivering intense even heat\nExpansive 70 x 45 cm cooking zone for large outdoor barbecues\nPrecision lid-mounted dial thermometer for temperature control\nHeavy-duty brass valves and instant piezo spark ignition\nAll-weather thermo-powder coated matte exterior",
+      "features_i18n": {
+        "ar": "4 شعلات غاز أنبوبية من الستانلس ستيل بقوة حرارية فائقة\nمساحة شواء رحبة 70 × 45 سم تكفي لتحضير وجبات كبيرة\nمقياس حرارة دقيق مدمج بالغطاء لمراقبة مستوى النضج\nصمامات نحاسية آمنة مع نظام إشعال بيزو ذاتي\nهيكل خارجي أسود مطلي حرارياً ومقاوم للظروف الجوية",
+        "en": "4 heavy stainless steel tubular burners delivering intense even heat\nExpansive 70 x 45 cm cooking zone for large outdoor barbecues\nPrecision lid-mounted dial thermometer for temperature control\nHeavy-duty brass valves and instant piezo spark ignition\nAll-weather thermo-powder coated matte exterior"
+      },
+      "tips": "Brush the grilling grates clean and cover with a weatherproof tarp after cooling.",
+      "tips_i18n": {
+        "ar": "احرص على تنظيف شبك الشواء بالفرشاة المخصصة وتغطية الشواية بالغطاء الواقي بعد الاستخدام.",
+        "en": "Brush the grilling grates clean and cover with a weatherproof tarp after cooling."
+      },
+      "additionalInfo": "",
+      "shipping_info": "White-glove heavy freight shipping with on-site assembly and 2-year warranty.",
+      "shipping_info_i18n": {
+        "ar": "شحن خاص للطلبات الثقيلة مع خدمة التركيب الميداني وضمان سنتين.",
+        "en": "White-glove heavy freight shipping with on-site assembly and 2-year warranty."
+      },
+      "sku": "MG-BBQ-4B-GRILL",
+      "created_at": "2026-10-01 12:13:43",
+      "updated_at": "2026-10-01 14:03:18"
+    },
+    {
+      "id": "30",
+      "name": "Mastergas 12L Digital Instant Gas Water Heater Full ODS Safety",
+      "name_i18n": {
+        "ar": "سخان مياه غاز فوري رقمي ماسترجاز 12 لتر أمان كامل ODS",
+        "en": "Mastergas 12L Digital Instant Gas Water Heater Full ODS Safety"
+      },
+      "description": "Smart 12L/min instant tankless gas water heater delivering uninterrupted hot water, digital LED temperature display, and multi-stage ODS safety shutting off upon oxygen depletion.",
+      "description_i18n": {
+        "ar": "سخان مياه غاز فوري ذكي ديجيتال سعة 10-12 لتر/دقيقة، تدفق مياه ساخنة فوري ومستمر بدون انقطاع، شاشة رقمية LED لضبط درجة الحرارة، نظام أمان ODS متطور يقطع الغاز تلقائياً عند نقص الأكسجين أو الميلان.",
+        "en": "Smart 12L/min instant tankless gas water heater delivering uninterrupted hot water, digital LED temperature display, and multi-stage ODS safety shutting off upon oxygen depletion."
+      },
+      "category_id": 58,
+      "subcategory_id": null,
+      "category": "Gas Water Heaters & Geysers",
+      "category_parent_id": null,
+      "subcategory": null,
+      "brand": null,
+      "price": 1349,
+      "discount": "472.15",
+      "stock": 40,
+      "quantity": 40,
+      "sales": 0,
+      "status": "active",
+      "is_featured": false,
+      "images": [
+        "/local-assets/products/30-cover.jpg",
+        "/local-assets/products/30-2.jpg",
+        "/local-assets/products/30-3.jpg"
+      ],
+      "image": "/local-assets/products/30-cover.jpg",
+      "attributes": {
+        "السعة": [
+          "10 لتر / دقيقة"
+        ],
+        "العرض": [
+          "35 سم"
+        ],
+        "العمق": [
+          "18 سم"
+        ],
+        "الألوان": [
+          "أبيض|#ffffff",
+          "فضي|#9ca3af"
+        ],
+        "الارتفاع": [
+          "72 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "غاز مسال"
+        ],
+        "صمام الأمان": [
+          "نظام ODS مع قفل عند الميلان"
+        ],
+        "نظام الإشعال": [
+          "أوتوماتيكي عند فتح صنبور المياه"
+        ],
+        "المؤقت الرقمي": [
+          "شاشة رقمية LED"
+        ],
+        "الجهد الكهربائي": [
+          "شاشة إلكترونية تعمل بالبطاريات"
+        ]
+      },
+      "color_options": [
+        "أبيض|#ffffff",
+        "فضي|#9ca3af"
+      ],
+      "size_options": [],
+      "raw_attributes": {
+        "السعة": [
+          "10 لتر / دقيقة"
+        ],
+        "العرض": [
+          "35 سم"
+        ],
+        "العمق": [
+          "18 سم"
+        ],
+        "الألوان": [
+          "أبيض|#ffffff",
+          "فضي|#9ca3af"
+        ],
+        "الارتفاع": [
+          "72 سم"
+        ],
+        "بلد المنشأ": [
+          "إيطاليا"
+        ],
+        "نوع الطاقة": [
+          "غاز مسال"
+        ],
+        "صمام الأمان": [
+          "نظام ODS مع قفل عند الميلان"
+        ],
+        "نظام الإشعال": [
+          "أوتوماتيكي عند فتح صنبور المياه"
+        ],
+        "المؤقت الرقمي": [
+          "شاشة رقمية LED"
+        ],
+        "الجهد الكهربائي": [
+          "شاشة إلكترونية تعمل بالبطاريات"
+        ]
+      },
+      "features": "Continuous instant hot water delivery of 10-12 Liters per minute\nBright digital LED interface displaying exact output temperature\nAdvanced ODS oxygen depletion safety with auto-tilt shutoff\nInstant automatic ignition triggered immediately upon water tap turn\nReliable high-efficiency performance under low water pressure",
+      "features_i18n": {
+        "ar": "تدفق مستمر للمياه الساخنة الفورية حتى 10-12 لتر في الدقيقة\nشاشة رقمية LED تعرض درجة حرارة المياه بدقة عالية\nنظام أمان ODS الذكي مع قفل أوتوماتيكي عند نقص الأكسجين أو الميلان\nإشعال أوتوماتيكي ذكي يعمل تلقائياً فور فتح صنبور المياه\nيعمل بكفاءة عالية حتى مع ضغط المياه المنخفض",
+        "en": "Continuous instant hot water delivery of 10-12 Liters per minute\nBright digital LED interface displaying exact output temperature\nAdvanced ODS oxygen depletion safety with auto-tilt shutoff\nInstant automatic ignition triggered immediately upon water tap turn\nReliable high-efficiency performance under low water pressure"
+      },
+      "tips": "Ensure the flue vent pipe is properly vented outside with clear airflow around the unit.",
+      "tips_i18n": {
+        "ar": "تأكد من تركيب مدخنة تصريف العادم بشكل سليم وعدم سد فتحات التهوية المحيطة بالسخان.",
+        "en": "Ensure the flue vent pipe is properly vented outside with clear airflow around the unit."
+      },
+      "additionalInfo": "",
+      "shipping_info": "24-hour express courier delivery across all cities with 3-year full warranty.",
+      "shipping_info_i18n": {
+        "ar": "توصيل سريع خلال 24 ساعة في كافة المدن مع ضمان شامل 3 سنوات.",
+        "en": "24-hour express courier delivery across all cities with 3-year full warranty."
+      },
+      "sku": "MG-WATER-HEATER-12L",
+      "created_at": "2026-10-01 12:13:44",
+      "updated_at": "2026-10-01 14:03:34"
+    }
+  ],
+  "categories": [
+    {
+      "id": 51,
+      "name": "Gas Cylinders & Tanks",
+      "name_i18n": {
+        "ar": "أسطوانات الغاز ومستلزماتها",
+        "en": "Gas Cylinders & Tanks"
+      },
+      "slug": "astoanat-alghaz-omstlzmatha",
+      "description": "Domestic and commercial LPG gas cylinders in steel and composite fiber materials complying with Jordanian standards.",
+      "description_i18n": {
+        "ar": "أسطوانات غاز منزلية وتجارية بمختلف الأحجام والأنواع حديد وفايبر مركبة ومطابقة لمعايير السلامة العامة.",
+        "en": "Domestic and commercial LPG gas cylinders in steel and composite fiber materials complying with Jordanian standards."
+      },
+      "image": "/local-assets/categories/51.jpg",
+      "is_active": true,
+      "sort_order": 1,
+      "parent_id": null,
+      "parent": null,
+      "children": [],
+      "products_count": 0,
+      "created_at": "2026-09-07 09:27:51",
+      "updated_at": "2026-09-07 10:00:48"
+    },
+    {
+      "id": 52,
+      "name": "Gas Regulators & Valves",
+      "name_i18n": {
+        "ar": "منظمات ومحابس الغاز",
+        "en": "Gas Regulators & Valves"
+      },
+      "slug": "mnthmat-omhabs-alghaz",
+      "description": "Certified Italian and international high/low pressure gas regulators and automatic emergency safety valves.",
+      "description_i18n": {
+        "ar": "منظمات ضغط عالي ومنخفض ومحابس أمان أوتوماتيكية أصلية إيطالية ودولية معتمدة مع مقاييس ضغط دقيقة.",
+        "en": "Certified Italian and international high/low pressure gas regulators and automatic emergency safety valves."
+      },
+      "image": "/local-assets/categories/52.jpg",
+      "is_active": true,
+      "sort_order": 2,
+      "parent_id": null,
+      "parent": null,
+      "children": [],
+      "products_count": 0,
+      "created_at": "2026-09-07 09:27:54",
+      "updated_at": "2026-09-07 10:00:48"
+    },
+    {
+      "id": 53,
+      "name": "Gas Heaters & Stoves",
+      "name_i18n": {
+        "ar": "صوبات ومدافئ الغاز",
+        "en": "Gas Heaters & Stoves"
+      },
+      "slug": "sobat-omdafy-alghaz",
+      "description": "Energy-efficient domestic LPG space heaters equipped with ODS oxygen depletion sensors and anti-tilt safety.",
+      "description_i18n": {
+        "ar": "مدافئ وصوبات غاز موفرة للطاقة ومزودة بأنظمة أمان متطورة وحساسات انخفاض الأكسجين (ODS) وحماية السقوط.",
+        "en": "Energy-efficient domestic LPG space heaters equipped with ODS oxygen depletion sensors and anti-tilt safety."
+      },
+      "image": "/local-assets/categories/53.jpg",
+      "is_active": true,
+      "sort_order": 3,
+      "parent_id": null,
+      "parent": null,
+      "children": [],
+      "products_count": 0,
+      "created_at": "2026-09-07 09:27:58",
+      "updated_at": "2026-09-07 10:00:49"
+    },
+    {
+      "id": 54,
+      "name": "Camping & Outdoor Gas Gear",
+      "name_i18n": {
+        "ar": "معدات غاز التخييم والرحلات",
+        "en": "Camping & Outdoor Gas Gear"
+      },
+      "slug": "maadat-ghaz-altkhyym-oalrhlat",
+      "description": "Portable lightweight gas stoves, safari cartridges, and outdoor lanterns designed for camping and adventure.",
+      "description_i18n": {
+        "ar": "مواقد وأسطوانات وفوانيس غاز خفيفة الوزن ومحمولة مخصصة لعشاق رحلات البر والتخييم والأنشطة الخارجية.",
+        "en": "Portable lightweight gas stoves, safari cartridges, and outdoor lanterns designed for camping and adventure."
+      },
+      "image": "/local-assets/categories/54.jpg",
+      "is_active": true,
+      "sort_order": 4,
+      "parent_id": null,
+      "parent": null,
+      "children": [],
+      "products_count": 0,
+      "created_at": "2026-09-07 09:28:00",
+      "updated_at": "2026-09-07 10:00:50"
+    },
+    {
+      "id": 55,
+      "name": "Gas Hoses & Connectors",
+      "name_i18n": {
+        "ar": "خراطيم وتوصيلات الغاز الآمنة",
+        "en": "Gas Hoses & Connectors"
+      },
+      "slug": "khratym-otosylat-alghaz-alamn",
+      "description": "Armored high-pressure gas hoses reinforced with steel mesh and certified leak-proof brass fittings.",
+      "description_i18n": {
+        "ar": "خراطيم ضغط عالي مدرعة معززة بالفولاذ ومقاومة للتآكل ووصلات نحاسية مانعة للتسريب معتمدة للسلامة.",
+        "en": "Armored high-pressure gas hoses reinforced with steel mesh and certified leak-proof brass fittings."
+      },
+      "image": "/local-assets/categories/55.jpg",
+      "is_active": true,
+      "sort_order": 5,
+      "parent_id": null,
+      "parent": null,
+      "children": [],
+      "products_count": 0,
+      "created_at": "2026-09-07 09:28:03",
+      "updated_at": "2026-09-07 10:00:50"
+    },
+    {
+      "id": 56,
+      "name": "Gas Leak Detectors & Safety",
+      "name_i18n": {
+        "ar": "كواشف وأنظمة إنذار تسريب الغاز",
+        "en": "Gas Leak Detectors & Safety"
+      },
+      "slug": "koashf-oanthm-anthar-tsryb-alghaz",
+      "description": "Smart sensor detectors and electromagnetic shutoff valves protecting homes against LPG gas leaks.",
+      "description_i18n": {
+        "ar": "أجهزة استشعار ذكية وصمامات غلق كهرومغناطيسية لحماية المنازل والمنشآت من مخاطر تسريب الغاز.",
+        "en": "Smart sensor detectors and electromagnetic shutoff valves protecting homes against LPG gas leaks."
+      },
+      "image": "/local-assets/categories/56.jpg",
+      "is_active": true,
+      "sort_order": 6,
+      "parent_id": null,
+      "parent": null,
+      "children": [],
+      "products_count": 0,
+      "created_at": "2026-09-07 09:28:06",
+      "updated_at": "2026-09-07 10:00:51"
+    },
+    {
+      "id": 57,
+      "name": "Gas Stoves & Built-in Hobs",
+      "name_i18n": {
+        "ar": "طباخات وأفران الغاز المسطحة",
+        "en": "Gas Stoves & Built-in Hobs"
+      },
+      "slug": "tbakhat-oafran-alghaz-almsth",
+      "description": "Built-in gas hobs and countertop stoves featuring high-efficiency brass burners and flame-failure safety.",
+      "description_i18n": {
+        "ar": "طباخات وأسطح طهي مدمجة تعمل بالغاز باستهلاك متوازن وشعلات نحاسية فائقة الكفاءة مع صمامات أمان.",
+        "en": "Built-in gas hobs and countertop stoves featuring high-efficiency brass burners and flame-failure safety."
+      },
+      "image": "/local-assets/categories/57.jpg",
+      "is_active": true,
+      "sort_order": 7,
+      "parent_id": null,
+      "parent": null,
+      "children": [],
+      "products_count": 4,
+      "created_at": "2026-09-07 09:28:09",
+      "updated_at": "2026-09-07 10:00:51"
+    },
+    {
+      "id": 58,
+      "name": "Gas Water Heaters & Geysers",
+      "name_i18n": {
+        "ar": "سخانات المياه بالغاز",
+        "en": "Gas Water Heaters & Geysers"
+      },
+      "slug": "skhanat-almyah-balghaz",
+      "description": "Tankless instant gas water heaters providing continuous on-demand hot water with smart digital control.",
+      "description_i18n": {
+        "ar": "سخانات مياه فورية تعمل بالغاز باشتعال تلقائي وكفاءة عالية في توفير الطاقة والماء الساخن غير المحدود.",
+        "en": "Tankless instant gas water heaters providing continuous on-demand hot water with smart digital control."
+      },
+      "image": "/local-assets/categories/58.jpg",
+      "is_active": true,
+      "sort_order": 8,
+      "parent_id": null,
+      "parent": null,
+      "children": [],
+      "products_count": 1,
+      "created_at": "2026-09-07 09:28:12",
+      "updated_at": "2026-09-07 10:00:51"
+    },
+    {
+      "id": 59,
+      "name": "Outdoor Gas Grills & BBQs",
+      "name_i18n": {
+        "ar": "شوايات ومواقد الحدائق",
+        "en": "Outdoor Gas Grills & BBQs"
+      },
+      "slug": "shoayat-omoakd-alhdayk",
+      "description": "Premium outdoor barbecue gas grills and heavy cast-iron stoves for gardens, patios, and outdoor cooking.",
+      "description_i18n": {
+        "ar": "شوايات باربيكيو خارجية فاخرة ومواقد طهي قوية للمزارع والحدائق والاستراحات والرحلات الخارجية.",
+        "en": "Premium outdoor barbecue gas grills and heavy cast-iron stoves for gardens, patios, and outdoor cooking."
+      },
+      "image": "/local-assets/categories/59.jpg",
+      "is_active": true,
+      "sort_order": 9,
+      "parent_id": null,
+      "parent": null,
+      "children": [],
+      "products_count": 1,
+      "created_at": "2026-09-07 09:28:15",
+      "updated_at": "2026-09-07 10:00:52"
+    },
+    {
+      "id": 60,
+      "name": "Gas Accessories & Spare Parts",
+      "name_i18n": {
+        "ar": "ملحقات وقطع غيار الغاز",
+        "en": "Gas Accessories & Spare Parts"
+      },
+      "slug": "mlhkat-oktaa-ghyar-alghaz",
+      "description": "Original replacement parts, heavy cylinder dollies, wrenches, and brass safety accessories.",
+      "description_i18n": {
+        "ar": "قطع غيار أصلية ومفاتيح أسطوانات وقواعد متينة لحماية وتسهيل استخدام الغاز بأعلى درجات الراحة والأمان.",
+        "en": "Original replacement parts, heavy cylinder dollies, wrenches, and brass safety accessories."
+      },
+      "image": "/local-assets/categories/60.jpg",
+      "is_active": true,
+      "sort_order": 10,
+      "parent_id": null,
+      "parent": null,
+      "children": [],
+      "products_count": 0,
+      "created_at": "2026-09-07 09:28:18",
+      "updated_at": "2026-09-07 10:00:52"
+    }
+  ],
+  "brands": [],
+  "offers": [
+    {
+      "id": 8,
+      "name": "Modern Ventilation & Cooking Collection",
+      "name_i18n": {
+        "ar": "مجموعة التهوية والطهي الحديثة",
+        "en": "Modern Ventilation & Cooking Collection"
+      },
+      "description": "Save 50 on a selected collection of modern hoods and cooking appliances.",
+      "description_i18n": {
+        "ar": "وفر 50 على مجموعة مختارة من الشفاطات وأجهزة الطهي الحديثة.",
+        "en": "Save 50 on a selected collection of modern hoods and cooking appliances."
+      },
+      "image": "/local-assets/offers/8.jpg",
+      "type": "fixed",
+      "value": "50.00",
+      "buy_x": null,
+      "get_y": null,
+      "code": "HOOD50QA",
+      "start_date": "2026-09-01T00:00:00.000000Z",
+      "end_date": "2026-11-30T00:00:00.000000Z",
+      "total_uses": 0,
+      "max_uses": 80,
+      "max_per_customer": 1,
+      "min_order_value": "200.00",
+      "max_discount": null,
+      "min_order_enabled": false,
+      "applies_to": "all",
+      "selected_categories": null,
+      "selected_products": null,
+      "status": "active",
+      "is_active": true,
+      "usage_percentage": 0,
+      "is_valid": true,
+      "created_at": "2026-09-29T12:20:08.000000Z",
+      "updated_at": "2026-09-29T12:22:24.000000Z"
+    },
+    {
+      "id": 7,
+      "name": "Luxury Italian Kitchen Clearance",
+      "name_i18n": {
+        "ar": "تصفية فاخرة للمطبخ الإيطالي",
+        "en": "Luxury Italian Kitchen Clearance"
+      },
+      "description": "Exclusive savings on Italian kitchen appliances for a limited time.",
+      "description_i18n": {
+        "ar": "خصم مميز على أجهزة المطبخ الإيطالية لفترة محدودة.",
+        "en": "Exclusive savings on Italian kitchen appliances for a limited time."
+      },
+      "image": "/local-assets/offers/7.jpg",
+      "type": "percentage",
+      "value": "35.00",
+      "buy_x": null,
+      "get_y": null,
+      "code": "ITALIAN35QA",
+      "start_date": "2026-09-01T00:00:00.000000Z",
+      "end_date": "2026-10-31T00:00:00.000000Z",
+      "total_uses": 0,
+      "max_uses": 100,
+      "max_per_customer": 1,
+      "min_order_value": "100.00",
+      "max_discount": null,
+      "min_order_enabled": false,
+      "applies_to": "all",
+      "selected_categories": null,
+      "selected_products": null,
+      "status": "active",
+      "is_active": true,
+      "usage_percentage": 0,
+      "is_valid": true,
+      "created_at": "2026-09-29T12:20:06.000000Z",
+      "updated_at": "2026-09-29T12:22:24.000000Z"
+    }
+  ],
+  "settings": [
+    {
+      "id": 1,
+      "key": "site_name",
+      "value": "Iris Flowers",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-03 14:57:12"
+    },
+    {
+      "id": 2,
+      "key": "delivery_range",
+      "value": "10",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-04-11 15:02:35"
+    },
+    {
+      "id": 3,
+      "key": "click_pay_number",
+      "value": "",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-04-11 15:02:35"
+    },
+    {
+      "id": 4,
+      "key": "phone_number",
+      "value": "+962 6 5000 0000",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-04-11 15:02:35"
+    },
+    {
+      "id": 5,
+      "key": "email",
+      "value": "info@irisflowers.net",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 15:15:35"
+    },
+    {
+      "id": 6,
+      "key": "address_ar",
+      "value": "عمان، الأردن",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 15:15:35"
+    },
+    {
+      "id": 7,
+      "key": "address_en",
+      "value": "Amman, Jordan",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 15:15:35"
+    },
+    {
+      "id": 8,
+      "key": "working_hours_ar",
+      "value": "السبت - الخميس: 9:00 صباحاً - 12:00 مساءً",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 15:15:35"
+    },
+    {
+      "id": 9,
+      "key": "working_hours_en",
+      "value": "Saturday - Thursday: 9:00 AM - 12:00 PM",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 15:15:35"
+    },
+    {
+      "id": 10,
+      "key": "logo",
+      "value": "/local-assets/settings/logo.png",
+      "type": "image",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-08-17 10:58:27"
+    },
+    {
+      "id": 11,
+      "key": "whatsapp",
+      "value": "+962790330303",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-07-11 15:26:32"
+    },
+    {
+      "id": 12,
+      "key": "facebook",
+      "value": "https://www.facebook.com/profile.php?id=61592606755936",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-08-08 14:20:56"
+    },
+    {
+      "id": 13,
+      "key": "twitter",
+      "value": "https://x.com/tijaracms",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-04-11 15:02:35"
+    },
+    {
+      "id": 14,
+      "key": "instagram",
+      "value": "https://www.instagram.com/irisflowers9393/",
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-08-08 14:20:56"
+    },
+    {
+      "id": 15,
+      "key": "youtube",
+      "value": null,
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 15:19:11"
+    },
+    {
+      "id": 16,
+      "key": "linkedin",
+      "value": null,
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 15:19:11"
+    },
+    {
+      "id": 17,
+      "key": "snapchat",
+      "value": null,
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 15:19:11"
+    },
+    {
+      "id": 18,
+      "key": "tiktok",
+      "value": null,
+      "type": "string",
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 15:19:11"
+    },
+    {
+      "id": 19,
+      "key": "delivery_range_km",
+      "value": "20",
+      "type": "string",
+      "created_at": "2026-04-11 15:49:35",
+      "updated_at": "2026-07-13 09:11:37"
+    },
+    {
+      "id": 20,
+      "key": "support_phone",
+      "value": "+962790330303",
+      "type": "string",
+      "created_at": "2026-04-11 15:49:35",
+      "updated_at": "2026-07-11 15:26:54"
+    },
+    {
+      "id": 21,
+      "key": "support_email",
+      "value": "support@irisflowers.net",
+      "type": "string",
+      "created_at": "2026-04-11 15:49:35",
+      "updated_at": "2026-05-17 15:20:22"
+    },
+    {
+      "id": 22,
+      "key": "x_twitter",
+      "value": null,
+      "type": "string",
+      "created_at": "2026-04-11 15:49:35",
+      "updated_at": "2026-06-28 12:03:55"
+    },
+    {
+      "id": 23,
+      "key": "home_category_1",
+      "value": "37",
+      "type": "string",
+      "created_at": "2026-04-11 15:49:35",
+      "updated_at": "2026-07-11 15:25:22"
+    },
+    {
+      "id": 24,
+      "key": "home_category_2",
+      "value": "39",
+      "type": "string",
+      "created_at": "2026-04-11 15:49:35",
+      "updated_at": "2026-07-11 15:25:22"
+    },
+    {
+      "id": 25,
+      "key": "free_delivery_threshold",
+      "value": "10",
+      "type": "string",
+      "created_at": "2026-04-25 10:49:29",
+      "updated_at": "2026-08-17 10:58:27"
+    },
+    {
+      "id": 26,
+      "key": "favicon",
+      "value": "/local-assets/settings/favicon.png",
+      "type": "image",
+      "created_at": "2026-04-25 10:49:29",
+      "updated_at": "2026-08-17 10:58:27"
+    },
+    {
+      "id": 27,
+      "key": "footer_logo",
+      "value": "/local-assets/settings/footer_logo.png",
+      "type": "image",
+      "created_at": "2026-04-25 10:49:29",
+      "updated_at": "2026-08-17 10:58:27"
+    },
+    {
+      "id": 28,
+      "key": "enable_city_shipping",
+      "value": "0",
+      "type": "string",
+      "created_at": null,
+      "updated_at": "2026-07-13 09:13:32"
+    },
+    {
+      "id": 29,
+      "key": "use_city_specific_rates",
+      "value": "1",
+      "type": "string",
+      "created_at": null,
+      "updated_at": "2026-05-03 16:03:47"
+    },
+    {
+      "id": 30,
+      "key": "default_city_shipping_rate",
+      "value": "0",
+      "type": "string",
+      "created_at": null,
+      "updated_at": "2026-05-03 14:28:24"
+    },
+    {
+      "id": 31,
+      "key": "shipping_cost",
+      "value": "0",
+      "type": "string",
+      "created_at": "2026-05-03 14:28:24",
+      "updated_at": "2026-07-26 17:00:59"
+    },
+    {
+      "id": 32,
+      "key": "tax_rate",
+      "value": "15",
+      "type": "string",
+      "created_at": "2026-05-03 14:28:24",
+      "updated_at": "2026-07-11 15:17:51"
+    },
+    {
+      "id": 33,
+      "key": "friday_hours_ar",
+      "value": "الجمعة: 2:00 مساءً - 12:00 مساءً",
+      "type": "string",
+      "created_at": "2026-05-03 14:28:24",
+      "updated_at": "2026-05-17 15:15:35"
+    },
+    {
+      "id": 34,
+      "key": "friday_hours_en",
+      "value": "Friday: 2:00 PM - 12:00 PM",
+      "type": "string",
+      "created_at": "2026-05-03 14:28:24",
+      "updated_at": "2026-05-17 15:15:35"
+    },
+    {
+      "id": 35,
+      "key": "home_section_category_title_ar",
+      "value": "تسوق حسب الفئة",
+      "type": "string",
+      "created_at": "2026-05-03 14:28:24",
+      "updated_at": "2026-05-04 18:34:31"
+    },
+    {
+      "id": 36,
+      "key": "home_section_category_title_en",
+      "value": "Shop by Category",
+      "type": "string",
+      "created_at": "2026-05-03 14:28:24",
+      "updated_at": "2026-05-03 14:28:24"
+    },
+    {
+      "id": 37,
+      "key": "home_section_offers_title_ar",
+      "value": "العروض المميزة",
+      "type": "string",
+      "created_at": "2026-05-03 14:28:24",
+      "updated_at": "2026-05-05 19:41:21"
+    },
+    {
+      "id": 38,
+      "key": "home_section_offers_title_en",
+      "value": "Featured Offers",
+      "type": "string",
+      "created_at": "2026-05-03 14:28:24",
+      "updated_at": "2026-05-03 14:28:24"
+    },
+    {
+      "id": 39,
+      "key": "currency_ar",
+      "value": "د.أ",
+      "type": "string",
+      "created_at": "2026-05-04 18:33:48",
+      "updated_at": "2026-05-04 18:33:48"
+    },
+    {
+      "id": 40,
+      "key": "currency_en",
+      "value": "JOD",
+      "type": "string",
+      "created_at": "2026-05-04 18:33:48",
+      "updated_at": "2026-05-04 18:33:48"
+    },
+    {
+      "id": 41,
+      "key": "about_title_ar",
+      "value": "من نحن",
+      "type": "string",
+      "created_at": "2026-05-04 18:33:48",
+      "updated_at": "2026-05-04 18:47:31"
+    },
+    {
+      "id": 42,
+      "key": "about_title_en",
+      "value": null,
+      "type": "string",
+      "created_at": "2026-05-04 18:33:48",
+      "updated_at": "2026-05-04 18:33:48"
+    },
+    {
+      "id": 43,
+      "key": "about_content_ar",
+      "value": "في Iris Flowers ، نؤمن أن الزهور ليست مجرد هدية، بل رسالة تعبّر عن المشاعر بطريقة أنيقة ومميزة.\n\nنحن متجر متخصص في تنسيق وتقديم الزهور والهدايا بعناية، حيث نحرص على اختيار أجود الأنواع وتقديمها بتصاميم عصرية تناسب مختلف المناسبات، من لحظات الفرح إلى التعبير عن الامتنان والحب.\n\nنعمل على توفير تجربة سهلة ومريحة لعملائنا، بدءًا من اختيار الهدية المناسبة، وصولًا إلى توصيلها بأفضل شكل وفي الوقت المناسب، لأننا ندرك أن التفاصيل الصغيرة تصنع فرقًا كبيرًا.\n\nهدفنا هو أن نكون جزءًا من لحظاتكم الجميلة، ونساعدكم على إيصال مشاعركم بطريقة لا تُنسى.",
+      "type": "string",
+      "created_at": "2026-05-04 18:33:48",
+      "updated_at": "2026-05-04 18:47:31"
+    },
+    {
+      "id": 44,
+      "key": "about_content_en",
+      "value": "At Iris Flowers, we believe flowers are more than just a gift; they're a message that expresses feelings in an elegant and unique way.\n\nWe are a boutique specializing in carefully arranged and presented flowers and gifts. We carefully select the finest blooms and present them in modern designs suitable for various occasions, from moments of joy to expressions of gratitude and love.\n\nWe strive to provide our customers with a seamless and convenient experience, from choosing the perfect gift to delivering it in the best possible way and on time, because we understand that small details make a big difference.\n\nOur goal is to be a part of your beautiful moments and help you express your feelings in a truly memorable way.",
+      "type": "string",
+      "created_at": "2026-05-04 18:33:48",
+      "updated_at": "2026-05-04 18:47:31"
+    },
+    {
+      "id": 45,
+      "key": "home_section_category_subtitle_ar",
+      "value": "اكتشف تشكيلتنا المتنوعة",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-06-28 12:07:10"
+    },
+    {
+      "id": 46,
+      "key": "home_section_category_subtitle_en",
+      "value": "Discover our diverse c١ollection١",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 47,
+      "key": "home_section_offers_subtitle_ar",
+      "value": "فرصة واحصل على أفضل العروض والخصومات",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 48,
+      "key": "home_section_offers_subtitle_en",
+      "value": "Grab the best deals and discounts",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 49,
+      "key": "home_section_best_sellers_title_ar",
+      "value": "الأكثر مبيعاً",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 50,
+      "key": "home_section_best_sellers_title_en",
+      "value": "Best Sellers",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 51,
+      "key": "home_section_best_sellers_subtitle_ar",
+      "value": "أفضل المنتجات المختارة لك",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 52,
+      "key": "home_section_best_sellers_subtitle_en",
+      "value": "Top picks just for you",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 53,
+      "key": "home_section_new_arrivals_title_ar",
+      "value": "وصل حديثاً",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 54,
+      "key": "home_section_new_arrivals_title_en",
+      "value": "New Arrivals",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 55,
+      "key": "home_section_new_arrivals_subtitle_ar",
+      "value": "أحدث المنتجات",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-06-28 12:06:28"
+    },
+    {
+      "id": 56,
+      "key": "home_section_new_arrivals_subtitle_en",
+      "value": "Latest additions to our store",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 57,
+      "key": "home_section_brands_title_ar",
+      "value": "شركاؤنا",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 58,
+      "key": "home_section_brands_title_en",
+      "value": "Our Brands",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 59,
+      "key": "home_section_brands_subtitle_ar",
+      "value": "تسوق من أشهر الماركات العالمية",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    },
+    {
+      "id": 60,
+      "key": "home_section_brands_subtitle_en",
+      "value": "Shop from top global brands",
+      "type": "string",
+      "created_at": "2026-05-07 02:08:59",
+      "updated_at": "2026-05-07 02:08:59"
+    }
+  ],
+  "sliders": [
+    {
+      "id": 30,
+      "title": "Italian Oven Collection",
+      "title_i18n": {
+        "ar": "تشكيلة الأفران الإيطالية",
+        "en": "Italian Oven Collection"
+      },
+      "description": "Discover Italian ovens with premium design and professional performance.",
+      "description_i18n": {
+        "ar": "اكتشف أحدث الأفران الإيطالية بتصميم فاخر وأداء احترافي.",
+        "en": "Discover Italian ovens with premium design and professional performance."
+      },
+      "link": "/products",
+      "button_text": null,
+      "button_text_i18n": null,
+      "image": "/local-assets/sliders/30.jpg",
+      "start_date": null,
+      "end_date": null,
+      "status": "active",
+      "order": 0,
+      "created_at": "2026-10-01 08:42:56",
+      "updated_at": "2026-10-01 08:42:56"
+    },
+    {
+      "id": 31,
+      "title": "Luxury Kitchen Offers",
+      "title_i18n": {
+        "ar": "عروض المطابخ الفاخرة",
+        "en": "Luxury Kitchen Offers"
+      },
+      "description": "Selected offers on premium kitchen appliances for a limited time.",
+      "description_i18n": {
+        "ar": "عروض مختارة على أجهزة المطبخ لفترة محدودة.",
+        "en": "Selected offers on premium kitchen appliances for a limited time."
+      },
+      "link": "/offers",
+      "button_text": null,
+      "button_text_i18n": null,
+      "image": "/local-assets/offers/8.jpg",
+      "start_date": null,
+      "end_date": null,
+      "status": "active",
+      "order": 0,
+      "created_at": "2026-10-01 08:42:58",
+      "updated_at": "2026-10-01 08:42:58"
+    },
+    {
+      "id": 32,
+      "title": "Home BBQ Solutions",
+      "title_i18n": {
+        "ar": "حلول الشواء المنزلية",
+        "en": "Home BBQ Solutions"
+      },
+      "description": "Upgrade your outdoor space with premium BBQ solutions.",
+      "description_i18n": {
+        "ar": "جهّز مساحتك الخارجية بأفضل حلول الشواء.",
+        "en": "Upgrade your outdoor space with premium BBQ solutions."
+      },
+      "link": "/products?search=BBQ",
+      "button_text": null,
+      "button_text_i18n": null,
+      "image": "/local-assets/sliders/32.jpg",
+      "start_date": null,
+      "end_date": null,
+      "status": "active",
+      "order": 0,
+      "created_at": "2026-10-01 08:43:01",
+      "updated_at": "2026-10-01 08:43:01"
+    },
+    {
+      "id": 33,
+      "title": "Modern Built-in Appliances",
+      "title_i18n": {
+        "ar": "أجهزة بلت إن بتصميم عصري",
+        "en": "Modern Built-in Appliances"
+      },
+      "description": "Elegant appliances designed for modern kitchens.",
+      "description_i18n": {
+        "ar": "تصميم أنيق يكمّل مطبخك العصري.",
+        "en": "Elegant appliances designed for modern kitchens."
+      },
+      "link": "/about",
+      "button_text": null,
+      "button_text_i18n": null,
+      "image": "/local-assets/sliders/33.jpg",
+      "start_date": null,
+      "end_date": null,
+      "status": "active",
+      "order": 0,
+      "created_at": "2026-10-01 08:43:03",
+      "updated_at": "2026-10-01 08:43:03"
+    }
+  ],
+  "topics": [
+    {
+      "id": 10,
+      "title": "About Us",
+      "title_i18n": {
+        "ar": "من نحن",
+        "en": "About Us"
+      },
+      "content": "Iris Flowers is a specialized floral boutique dedicated to crafting elegant flower bouquets and beautifully arranged floral gifts with a refined and distinctive touch. Blending artistic taste with creative expression, every design is thoughtfully created to deliver a memorable experience that conveys emotions in the most beautiful way whether for special occasions or everyday gifting. Since its establishment, Iris Flowers has been committed to excellence, paying close attention to every detail and carefully selecting premium flowers to ensure each arrangement reaches customers with sophistication that reflects the beauty and value of every moment.",
+      "content_i18n": {
+        "ar": "أيرس فلورز هي منشأة متخصصة في تجهيز باقات الورد وتنسيق الهدايا الزهرية بأسلوب راقٍ وفريد، تجمع بين الذوق الفني واللمسة الإبداعية في كل تصميم. منذ تأسيسها، تسعى لتقديم تجارب مميزة تعبّر عن المشاعر بأجمل صورة، سواء للمناسبات الخاصة أو الهدايا اليومية. تتميز إيرس فلورز باهتمامها بأدق التفاصيل وجودة اختيار الورود، لتصل إلى عملائها بأناقة تعكس جمال اللحظة وقيمتها.",
+        "en": "Iris Flowers is a specialized floral boutique dedicated to crafting elegant flower bouquets and beautifully arranged floral gifts with a refined and distinctive touch. Blending artistic taste with creative expression, every design is thoughtfully created to deliver a memorable experience that conveys emotions in the most beautiful way whether for special occasions or everyday gifting. Since its establishment, Iris Flowers has been committed to excellence, paying close attention to every detail and carefully selecting premium flowers to ensure each arrangement reaches customers with sophistication that reflects the beauty and value of every moment."
+      },
+      "category": null,
+      "category_i18n": null,
+      "author": null,
+      "publish_date": null,
+      "views": 0,
+      "status": "published",
+      "show_in_nav": true,
+      "created_at": "2026-05-05 08:15:22",
+      "updated_at": "2026-05-17 16:35:09"
+    },
+    {
+      "id": 9,
+      "title": "Shipping Information",
+      "title_i18n": {
+        "ar": "معلومات الشحن",
+        "en": "Shipping Information"
+      },
+      "content": "We are committed to providing a fast and secure shipping experience to ensure your orders arrive in perfect condition and on time.\n\nDelivery Areas: We deliver to various areas within the country, with plans to expand to additional areas soon.\n\nDelivery Time: Orders are processed quickly, and delivery time varies depending on the recipient's location.\n\nShipping Cost: Shipping fees are calculated based on the delivery location and order value and are clearly displayed before payment.\n\nOrder Tracking: You can monitor the order status in real time through your account.\n\nDelivery Policy: If we are unable to reach the recipient, we will contact you to reschedule delivery.\n\nWe always aim to provide a reliable service that meets your expectations and offers you a convenient and seamless shopping experience.",
+      "content_i18n": {
+        "ar": "نحرص في أيرس فلورز على تقديم تجربة شحن سريعة وآمنة، تضمن وصول طلباتكم بأجمل صورة وفي الوقت المناسب، لأن التفاصيل الصغيرة تصنع الفرق الكبير \nمناطق التوصيل:\nنقوم بالتوصيل إلى مختلف المناطق داخل الدولة، مع سعي مستمر لتوسيع نطاق خدماتنا لتصل إليكم أينما كنتم.\nمدة التوصيل:\nيتم تجهيز الطلبات وتوصيلها خلال 4 ساعات كحد أقصى من وقت تأكيد الطلب، مع الحفاظ على جودة وترتيب الباقة حتى لحظة التسليم.\nتكلفة الشحن:\nتُحتسب رسوم التوصيل بناءً على موقع المستلم وقيمة الطلب، ويتم عرضها بشكل واضح قبل إتمام عملية الدفع.\nتتبع الطلب:\nيمكنكم متابعة حالة طلبكم بكل سهولة عبر حسابكم، من لحظة التجهيز وحتى وصوله إلى بابكم.\nسياسة التسليم:\nفي حال تعذر الوصول إلى المستلم، يتم التواصل مباشرة لإعادة جدولة عملية التسليم بما يناسبكم.\nهدفنا أن نمنحكم تجربة توصيل موثوقة، سلسة، ومليئة بالثقة والاهتمام بكل تفصيلة",
+        "en": "We are committed to providing a fast and secure shipping experience to ensure your orders arrive in perfect condition and on time.\n\nDelivery Areas: We deliver to various areas within the country, with plans to expand to additional areas soon.\n\nDelivery Time: Orders are processed quickly, and delivery time varies depending on the recipient's location.\n\nShipping Cost: Shipping fees are calculated based on the delivery location and order value and are clearly displayed before payment.\n\nOrder Tracking: You can monitor the order status in real time through your account.\n\nDelivery Policy: If we are unable to reach the recipient, we will contact you to reschedule delivery.\n\nWe always aim to provide a reliable service that meets your expectations and offers you a convenient and seamless shopping experience."
+      },
+      "category": null,
+      "category_i18n": null,
+      "author": null,
+      "publish_date": null,
+      "views": 0,
+      "status": "published",
+      "show_in_nav": false,
+      "created_at": "2026-05-04 18:28:02",
+      "updated_at": "2026-05-17 15:10:36"
+    },
+    {
+      "id": 1,
+      "title": "Privacy Policy",
+      "title_i18n": {
+        "ar": "سياسة الخصوصية",
+        "en": "Privacy Policy"
+      },
+      "content": "Website Usage Policy\n\nWelcome to our website. Please read the usage policy carefully before using the site. By accessing and using this website, you agree to comply with the following terms:\n\nLawful Use: The website may only be used for lawful purposes. Any use that violates laws or harms the website or other users is strictly prohibited.\nContent: All content displayed on this website is the property of the site and may not be copied or reused without prior permission.\nInformation: We strive to ensure the accuracy of information; however, we are not responsible for any unintentional errors or updates in the content.\nOrders & Services: Orders are processed based on availability, and we reserve the right to modify or cancel any order when necessary.\nModifications: We reserve the right to update or change these policies at any time without prior notice. Continued use of the website constitutes acceptance of any changes.\n\nBy using this website, you agree to all the terms stated above.",
+      "content_i18n": {
+        "ar": "سياسة الخصوصية\nتلتزم أيرس فلورز باحترام خصوصية مستخدمينا وحماية البيانات الشخصية التي يتم جمعها ومعالجتها وفقًا لأفضل الممارسات والسياسات المعتمدة.\nأولاً: جمع البيانات\nيقوم الموقع بجمع البيانات الشخصية التي يقدمها المستخدم طوعًا عند استخدامه للخدمات، وتشمل على سبيل المثال لا الحصر: الاسم الكامل، رقم الهاتف، عنوان التوصيل، ومعلومات الطلب. كما قد يتم جمع بيانات تقنية غير مباشرة مثل عنوان الـ IP ونوع المتصفح لتحسين تجربة الاستخدام.\nثانيًا: استخدام البيانات\nتُستخدم البيانات التي يتم جمعها للأغراض التالية:\nمعالجة الطلبات وإتمام عمليات التوصيل.\nتحسين جودة الخدمات وتجربة المستخدم.\nالتواصل مع المستخدم بخصوص الطلبات أو الاستفسارات.\nإرسال العروض والتحديثات في حال الموافقة المسبقة.\nثالثًا: حماية البيانات\nنلتزم باتخاذ التدابير الأمنية والإدارية والتقنية المناسبة لحماية البيانات الشخصية من الوصول غير المصرح به أو التعديل أو الإفصاح أو الإتلاف غير المشروع.\nرابعًا: مشاركة البيانات\nلا يتم بيع أو تأجير أو مشاركة البيانات الشخصية مع أي طرف ثالث، باستثناء الجهات المعنية بعملية التوصيل أو عند وجود التزام قانوني بالإفصاح.\nخامسًا: الاحتفاظ بالبيانات\nيتم الاحتفاظ بالبيانات الشخصية فقط للمدة اللازمة لتحقيق الأغراض التي جُمعت من أجلها، أو حسب ما تقتضيه الأنظمة والقوانين المعمول بها.\nسادسًا: حقوق المستخدم\nيحق للمستخدم طلب الوصول إلى بياناته الشخصية أو تعديلها أو حذفها، وذلك وفقًا للأنظمة والسياسات الداخلية للموقع.\nسابعًا: التعديلات على السياسة\nتحتفظ إيرس فلورز بحق تعديل هذه السياسة في أي وقت، ويتم نشر التحديثات على هذه الصفحة ويُعد استمرار استخدام الموقع موافقة ضمنية على التعديلات.",
+        "en": "Website Usage Policy\n\nWelcome to our website. Please read the usage policy carefully before using the site. By accessing and using this website, you agree to comply with the following terms:\n\nLawful Use: The website may only be used for lawful purposes. Any use that violates laws or harms the website or other users is strictly prohibited.\nContent: All content displayed on this website is the property of the site and may not be copied or reused without prior permission.\nInformation: We strive to ensure the accuracy of information; however, we are not responsible for any unintentional errors or updates in the content.\nOrders & Services: Orders are processed based on availability, and we reserve the right to modify or cancel any order when necessary.\nModifications: We reserve the right to update or change these policies at any time without prior notice. Continued use of the website constitutes acceptance of any changes.\n\nBy using this website, you agree to all the terms stated above."
+      },
+      "category": "{\"ar\":\"\\u0633\\u064a\\u0627\\u0633\\u0627\\u062a\",\"en\":\"\"}",
+      "category_i18n": {
+        "ar": "سياسات",
+        "en": ""
+      },
+      "author": "Admin",
+      "publish_date": "2025-01-15",
+      "views": 1250,
+      "status": "published",
+      "show_in_nav": false,
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 16:36:35"
+    },
+    {
+      "id": 2,
+      "title": "Terms of Service",
+      "title_i18n": {
+        "ar": "شروط الخدمة",
+        "en": "Terms of Service"
+      },
+      "content": "By using our website, you agree to these terms and conditions. These terms govern your use of our services and products. We reserve the right to modify these terms at any time. Continued use of our services constitutes acceptance of any changes.",
+      "content_i18n": {
+        "ar": "شروط الخدمة – أيرس فلورز\nباستخدامكم لموقع أو خدمات إيرس فلورز، فإنكم توافقون على الالتزام بهذه الشروط والأحكام، والتي تهدف إلى تنظيم العلاقة بيننا وبين عملائنا وضمان تقديم خدمة موثوقة وآمنة \nأولاً: قبول الشروط\nيُعد استخدام الموقع أو تقديم الطلبات عبره موافقة صريحة من المستخدم على جميع الشروط والأحكام الواردة في هذه الصفحة.\nثانيًا: الطلبات والخدمات\nيتم تنفيذ الطلبات بناءً على المعلومات التي يقدمها العميل بشكل صحيح وكامل.\nتحتفظ أيرس فلورز بحق رفض أو إلغاء أي طلب في حال وجود معلومات غير دقيقة أو عدم توفر المنتج المطلوب.\nقد تختلف المنتجات النهائية بشكل طفيف حسب توفر الورود الموسمية، مع الحفاظ على نفس القيمة والجودة العامة.\nثالثًا: الأسعار والدفع\nجميع الأسعار المعروضة قابلة للتحديث دون إشعار مسبق.\nيتم تأكيد الطلب بعد إتمام عملية الدفع أو اختيار طريقة الدفع المعتمدة.\nقد يتم إضافة رسوم توصيل حسب موقع العميل، ويتم توضيحها قبل إتمام الطلب.\nرابعًا: التوصيل\nيتم توصيل الطلبات خلال 4 ساعات من وقت التأكيد، ما لم يتم الاتفاق على وقت مختلف.\nيجب توفير معلومات دقيقة للتوصيل، وإلا قد يتأثر وقت التسليم.\nفي حال تعذر تسليم الطلب، يتم التواصل مع العميل لإعادة جدولة التوصيل.\nخامسًا: الإلغاء والاستبدال\nيمكن إلغاء الطلب قبل بدء عملية التجهيز فقط.\nلا يمكن استبدال أو استرجاع الطلبات بعد تجهيزها أو تسليمها، إلا في حال وجود خطأ من طرفنا.\nسادسًا: المسؤولية\nأيرس فلورز غير مسؤولة عن أي تأخير ناتج عن ظروف خارجة عن الإرادة مثل الظروف الجوية أو مشاكل في العنوان أو التواصل مع المستلم.\nسابعًا: حقوق الملكية\nجميع المحتويات المعروضة على الموقع (الصور، النصوص، التصاميم) هي ملك لإيرس فلورز ولا يجوز استخدامها أو إعادة نشرها دون إذن مسبق.\nثامنًا: التعديلات\nتحتفظ أيرس فلورز بحق تعديل شروط الخدمة في أي وقت، ويُعد استمرار استخدام الموقع بعد التعديلات موافقة ضمنية عليها.",
+        "en": "By using our website, you agree to these terms and conditions. These terms govern your use of our services and products. We reserve the right to modify these terms at any time. Continued use of our services constitutes acceptance of any changes."
+      },
+      "category": "{\"ar\":\"\\u0633\\u064a\\u0627\\u0633\\u0627\\u062a\",\"en\":\"Terms of Service\"}",
+      "category_i18n": {
+        "ar": "سياسات",
+        "en": "Terms of Service"
+      },
+      "author": "Admin",
+      "publish_date": "2026-05-03",
+      "views": 980,
+      "status": "published",
+      "show_in_nav": false,
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 15:11:39"
+    },
+    {
+      "id": 3,
+      "title": "Return and Exchange Policy",
+      "title_i18n": {
+        "ar": "سياسة الإرجاع والاستبدال",
+        "en": "Return and Exchange Policy"
+      },
+      "content": "At Iris Flowers, we are committed to providing premium floral products and a memorable experience for every customer. To ensure transparency and clarity, we kindly ask you to review our Return & Exchange Policy below.\n\nFirst: Returns\n\nDue to the nature of our products (flowers and perishable gifts), orders cannot be returned once they have been prepared or delivered, except in the following cases:\n\n* The product arrives in a clearly damaged condition upon delivery.\n* An error has occurred from our side (such as receiving a different design or item than ordered).\n\nIn such cases, customers must contact us within 24 hours of receiving the order and provide photos or the necessary proof for review.\n\nSecond: Exchanges\n\nCustomers may request an exchange if the issue resulted from an error by Iris Flowers. Exchanges are subject to the availability of suitable alternatives while maintaining the same order value or offering an appropriate replacement option.\n\nThird: Non-Returnable & Non-Exchangeable Cases\n\n* Change of mind after the order has been prepared or delivered.\n* Incorrect delivery information provided by the customer.\n* Delays in delivery or receipt due to the recipient being unavailable at the scheduled time.\n\nFourth: Order Review Process\n\nWe are committed to reviewing each case individually and working towards the most suitable solution to ensure customer satisfaction while maintaining the quality of our service.\n",
+      "content_i18n": {
+        "ar": "نحرص في أيرس فلورز على تقديم منتجات زهرية عالية الجودة وتجربة مميزة لكل عميل، ونلتزم بتوضيح سياسة الإرجاع والاستبدال لضمان الشفافية والوضوح \nأولاً: الإرجاع\nنظرًا لطبيعة المنتجات (الزهور والهدايا القابلة للتلف)، لا يمكن إرجاع الطلبات بعد تجهيزها أو تسليمها، إلا في الحالات التالية:\nوصول المنتج بحالة تالفة بشكل واضح عند التسليم.\nوجود خطأ في الطلب من طرفنا (مثل نوع أو تصميم مختلف عن المطلوب).\nوفي هذه الحالات، يجب التواصل معنا خلال 24 ساعة من وقت الاستلام مع تزويدنا بالصور أو الإثباتات اللازمة.\nثانيًا: الاستبدال\nيمكن طلب استبدال الطلب في حال وجود خطأ من طرف أيرس فلورز، ويتم ذلك وفق توفر البدائل المناسبة، مع الحفاظ على نفس القيمة أو تقديم خيار بديل مناسب للعميل.\nثالثًا: الحالات غير القابلة للإرجاع أو الاستبدال\nتغيير رأي العميل بعد تجهيز الطلب أو توصيله.\nإدخال معلومات توصيل خاطئة من قبل العميل.\nتأخر الاستلام بسبب عدم توفر المستلم في الوقت المحدد.\nرابعًا: معالجة الطلبات\nنلتزم بدراسة جميع الحالات المقدمة بشكل فردي، والعمل على إيجاد الحل المناسب بما يضمن رضا العميل والحفاظ على جودة الخدمة.",
+        "en": "At Iris Flowers, we are committed to providing premium floral products and a memorable experience for every customer. To ensure transparency and clarity, we kindly ask you to review our Return & Exchange Policy below.\n\nFirst: Returns\n\nDue to the nature of our products (flowers and perishable gifts), orders cannot be returned once they have been prepared or delivered, except in the following cases:\n\n* The product arrives in a clearly damaged condition upon delivery.\n* An error has occurred from our side (such as receiving a different design or item than ordered).\n\nIn such cases, customers must contact us within 24 hours of receiving the order and provide photos or the necessary proof for review.\n\nSecond: Exchanges\n\nCustomers may request an exchange if the issue resulted from an error by Iris Flowers. Exchanges are subject to the availability of suitable alternatives while maintaining the same order value or offering an appropriate replacement option.\n\nThird: Non-Returnable & Non-Exchangeable Cases\n\n* Change of mind after the order has been prepared or delivered.\n* Incorrect delivery information provided by the customer.\n* Delays in delivery or receipt due to the recipient being unavailable at the scheduled time.\n\nFourth: Order Review Process\n\nWe are committed to reviewing each case individually and working towards the most suitable solution to ensure customer satisfaction while maintaining the quality of our service.\n"
+      },
+      "category": "Policies",
+      "category_i18n": null,
+      "author": "Admin",
+      "publish_date": "2025-02-01",
+      "views": 750,
+      "status": "published",
+      "show_in_nav": false,
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-05-17 16:44:31"
+    },
+    {
+      "id": 7,
+      "title": "FAQ",
+      "title_i18n": {
+        "ar": "الأسئلة الشائعة",
+        "en": "FAQ"
+      },
+      "content": "1. How do I place an order?\n\nYou can browse products, choose the perfect gift, add it to your cart, and then easily complete your order through the checkout page.\n\n2. What payment methods are available?\n\nWe offer several payment options, such as electronic payment or cash on delivery (depending on availability in your area).\n\n3. How long does delivery take?\n\nDelivery time varies depending on the recipient's location. The estimated time is displayed before order confirmation.\n\n4. Can I track my order?\n\nYes, you can track the order status directly through your account on the app or website.\n\n5. Can I modify or cancel my order?\n\nYou can modify or cancel your order within a limited timeframe after it has been created, before processing begins.\n\n6. What happens if the delivery person cannot reach the recipient?\n\nYou or the recipient will be contacted to reschedule the delivery.\n\n7. Can I send my order as a gift?\n\nYes, you can choose to send your order as a gift with a personalized message for the recipient.\n\n8. Are gifts wrapped? Certainly, orders are carefully prepared with appropriate packaging according to the type of gift.\n\n9. Can I choose a specific delivery time?\n\nIn some cases, you can specify a delivery time or window during the order placement process.\n\n10. What should I do if I encounter a problem with my order?\n\nYou can contact our support team through the app or the \"Contact Us\" page, and we will assist you as quickly as possible.",
+      "content_i18n": {
+        "ar": "الأسئلة الشائعة (FAQ)\n1-هل يمكنني الطلب من السعودية أو من خارج الأردن؟\nنعم، يمكنك الطلب من السعودية أو أي دولة أخرى بكل سهولة، وسنقوم بتوصيل الورد أو الهدية إلى المستلم داخل جميع مناطق الأردن في الموعد الذي تختاره.\n2-ما هي طرق الدفع المتوفرة؟\nنوفر عدة خيارات دفع لتناسب الجميع، بما في ذلك بطاقات الائتمان (Visa وMastercard)، والدفع الإلكتروني، بالإضافة إلى خيارات الدفع المحلية المتوفرة داخل الأردن.\n3-هل يتوفر توصيل في نفس اليوم؟\nنعم، نوفر خدمة التوصيل في نفس اليوم للطلبات التي يتم تأكيدها قبل وقت الإغلاق اليومي، وذلك حسب المدينة وتوفر المنتج.\n4-كيف أعرف أن الهدية وصلت؟\nبعد إتمام عملية التسليم، يتم تحديث حالة الطلب، كما يمكنك التواصل مع فريق خدمة العملاء للتأكد من وصول الهدية، وسنقوم بإبلاغك فور اكتمال التسليم.\n5-هل يمكن إضافة بطاقة أو رسالة مع الهدية؟\nبالتأكيد، يمكنك كتابة رسالة شخصية أثناء إتمام الطلب، وسنقوم بطباعتها وإرفاقها مع باقة الورد أو الهدية دون أي تكلفة إضافية.\n6-هل يمكنني طلب باقة ورد مخصصة؟\nنعم، نوفر خدمة تصميم باقات ورد حسب طلبك. يمكنك اختيار نوع الورد، الألوان، عدد الورود، التغليف، وإضافة الشوكولاتة أو الدمى أو أي هدية أخرى، وسنقوم بتنفيذها بما يناسب ذوقك ومناسبتك.\n7-هل تقومون بالتوصيل إلى جميع محافظات الأردن؟\nنعم، نقدم خدمة توصيل الورد والهدايا إلى جميع محافظات ومدن الأردن، مع الحرص على وصول الطلب بأفضل حالة وفي الموعد المحدد.\n8-هل يمكن تحديد موعد التوصيل؟\nنعم، يمكنك اختيار تاريخ التوصيل أثناء إتمام الطلب، وسنعمل على تسليم الهدية في الموعد المطلوب قدر الإمكان.\n9-هل الصور الموجودة على الموقع مطابقة للمنتج؟\nنعم، جميع الصور تعكس التصميم الحقيقي للمنتج. قد تطرأ اختلافات بسيطة في تنسيق الورد أو التغليف حسب الموسم وتوفر بعض الأصناف، مع الحفاظ على نفس الجودة والتصميم العام.\n10-ماذا أفعل إذا أردت تعديل أو إلغاء طلبي؟\nإذا لم يتم تجهيز الطلب أو شحنه بعد، يمكنك التواصل مع خدمة العملاء لتعديل الطلب أو إلغائه، وسنساعدك بأسرع وقت ممكن.",
+        "en": "1. How do I place an order?\n\nYou can browse products, choose the perfect gift, add it to your cart, and then easily complete your order through the checkout page.\n\n2. What payment methods are available?\n\nWe offer several payment options, such as electronic payment or cash on delivery (depending on availability in your area).\n\n3. How long does delivery take?\n\nDelivery time varies depending on the recipient's location. The estimated time is displayed before order confirmation.\n\n4. Can I track my order?\n\nYes, you can track the order status directly through your account on the app or website.\n\n5. Can I modify or cancel my order?\n\nYou can modify or cancel your order within a limited timeframe after it has been created, before processing begins.\n\n6. What happens if the delivery person cannot reach the recipient?\n\nYou or the recipient will be contacted to reschedule the delivery.\n\n7. Can I send my order as a gift?\n\nYes, you can choose to send your order as a gift with a personalized message for the recipient.\n\n8. Are gifts wrapped? Certainly, orders are carefully prepared with appropriate packaging according to the type of gift.\n\n9. Can I choose a specific delivery time?\n\nIn some cases, you can specify a delivery time or window during the order placement process.\n\n10. What should I do if I encounter a problem with my order?\n\nYou can contact our support team through the app or the \"Contact Us\" page, and we will assist you as quickly as possible."
+      },
+      "category": "Support",
+      "category_i18n": null,
+      "author": "Support Team",
+      "publish_date": "2025-03-01",
+      "views": 890,
+      "status": "published",
+      "show_in_nav": false,
+      "created_at": "2026-04-11 15:02:35",
+      "updated_at": "2026-07-22 16:14:40"
+    }
+  ],
+  "coupons": [
+    {
+      "id": 14,
+      "code": "IRIS2026",
+      "name": "عروض الموسم",
+      "description": null,
+      "type": "percentage",
+      "value": "10.00",
+      "minimum_amount": "0.00",
+      "max_discount": "0.00",
+      "usage_limit": 1,
+      "used_count": 0,
+      "start_date": "2026-07-26",
+      "end_date": "2026-09-30",
+      "is_active": true,
+      "is_public": true,
+      "applicable_products": null,
+      "applicable_categories": null,
+      "is_valid": false,
+      "created_at": "2026-07-26T17:00:02.000000Z",
+      "updated_at": "2026-08-16T13:15:31.000000Z"
+    }
+  ],
+  "filters": {
+    "attributes": {
+      "السعة": [
+        "10 لتر / دقيقة",
+        "4 شعلات غاز",
+        "5 شعلات غاز",
+        "65 لتر",
+        "85 لتر",
+        "قوة شفط 1200 م³/ساعة",
+        "مساحة شواء 70 × 45 سم"
+      ],
+      "العرض": [
+        "135 سم",
+        "35 سم",
+        "58 سم",
+        "86 سم",
+        "89.5 سم",
+        "90 سم"
+      ],
+      "العمق": [
+        "18 سم",
+        "50 سم",
+        "51 سم",
+        "56 سم",
+        "58 سم"
+      ],
+      "الألوان": [
+        "أبيض|#ffffff",
+        "أسود ملكي",
+        "أسود ملكي / فضي|#111827",
+        "أسود ملكي|#111827",
+        "ستانلس ستيل",
+        "ستانلس ستيل|#111827",
+        "فضي",
+        "فضي|#9ca3af"
+      ],
+      "الارتفاع": [
+        "115 سم",
+        "12 سم",
+        "4.5 سم",
+        "5 سم",
+        "55 سم",
+        "59.5 سم",
+        "70-105 سم",
+        "72 سم"
+      ],
+      "بلد المنشأ": [
+        "إيطاليا"
+      ],
+      "نوع الطاقة": [
+        "غاز طبيعي / مسال",
+        "غاز مسال",
+        "كهرباء 230 واط"
+      ],
+      "صمام الأمان": [
+        "أمان كامل",
+        "أمان كامل فوري",
+        "حماية ثلاثية متكاملة",
+        "صمامات أمان معتمدة",
+        "صمامات نحاسية آمنة",
+        "نظام ODS مع قفل عند الميلان"
+      ],
+      "وظائف الطهي": [
+        "4 وظائف",
+        "6 وظائف",
+        "7 وظائف"
+      ],
+      "نظام الإشعال": [
+        "أوتوماتيكي عند فتح صنبور المياه",
+        "إشعال بيزو ذاتي",
+        "إلكتروني أوتوماتيكي فوري",
+        "إلكتروني ذاتي",
+        "إلكتروني مدمج بالمفتاح"
+      ],
+      "المؤقت الرقمي": [
+        "شاشة رقمية LED",
+        "لا",
+        "مؤشر حرارة رقمي",
+        "مقياس حرارة مدمج بالغطاء"
+      ],
+      "الجهد الكهربائي": [
+        "220-240 فولت",
+        "شاشة إلكترونية تعمل بالبطاريات",
+        "لا يتطلب كهرباء"
+      ],
+      "اللون والمظهر": [
+        "زجاج حراري مقسّى أسود",
+        "ستانلس ستيل وأسود"
+      ]
+    }
+  },
+  "countries": [
+    {
+      "id": 1,
+      "name": "المملكة العربية السعودية",
+      "name_en": "Saudi Arabia",
+      "name_ar": "المملكة العربية السعودية",
+      "code": "SA",
+      "phone_code": "966",
+      "currency": "SAR",
+      "is_active": 1
+    },
+    {
+      "id": 2,
+      "name": "الأردن",
+      "name_en": "Jordan",
+      "name_ar": "الأردن",
+      "code": "JO",
+      "phone_code": "962",
+      "currency": "JOD",
+      "is_active": 1
+    }
+  ],
+  "cities": [
+    {
+      "id": 1,
+      "country_id": 1,
+      "name": "الرياض",
+      "name_en": "Riyadh",
+      "name_ar": "الرياض",
+      "is_active": 1
+    },
+    {
+      "id": 2,
+      "country_id": 1,
+      "name": "جدة",
+      "name_en": "Jeddah",
+      "name_ar": "جدة",
+      "is_active": 1
+    },
+    {
+      "id": 3,
+      "country_id": 1,
+      "name": "الدمام",
+      "name_en": "Dammam",
+      "name_ar": "الدمام",
+      "is_active": 1
+    },
+    {
+      "id": 4,
+      "country_id": 2,
+      "name": "عمان",
+      "name_en": "Amman",
+      "name_ar": "عمان",
+      "is_active": 1
+    },
+    {
+      "id": 5,
+      "country_id": 2,
+      "name": "إربد",
+      "name_en": "Irbid",
+      "name_ar": "إربد",
+      "is_active": 1
+    }
+  ],
+  "shippingRates": [
+    {
+      "id": 1,
+      "city_id": 1,
+      "rate": 0,
+      "shipping_rate": 0
+    },
+    {
+      "id": 2,
+      "city_id": 2,
+      "rate": 20,
+      "shipping_rate": 20
+    },
+    {
+      "id": 3,
+      "city_id": 3,
+      "rate": 25,
+      "shipping_rate": 25
+    },
+    {
+      "id": 4,
+      "city_id": 4,
+      "rate": 5,
+      "shipping_rate": 5
+    },
+    {
+      "id": 5,
+      "city_id": 5,
+      "rate": 7,
+      "shipping_rate": 7
+    }
+  ],
+  "addresses": [
+    {
+      "id": 1,
+      "customer_id": 1,
+      "name": "أحمد الحربي",
+      "full_name": "أحمد الحربي",
+      "recipient_name": "أحمد الحربي",
+      "phone": "0557654321",
+      "country_id": 1,
+      "country_name": "المملكة العربية السعودية",
+      "country": {
+        "id": 1,
+        "name": "المملكة العربية السعودية",
+        "code": "SA"
+      },
+      "city_id": 2,
+      "city": "جدة",
+      "district": "النعيم",
+      "address": "شارع حراء، فيلا 18أ",
+      "is_default": true
+    },
+    {
+      "id": 2,
+      "customer_id": 1,
+      "name": "عبدالله القحطاني",
+      "full_name": "عبدالله القحطاني",
+      "recipient_name": "عبدالله القحطاني",
+      "phone": "0501234567",
+      "country_id": 1,
+      "country_name": "المملكة العربية السعودية",
+      "country": {
+        "id": 1,
+        "name": "المملكة العربية السعودية",
+        "code": "SA"
+      },
+      "city_id": 1,
+      "city": "الرياض",
+      "district": "الياسمين",
+      "address": "طريق الملك عبدالعزيز، شقة 4، مبنى 12",
+      "is_default": false
+    }
+  ],
+  "pages": [],
+  "reviews": [],
+  "customers": [
+    {
+      "id": 1,
+      "name": "عمر رجب",
+      "email": "demo@mastergas.local",
+      "password": "demo123",
+      "phone": "0551234567",
+      "country": "SA",
+      "country_id": 1,
+      "city_id": 1,
+      "city": "الرياض",
+      "address": "طريق الملك فهد، حي الصحافة، فيلا 12",
+      "addresses": [
+        {
+          "id": 1,
+          "customer_id": 1,
+          "name": "المنزل",
+          "full_name": "عمر رجب",
+          "phone": "0551234567",
+          "country_id": 1,
+          "country_name": "المملكة العربية السعودية",
+          "country": {
+            "id": 1,
+            "name": "المملكة العربية السعودية",
+            "code": "SA"
+          },
+          "city_id": 1,
+          "city": "الرياض",
+          "address": "طريق الملك فهد، حي الصحافة، فيلا 12",
+          "is_default": true
+        },
+        {
+          "id": 2,
+          "customer_id": 1,
+          "name": "العمل",
+          "full_name": "عمر رجب",
+          "phone": "0559876543",
+          "country_id": 1,
+          "country_name": "المملكة العربية السعودية",
+          "country": {
+            "id": 1,
+            "name": "المملكة العربية السعودية",
+            "code": "SA"
+          },
+          "city_id": 1,
+          "city": "الرياض",
+          "address": "طريق الملك عبد العزيز، حي الياسمين، برج الأعمال 4",
+          "is_default": false
+        }
+      ]
+    }
+  ],
+  "admins": [
+    {
+      "id": 1,
+      "name": "Local Admin",
+      "email": "admin@mastergas.local",
+      "password": "admin123",
+      "role": "super-admin",
+      "permissions": [
+        "*"
+      ]
+    }
+  ]
+}
