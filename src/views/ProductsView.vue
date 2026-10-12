@@ -115,7 +115,7 @@
                   </div>
                   <div class="prod-details">
                     <span class="prod-title">{{ prod.name_i18n?.ar || prod.name }}</span>
-                    <span class="prod-cat-badge">{{ categoryName(prod.category) || 'غير محدد' }}</span>
+                    <span class="prod-cat-badge">{{ productCategoryName(prod, categories) || 'غير محدد' }}</span>
                   </div>
                 </div>
               </td>
@@ -629,7 +629,7 @@
           <div class="view-title-row">
             <div>
               <h3 class="view-title">{{ viewProduct?.name }}</h3>
-              <p class="view-subtitle">{{ categoryName(viewProduct?.category) }} <span v-if="viewProduct?.subcategory">/ {{ viewProduct?.subcategory }}</span></p>
+              <p class="view-subtitle">{{ productCategoryName(viewProduct, categories) || 'غير محدد' }} <span v-if="viewProduct?.subcategory">/ {{ viewProduct?.subcategory }}</span></p>
             </div>
             <div class="view-status-badge" :class="viewProduct?.status === 'active' ? 'active' : 'inactive'">
               {{ viewProduct?.status === 'active' ? 'نشط' : 'غير نشط' }}
@@ -725,7 +725,7 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
 import adminCatalogService from '../application/adminCatalogService';
-import { categoryName, toLines, toProductPayload } from '../domain/catalog/adminCatalog';
+import { productCategoryName, toLines, toProductPayload } from '../domain/catalog/adminCatalog';
 import { dedupeColorOptions, isColorAttribute, normalizeProductAttributes } from '../utils/productAttributes';
 
 // States

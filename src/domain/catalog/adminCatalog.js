@@ -10,7 +10,33 @@ const localized = (translations, key, fallback = '') => firstText(
 export const toLines = (value) => (Array.isArray(value) ? value : String(value ?? '').split('\n')).map((line) => String(line));
 
 // A product's `category` is a mapped object after toProduct(); views need a display name.
-export const categoryName = (category) => (category && typeof category === 'object' ? (category.name_i18n?.ar || category.name) : category);
+export const categoryName = (category) => {
+  if (!category || typeof category !== 'object') return category;
+  return firstText(
+    category.name_i18n?.ar,
+    category.translations?.ar?.name,
+    category.name_ar,
+    category.name_i18n?.en,
+    category.translations?.en?.name,
+    category.name_en,
+    category.name,
+  );
+};
+
+// The products endpoint can return the relationship as an object, a name, or
+// only as category_id. Resolve all of those shapes before the table falls back
+// to "غير محدد". `categories` may contain parent categories with `subchildren`.
+export const productCategoryName = (product = {}, categories = []) => {
+  const directName = categoryName(product.category);
+  if (directName !== undefined && directName !== null && String(directName).trim() !== '' && !/^\d+$/.test(String(directName))) {
+    return directName;
+  }
+
+  const categoryId = product.subcategory_id ?? product.category_id ?? product.category?.id;
+  const allCategories = categories.flatMap((category) => [category, ...(category.subchildren || [])]);
+  const matched = allCategories.find((category) => Number(category.id) === Number(categoryId));
+  return categoryName(matched) || product.category_name || product.subcategory_name || '';
+};
 
 const unwrap = (payload) => payload?.data ?? payload;
 
@@ -61,7 +87,7 @@ export const toProduct = (raw = {}) => {
     tips_i18n: { ar: tipsAr, en: tipsEn },
     shipping_info_i18n: { ar: shippingAr, en: shippingEn },
     category,
-    category_id: raw.category_id ?? category?.id,
+    category_id: raw.subcategory_id ?? raw.category_id ?? category?.id,
     stock: raw.number ?? raw.quantity ?? raw.stock,
     quantity: raw.number ?? raw.quantity ?? raw.stock,
     status: raw.is_active === false || raw.is_active === 0 ? 'inactive' : 'active',
