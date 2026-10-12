@@ -131,7 +131,7 @@
                 </div>
               </td>
               <td class="col-products">
-                <span class="products-count">{{ cat.products_count }} <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
+                <span class="products-count">{{ categoryProductCount(cat) }} <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
               </td>
               <td class="col-parent">
                 <span v-if="cat.parent" class="parent-badge">{{ cat.parent.name_i18n?.ar || cat.parent.name }}</span>
@@ -292,7 +292,7 @@
           </div>
           <div class="detail-row">
             <span class="detail-label">عدد المنتجات:</span>
-            <span class="detail-value">{{ viewCategory.products_count }} منتج</span>
+            <span class="detail-value">{{ categoryProductCount(viewCategory) }} منتج</span>
           </div>
         </div>
       </div>
@@ -316,6 +316,7 @@ import { toCategoryPayload } from '../domain/catalog/adminCatalog';
 
 // State
 const categories = ref([]);
+const allProducts = ref([]);
 const loading = ref(false);
 const searchQuery = ref('');
 const statusFilter = ref('');
@@ -324,7 +325,22 @@ const statusFilter = ref('');
 const activeCategoriesCount = computed(() => categories.value.filter(c => c.is_active).length);
 const mainCategoriesCount = computed(() => categories.value.filter(c => !c.parent_id).length);
 const subCategoriesCount = computed(() => categories.value.filter(c => c.parent_id).length);
-const totalProductsCount = computed(() => categories.value.reduce((sum, c) => sum + (c.products_count || 0), 0));
+const productCounts = computed(() => allProducts.value.reduce((counts, product) => {
+  const id = product.subcategory_id ?? product.category_id ?? product.category?.id;
+  if (id !== undefined && id !== null && id !== '') counts[Number(id)] = (counts[Number(id)] || 0) + 1;
+  return counts;
+}, {}));
+const categoryProductCount = (category) => {
+  if (allProducts.value.length) {
+    const descendantIds = categories.value
+      .filter(child => Number(child.parent_id) === Number(category.id))
+      .map(child => Number(child.id));
+    return [Number(category.id), ...descendantIds]
+      .reduce((sum, id) => sum + (productCounts.value[id] || 0), 0);
+  }
+  return Number(category.products_count || 0);
+};
+const totalProductsCount = computed(() => allProducts.value.length || categories.value.reduce((sum, c) => sum + Number(c.products_count || 0), 0));
 
 // Filtered categories
 const filteredCategories = computed(() => {
@@ -391,7 +407,12 @@ const triggerAlert = (msg, type = 'success') => {
 const fetchCategories = async () => {
   loading.value = true;
   try {
-    categories.value = await adminCatalogService.listCategories();
+    const [categoryList, productList] = await Promise.all([
+      adminCatalogService.listCategories(),
+      adminCatalogService.listAllProducts(),
+    ]);
+    categories.value = categoryList;
+    allProducts.value = productList;
   } catch {
     triggerAlert('فشل جلب الأقسام', 'error');
   } finally {

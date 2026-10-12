@@ -34,6 +34,18 @@ export const adminCatalogService = {
     data: listFromResponse(response.data).map(toProduct),
     items: listFromResponse(response.data).map(toProduct),
   })),
+  // The categories endpoint does not include products_count. Collect every
+  // product page so CategoriesView can calculate authoritative counters.
+  listAllProducts: async (params = {}) => {
+    const first = await tijaraAdminApi.listProducts({ ...params, page: 1 });
+    const items = [...listFromResponse(first.data)];
+    const lastPage = Math.min(Number(first.data?.meta?.last_page) || 1, MAX_PAGES);
+    for (let page = 2; page <= lastPage; page += 1) {
+      const next = await tijaraAdminApi.listProducts({ ...params, page });
+      items.push(...listFromResponse(next.data));
+    }
+    return items.map(toProduct);
+  },
   createProduct: (payload, files) => mapData(() => tijaraAdminApi.createProduct(payload, files), toProduct),
   updateProduct: (id, payload, files) => mapData(() => tijaraAdminApi.updateProduct(id, payload, files), toProduct),
   deleteProduct: tijaraAdminApi.deleteProduct,
