@@ -408,8 +408,8 @@ const fetchCategories = async () => {
   loading.value = true;
   try {
     const [categoryList, productList] = await Promise.all([
-      adminCatalogService.listCategories(),
-      adminCatalogService.listAllProducts(),
+      adminCatalogService.listCategories({ include_inactive: 1, show_all: 1 }),
+      adminCatalogService.listAllProducts({ include_inactive: 1, show_all: 1 }),
     ]);
     categories.value = categoryList;
     allProducts.value = productList;

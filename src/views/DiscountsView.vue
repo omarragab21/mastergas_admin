@@ -517,7 +517,7 @@ const goToPage = (page) => {
 const fetchOffers = async () => {
   loading.value = true;
   try {
-    offers.value = await adminCatalogService.listDiscountCodes();
+    offers.value = await adminCatalogService.listDiscountCodes({ include_inactive: 1, show_all: 1 });
     totalOffersCount.value = offers.value.length;
   } catch {
     offers.value = [];

@@ -1103,7 +1103,11 @@ const fetchProducts = async () => {
   try {
     const params = {
       page: currentPage.value,
-      per_page: perPage.value
+      per_page: perPage.value,
+      // Admin must be able to manage records in either state. Public catalog
+      // endpoints remain active-only; this flag is scoped to the admin API.
+      include_inactive: 1,
+      show_all: 1,
     };
 
     if (catFilter.value) {
@@ -1130,9 +1134,8 @@ const fetchProducts = async () => {
 
 const fetchStats = async () => {
   try {
-    const allRes = await adminCatalogService.listProducts({ per_page: 10000 });
-    const allList = allRes.data || allRes.items || [];
-    const totalCount = Number(allRes.meta?.total ?? allRes.total ?? allList.length);
+    const allList = await adminCatalogService.listAllProducts({ include_inactive: 1, show_all: 1 });
+    const totalCount = allList.length;
     const activeCount = allList.filter(p => p.status === 'active').length;
     const inactiveCount = allList.filter(p => p.status !== 'active').length;
     const salesSum = allList.reduce((sum, p) => sum + Number(p.sales || p.sales_count || p.total_sold || 0), 0);
