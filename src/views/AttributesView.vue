@@ -13,16 +13,16 @@
     <div class="modal-overlay" v-if="showAttributeModal" @click.self="closeAttributeModal">
       <div class="modal-content">
         <button class="modal-close" @click="closeAttributeModal">×</button>
-        <h3 class="modal-title">إضافة خاصية منتج</h3>
-        <p class="modal-subtitle">أضف اللون أو المقاس أو أي خاصية نصية جديدة</p>
+        <h3 class="modal-title">{{ editingAttributeId ? 'تعديل خاصية منتج' : 'إضافة خاصية منتج' }}</h3>
+        <p class="modal-subtitle">{{ editingAttributeId ? 'عدّل الاسم أو النوع — القيم تُدار من زر إدارة القيم' : 'أضف اللون أو المقاس أو أي خاصية نصية جديدة' }}</p>
         <form class="value-form" @submit.prevent="submitAttribute">
           <div class="form-group"><label class="form-label">الاسم بالعربي *</label><input v-model="attributeForm.name_ar" class="form-control" required placeholder="اللون" /></div>
           <div class="form-group"><label class="form-label">الاسم بالإنجليزية *</label><input v-model="attributeForm.name_en" class="form-control" required placeholder="Color" /></div>
           <div class="form-group"><label class="form-label">نوع الخاصية</label><select v-model="attributeForm.type" class="form-control"><option value="color">لون</option><option value="select">اختيارات</option><option value="text">نص</option></select></div>
-          <div class="form-group"><label class="form-label">القيم (افصل بينها بفاصلة)</label><input v-model="attributeForm.values_list" class="form-control" placeholder="أسود|#111827, أبيض|#ffffff" /></div>
+          <div class="form-group" v-if="!editingAttributeId"><label class="form-label">القيم (افصل بينها بفاصلة)</label><input v-model="attributeForm.values_list" class="form-control" placeholder="أسود|#111827, أبيض|#ffffff" /><span class="help-text">الفاصلة تفصل بين القيم، فلا تستخدمها داخل القيمة نفسها — أضف القيم المركّبة لاحقاً من زر «إضافة قيمة».</span></div>
           <div class="form-actions">
             <button class="btn-cancel" type="button" @click="closeAttributeModal">إلغاء</button>
-            <button class="btn-submit" type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'جاري الحفظ...' : 'حفظ الخاصية' }}</button>
+            <button class="btn-submit" type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'جاري الحفظ...' : (editingAttributeId ? 'حفظ التعديلات' : 'حفظ الخاصية') }}</button>
           </div>
         </form>
       </div>
@@ -80,6 +80,9 @@
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                       <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/>
                     </svg>
+                  </button>
+                  <button class="action-btn edit-btn" @click="openEditAttributeModal(attr)" title="تعديل الخاصية" aria-label="تعديل الخاصية">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   </button>
                   <button class="action-btn add-btn" @click="openAddValueModal(attr)" title="إضافة قيمة جديدة">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -260,7 +263,7 @@ const fetchAttributes = async () => {
         selectedAttribute.value = updated;
       }
     }
-  } catch (err) {
+  } catch {
     triggerAlert('فشل جلب الخصائص', 'error');
   } finally {
     loading.value = false;
@@ -290,7 +293,21 @@ const closeValueModal = () => {
   selectedAttribute.value = null;
 };
 
+const editingAttributeId = ref(null);
+
+const openEditAttributeModal = (attr) => {
+  editingAttributeId.value = attr.id;
+  attributeForm.value = {
+    name_ar: attr.translations?.ar?.name || attr.name || '',
+    name_en: attr.translations?.en?.name || attr.name || '',
+    type: attr.type || 'select',
+    values_list: '',
+  };
+  showAttributeModal.value = true;
+};
+
 const openAttributeModal = () => {
+  editingAttributeId.value = null;
   attributeForm.value = { name_ar: '', name_en: '', label_ar: '', label_en: '', type: 'select', values_list: '', is_active: true, sort_order: attributes.value.length + 1 };
   showAttributeModal.value = true;
 };
@@ -300,16 +317,21 @@ const closeAttributeModal = () => { showAttributeModal.value = false; };
 const submitAttribute = async () => {
   isSubmitting.value = true;
   try {
-    await productAttributeService.create({
-      ...attributeForm.value,
-      label_ar: attributeForm.value.label_ar || `اختر ${attributeForm.value.name_ar}`,
-      label_en: attributeForm.value.label_en || `Select ${attributeForm.value.name_en}`,
-    });
+    if (editingAttributeId.value) {
+      await productAttributeService.update(editingAttributeId.value, attributeForm.value);
+    } else {
+      await productAttributeService.create({
+        ...attributeForm.value,
+        label_ar: attributeForm.value.label_ar || `اختر ${attributeForm.value.name_ar}`,
+        label_en: attributeForm.value.label_en || `Select ${attributeForm.value.name_en}`,
+      });
+    }
+    const wasEdit = Boolean(editingAttributeId.value);
     closeAttributeModal();
     await fetchAttributes();
-    triggerAlert('تم إضافة الخاصية بنجاح');
+    triggerAlert(wasEdit ? 'تم تحديث الخاصية بنجاح' : 'تم إضافة الخاصية بنجاح');
   } catch (error) {
-    triggerAlert(error.response?.data?.message || 'تعذر إضافة الخاصية', 'error');
+    triggerAlert(error.response?.data?.message || 'تعذر حفظ الخاصية', 'error');
   } finally {
     isSubmitting.value = false;
   }

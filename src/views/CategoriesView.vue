@@ -216,7 +216,7 @@
 
           <div class="form-group" v-show="activeLang === 'en'">
             <label class="form-label">الاسم (English) <span class="req">*</span></label>
-            <input type="text" v-model="form.name_en" class="form-control" placeholder="Category name in English" required />
+            <input type="text" v-model="form.name_en" class="form-control" placeholder="Category name in English" />
           </div>
 
 
@@ -311,7 +311,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import api from '../config/axios';
+import adminCatalogService from '../application/adminCatalogService';
+import { toCategoryPayload } from '../domain/catalog/adminCatalog';
 
 // State
 const categories = ref([]);
@@ -340,7 +341,6 @@ const filteredCategories = computed(() => {
   });
 });
 
-const mainCategories = computed(() => categories.value.filter(c => !c.parent_id));
 
 // Modals
 const showFormModal = ref(false);
@@ -391,9 +391,8 @@ const triggerAlert = (msg, type = 'success') => {
 const fetchCategories = async () => {
   loading.value = true;
   try {
-    const res = await api.get('/dashboard/categories');
-    categories.value = res.data.data || res.data;
-  } catch (error) {
+    categories.value = await adminCatalogService.listCategories();
+  } catch {
     triggerAlert('فشل جلب الأقسام', 'error');
   } finally {
     loading.value = false;
@@ -484,25 +483,13 @@ const submitForm = async () => {
 
   isSubmitting.value = true;
   
-  const formData = new FormData();
-  formData.append('name', JSON.stringify({ ar: form.value.name_ar || '', en: form.value.name_en || '' }));
-  formData.append('description', JSON.stringify({ ar: form.value.description_ar || '', en: form.value.description_en || '' }));
-  if (form.value.parent_id) formData.append('parent_id', form.value.parent_id);
-  formData.append('is_active', form.value.is_active ? 1 : 0);
-  formData.append('sort_order', form.value.sort_order || 0);
-  if (form.value.image) formData.append('image', form.value.image);
-
   try {
+    const payload = toCategoryPayload(form.value);
     if (isEdit.value) {
-      formData.append('_method', 'PUT'); // For Laravel multipart put
-      await api.post(`/dashboard/categories/${editingId.value}`, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      await adminCatalogService.updateCategory(editingId.value, payload, form.value.image);
       triggerAlert('تم تحديث القسم بنجاح');
     } else {
-      await api.post('/dashboard/categories', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      await adminCatalogService.createCategory(payload, form.value.image);
       triggerAlert('تم إضافة القسم بنجاح');
     }
     closeModal();
@@ -519,7 +506,7 @@ const submitForm = async () => {
 const confirmDelete = async (cat) => {
   if (confirm(`هل أنت متأكد من حذف القسم "${cat.name_i18n?.ar || cat.name}"؟`)) {
     try {
-      await api.delete(`/dashboard/categories/${cat.id}`);
+      await adminCatalogService.deleteCategory(cat.id);
       triggerAlert('تم الحذف بنجاح');
       fetchCategories();
     } catch (error) {

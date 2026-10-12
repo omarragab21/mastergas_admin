@@ -1,39 +1,29 @@
-import api from '../config/axios';
-import { normalizeProductAttributes } from '../utils/productAttributes';
+import adminCatalogService from '../application/adminCatalogService';
+import { toAttributeOptionPayload, toAttributePayload, toAttributeUpdatePayload } from '../domain/catalog/adminCatalog';
 
-const unwrapList = (response) => normalizeProductAttributes(response?.data?.data || []);
-
-export const buildProductAttributePayload = (form) => ({
-  name: { en: String(form.name_en || '').trim(), ar: String(form.name_ar || '').trim() },
-  label: { en: String(form.label_en || '').trim(), ar: String(form.label_ar || '').trim() },
-  type: form.type || 'select',
-  values_list: String(form.values_list || '').split(',').map((value) => value.trim()).filter(Boolean),
-  is_active: Boolean(form.is_active),
-  sort_order: Number(form.sort_order) || 1,
-});
+export const buildProductAttributePayload = (form) => toAttributePayload(form);
 
 export const productAttributeService = {
   async list() {
-    const response = await api.get('/dashboard/product-attributes');
-    return unwrapList(response);
+    return adminCatalogService.listAttributes();
   },
   async create(form) {
-    const response = await api.post('/dashboard/product-attributes/store', buildProductAttributePayload(form));
-    return response.data?.data || response.data;
+    return adminCatalogService.createAttribute(buildProductAttributePayload(form));
+  },
+  async update(attributeId, form) {
+    return adminCatalogService.updateAttribute(attributeId, toAttributeUpdatePayload(form));
   },
   async delete(attributeId) {
-    return api.delete(`/dashboard/product-attributes/${attributeId}/delete`);
+    return adminCatalogService.deleteAttribute(attributeId);
   },
   async createValue(attributeId, value) {
-    const response = await api.post(`/dashboard/product-attributes/${attributeId}/values`, value);
-    return response.data?.data || response.data;
+    return adminCatalogService.createAttributeOption(attributeId, toAttributeOptionPayload(value));
   },
   async updateValue(attributeId, valueId, value) {
-    const response = await api.put(`/dashboard/product-attributes/${attributeId}/values/${valueId}`, value);
-    return response.data?.data || response.data;
+    return adminCatalogService.updateAttributeOption(attributeId, valueId, toAttributeOptionPayload(value));
   },
   async deleteValue(attributeId, valueId) {
-    return api.delete(`/dashboard/product-attributes/${attributeId}/values/${valueId}`);
+    return adminCatalogService.deleteAttributeOption(attributeId, valueId);
   },
 };
 

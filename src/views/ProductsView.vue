@@ -115,7 +115,7 @@
                   </div>
                   <div class="prod-details">
                     <span class="prod-title">{{ prod.name_i18n?.ar || prod.name }}</span>
-                    <span class="prod-cat-badge">{{ prod.category || 'غير محدد' }}</span>
+                    <span class="prod-cat-badge">{{ categoryName(prod.category) || 'غير محدد' }}</span>
                   </div>
                 </div>
               </td>
@@ -250,7 +250,7 @@
 
             <div class="form-group" v-show="activeLang === 'en'">
               <label class="form-label">اسم المنتج (English) <span class="req">*</span></label>
-              <input type="text" v-model="form.name_en" class="form-control" placeholder="Product name in English (اسم المنتج بالإنجليزية)" required />
+              <input type="text" v-model="form.name_en" class="form-control" placeholder="Product name in English (اسم المنتج بالإنجليزية)" />
             </div>
 
             <div class="form-row">
@@ -283,7 +283,8 @@
               </div>
               <div class="form-group half-width">
                 <label class="form-label">الخصم (%)</label>
-                <input type="number" step="0.1" min="0" max="100" v-model="form.discount" class="form-control no-rtl-issue" placeholder="0 (Discount)" />
+                <input type="number" step="0.1" min="1" max="99" v-model="form.discount" class="form-control no-rtl-issue" placeholder="1–99% (Discount)" />
+                <span class="field-hint">الحد الأدنى المقبول من النظام 1% — يُطبَّق تلقائياً عند ترك الحقل فارغاً.</span>
               </div>
             </div>
 
@@ -628,7 +629,7 @@
           <div class="view-title-row">
             <div>
               <h3 class="view-title">{{ viewProduct?.name }}</h3>
-              <p class="view-subtitle">{{ viewProduct?.category }} <span v-if="viewProduct?.subcategory">/ {{ viewProduct?.subcategory }}</span></p>
+              <p class="view-subtitle">{{ categoryName(viewProduct?.category) }} <span v-if="viewProduct?.subcategory">/ {{ viewProduct?.subcategory }}</span></p>
             </div>
             <div class="view-status-badge" :class="viewProduct?.status === 'active' ? 'active' : 'inactive'">
               {{ viewProduct?.status === 'active' ? 'نشط' : 'غير نشط' }}
@@ -657,13 +658,13 @@
           <div class="view-sections">
             <div class="v-section" v-if="viewProduct?.description">
               <h4 class="v-section-title">نبذة عن المنتج</h4>
-              <div class="v-section-content" style="white-space: pre-wrap;">{{ viewProduct?.description }}</div>
+              <div class="v-section-content" style="white-space: pre-wrap;">{{ toLines(viewProduct?.description).join('\n') }}</div>
             </div>
             <div class="v-section" v-if="viewProduct?.features">
               <h4 class="v-section-title">المميزات الرئيسية</h4>
               <div class="v-section-content">
                 <ul class="v-feature-list">
-                  <li v-for="(feature, idx) in viewProduct.features.split('\n')" :key="idx" v-show="feature.trim() !== ''">
+                  <li v-for="(feature, idx) in toLines(viewProduct.features)" :key="idx" v-show="feature.trim() !== ''">
                     {{ feature.replace(/^[-*•]\s*/, '').trim() }}
                   </li>
                 </ul>
@@ -673,7 +674,7 @@
               <h4 class="v-section-title">نصائح</h4>
               <div class="v-section-content">
                 <ul class="v-feature-list">
-                  <li v-for="(tip, idx) in viewProduct.tips.split('\n')" :key="idx" v-show="tip.trim() !== ''">
+                  <li v-for="(tip, idx) in toLines(viewProduct.tips)" :key="idx" v-show="tip.trim() !== ''">
                     {{ tip.replace(/^[-*•]\s*/, '').trim() }}
                   </li>
                 </ul>
@@ -681,7 +682,7 @@
             </div>
             <div class="v-section" v-if="viewProduct?.shipping_info">
               <h4 class="v-section-title">الشحن والضمان</h4>
-              <div class="v-section-content" style="white-space: pre-wrap;">{{ viewProduct.shipping_info }}</div>
+              <div class="v-section-content" style="white-space: pre-wrap;">{{ toLines(viewProduct.shipping_info).join('\n') }}</div>
             </div>
             <div class="v-section" v-if="Object.keys(viewProduct?.attributes || {}).length > 0">
               <h4 class="v-section-title">خصائص المنتج</h4>
@@ -723,7 +724,8 @@
 
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue';
-import api from '../config/axios';
+import adminCatalogService from '../application/adminCatalogService';
+import { categoryName, toLines, toProductPayload } from '../domain/catalog/adminCatalog';
 import { dedupeColorOptions, isColorAttribute, normalizeProductAttributes } from '../utils/productAttributes';
 
 // States
@@ -916,20 +918,6 @@ const removeSize = (idx) => {
 
 const hasColorType = (attr) => {
   return isColorAttribute(attr);
-};
-
-const addCustomAttributeValue = (attrName, defaultVal = '') => {
-  if (!customAttributes.value[attrName]) customAttributes.value[attrName] = [];
-  
-  if (defaultVal) {
-    customAttributes.value[attrName].push(defaultVal);
-  } else {
-    const val = customInputs.value[attrName]?.trim();
-    if (val && !customAttributes.value[attrName].includes(val)) {
-      customAttributes.value[attrName].push(val);
-      customInputs.value[attrName] = '';
-    }
-  }
 };
 
 // Specifications Management
@@ -1130,25 +1118,10 @@ const fetchProducts = async () => {
       params.search = searchQuery.value;
     }
 
-    const res = await api.get('/dashboard/products', { params });
-
-    const rawData = res.data.data;
-    const productList = Array.isArray(rawData) ? rawData : (rawData?.data || []);
-    products.value = productList;
-
-    const extractedTotal = res.data.meta?.total ?? 
-                           res.data.total ?? 
-                           (rawData && typeof rawData === 'object' && !Array.isArray(rawData) ? rawData.total : undefined) ?? 
-                           res.data.stats?.total ?? 
-                           res.data.summary?.total_products ?? 
-                           res.data.total_products;
-
-    if (extractedTotal !== undefined && extractedTotal !== null) {
-      totalProductsCount.value = Number(extractedTotal);
-    } else {
-      totalProductsCount.value = productList.length;
-    }
-  } catch (err) {
+    const res = await adminCatalogService.listProducts(params);
+    products.value = res.data || res.items || [];
+    totalProductsCount.value = Number(res.meta?.total ?? res.total ?? products.value.length);
+  } catch {
     triggerAlert('فشل استيراد المنتجات', 'error');
   } finally {
     loading.value = false;
@@ -1157,37 +1130,14 @@ const fetchProducts = async () => {
 
 const fetchStats = async () => {
   try {
-    const statsRes = await api.get('/dashboard/statistics').catch(() => null);
-    if (statsRes?.data?.data?.summary) {
-      const s = statsRes.data.data.summary;
-      if (s.total_products !== undefined || s.products_count !== undefined) {
-        overallStats.value.total = Number(s.total_products ?? s.products_count ?? 0);
-      }
-    }
-
-    const allRes = await api.get('/dashboard/products', { params: { per_page: 10000 } }).catch(() => null);
-    if (allRes?.data) {
-      const rawAll = allRes.data.data;
-      const allList = Array.isArray(rawAll) ? rawAll : (rawAll?.data || []);
-      const totalFromMeta = allRes.data.meta?.total ?? allRes.data.total ?? (rawAll && typeof rawAll === 'object' && !Array.isArray(rawAll) ? rawAll.total : undefined);
-      
-      const totalCount = totalFromMeta !== undefined && totalFromMeta !== null ? Number(totalFromMeta) : allList.length;
-      const activeCount = allList.filter(p => p.status === 'active' || p.is_active === true || p.is_active === 1).length;
-      const inactiveCount = totalCount > allList.length && allList.length > 0 ? (totalCount - activeCount) : allList.filter(p => p.status !== 'active' && !p.is_active && p.is_active !== 1).length;
-      const salesSum = allList.reduce((sum, p) => sum + Number(p.sales || p.sales_count || p.total_sold || 0), 0);
-
-      overallStats.value = {
-        total: totalCount || overallStats.value.total,
-        active: activeCount,
-        inactive: inactiveCount,
-        totalSales: salesSum,
-        isLoaded: true
-      };
-
-      if (totalCount > 0) {
-        totalProductsCount.value = totalCount;
-      }
-    }
+    const allRes = await adminCatalogService.listProducts({ per_page: 10000 });
+    const allList = allRes.data || allRes.items || [];
+    const totalCount = Number(allRes.meta?.total ?? allRes.total ?? allList.length);
+    const activeCount = allList.filter(p => p.status === 'active').length;
+    const inactiveCount = allList.filter(p => p.status !== 'active').length;
+    const salesSum = allList.reduce((sum, p) => sum + Number(p.sales || p.sales_count || p.total_sold || 0), 0);
+    overallStats.value = { total: totalCount, active: activeCount, inactive: inactiveCount, totalSales: salesSum, isLoaded: true };
+    totalProductsCount.value = totalCount;
   } catch (err) {
     console.error('Failed to fetch overall product stats:', err);
   }
@@ -1197,17 +1147,16 @@ const fetchDependencies = async () => {
   attributesLoading.value = true;
   attributesLoadError.value = false;
   try {
-    const [cats, attrs] = await Promise.all([
-      api.get('/dashboard/categories'),
-      api.get('/dashboard/product-attributes')
+    const [allCategories, rawAttributes] = await Promise.all([
+      adminCatalogService.listCategories(),
+      adminCatalogService.listAttributes(),
     ]);
-    categories.value = cats.data.data.filter(c => !c.parent_id);
-    const allC = cats.data.data;
+    categories.value = allCategories.filter(c => !c.parent_id);
+    const allC = allCategories;
     categories.value.forEach(c => {
-      c.subchildren = allC.filter(sc => sc.parent_id === c.id);
+      c.subchildren = allC.filter(sc => Number(sc.parent_id) === Number(c.id));
     });
 
-    const rawAttributes = attrs?.data?.data ?? attrs?.data ?? [];
     const normalizedAttributes = normalizeProductAttributes(rawAttributes).filter(a => a.is_active);
     if (!normalizedAttributes.length) {
       throw new Error('Product attributes API returned an empty list.');
@@ -1287,13 +1236,15 @@ const openEditModal = (prod) => {
   customColorHex.value = '#111827';
   customSizeInput.value = '';
   
-  // Find category ID
-  const cat = categories.value.find(c => c.name === prod.category);
-  const catId = cat ? cat.id : '';
+  // Resolve the API category object/ID into the form's parent + sub-category fields.
+  const allCategories = categories.value.flatMap((category) => [category, ...(category.subchildren || [])]);
+  const cat = allCategories.find(c => Number(c.id) === Number(prod.category_id))
+    || allCategories.find(c => c.name === (typeof prod.category === 'object' ? prod.category.name : prod.category));
+  const catId = cat?.parent_id ? cat.parent_id : (cat?.id || '');
   if (catId) {
     subCategories.value = cat.subchildren || [];
   }
-  const subcatId = subCategories.value.find(sc => sc.name === prod.subcategory)?.id || '';
+  const subcatId = cat?.parent_id ? cat.id : (subCategories.value.find(sc => sc.name === prod.subcategory)?.id || '');
 
   const selAttr = {};
   const custAttr = {};
@@ -1304,7 +1255,10 @@ const openEditModal = (prod) => {
   
   attributesList.value.forEach(a => { 
     const key = a.name;
-    const values = existingAttrs[key] || [];
+    const rawValues = existingAttrs[key] || [];
+    const values = Array.isArray(rawValues)
+      ? rawValues.map(value => typeof value === 'object' ? (value.label || value.name || '') : value)
+      : [];
     const predefinedLabels = a.values ? a.values.map(v => v.label) : [];
     
     selAttr[key] = values.filter(v => predefinedLabels.includes(v));
@@ -1499,12 +1453,15 @@ const setPrimaryNewImage = (idx) => {
   }
 };
 
-const handleAttrCheckbox = (attrName, valId, e) => {
-  const arr = form.value.selectedAttributes[attrName];
-  if (!Array.isArray(arr)) { form.value.selectedAttributes[attrName] = []; }
+// Form Submission
+const validateProductForm = (f) => {
+  if (!f.category_id && !f.subcategory_id) return 'القسم الرئيسي مطلوب';
+  if (f.price === '' || f.price == null || !(Number(f.price) >= 0)) return 'السعر يجب أن يكون رقماً صحيحاً (0 أو أكبر)';
+  if (f.quantity === '' || f.quantity == null || !Number.isInteger(Number(f.quantity)) || Number(f.quantity) < 0) return 'المخزون يجب أن يكون عدداً صحيحاً (0 أو أكبر)';
+  if (f.discount !== '' && f.discount != null && (Number(f.discount) < 1 || Number(f.discount) > 99)) return 'نسبة الخصم يجب أن تكون بين 1% و99%';
+  return '';
 };
 
-// Form Submission
 const submitForm = async () => {
   if (!String(form.value.name_ar || '').trim()) {
     activeLang.value = 'ar';
@@ -1516,24 +1473,15 @@ const submitForm = async () => {
     triggerAlert('اسم المنتج بالإنجليزية مطلوب', 'error');
     return;
   }
+  const productError = validateProductForm(form.value);
+  if (productError) {
+    currentTab.value = 'info';
+    triggerAlert(productError, 'error');
+    return;
+  }
 
   isSubmitting.value = true;
   
-  const fd = new FormData();
-  fd.append('name', JSON.stringify({ ar: form.value.name_ar || '', en: form.value.name_en || '' }));
-  fd.append('price', form.value.price);
-  fd.append('quantity', form.value.quantity);
-  fd.append('is_active', form.value.is_active ? 1 : 0);
-  
-  if (form.value.category_id) fd.append('category_id', form.value.category_id);
-  if (form.value.subcategory_id) fd.append('subcategory_id', form.value.subcategory_id);
-  
-  fd.append('description', JSON.stringify({ ar: form.value.description_ar || '', en: form.value.description_en || '' }));
-  fd.append('discount', form.value.discount || 0);
-  fd.append('features', JSON.stringify({ ar: form.value.features_ar || '', en: form.value.features_en || '' }));
-  fd.append('tips', JSON.stringify({ ar: form.value.tips_ar || '', en: form.value.tips_en || '' }));
-  fd.append('shipping_info', JSON.stringify({ ar: form.value.shipping_info_ar || '', en: form.value.shipping_info_en || '' }));
-
   // Merge attributes
   const finalAttributes = {};
   const normalizedColors = dedupeColorOptions(form.value.colors || []);
@@ -1577,26 +1525,22 @@ const submitForm = async () => {
       finalAttributes[key] = Array.from(new Set(combined));
     }
   });
-  fd.append('attributes', JSON.stringify(finalAttributes));
-  fd.append('color_options', JSON.stringify(payloadColors));
-  fd.append('size_options', JSON.stringify(form.value.sizes || []));
-
-  // Images
-  form.value.existing_images.forEach(img => { fd.append('existing_images[]', img); });
-  form.value.new_images.forEach(img => { fd.append('images[]', img); });
-
-  // Main image fallback if new
-  if (form.value.new_images.length > 0 && form.value.existing_images.length === 0) {
-    fd.append('image', form.value.new_images[0]);
-  }
+  const payload = toProductPayload(form.value);
+  payload.attributes = JSON.stringify(finalAttributes);
+  payload.color_options = JSON.stringify(payloadColors);
+  payload.size_options = JSON.stringify(form.value.sizes || []);
+  payload.option_ids = attributesList.value.flatMap((attribute) => (
+    (form.value.selectedAttributes[attribute.name] || [])
+      .map((label) => attribute.values.find((value) => value.label === label)?.id)
+      .filter(Boolean)
+  ));
 
   try {
     if (isEdit.value) {
-      fd.append('_method', 'PUT');
-      await api.post(`/dashboard/products/${editingId.value}`, fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+      await adminCatalogService.updateProduct(editingId.value, payload, form.value.new_images);
       triggerAlert('تم تحديث المنتج بنجاح');
     } else {
-      await api.post('/dashboard/products', fd, { headers: { 'Content-Type': 'multipart/form-data' } });
+      await adminCatalogService.createProduct(payload, form.value.new_images);
       triggerAlert('تم إضافة المنتج بنجاح');
     }
     closeModal();
@@ -1613,11 +1557,11 @@ const submitForm = async () => {
 const confirmDelete = async (prod) => {
   if (confirm(`تأكيد حذف المنتج "${prod.name_i18n?.ar || prod.name}"؟`)) {
     try {
-      await api.delete(`/dashboard/products/${prod.id}`);
+      await adminCatalogService.deleteProduct(prod.id);
       triggerAlert('تم الحذف بنجاح');
       fetchProducts();
       fetchStats();
-    } catch (err) {
+    } catch {
       triggerAlert('فشل عملية الحذف', 'error');
     }
   }
@@ -1990,4 +1934,5 @@ const confirmDelete = async (prod) => {
 .alert-toast.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
 .alert-toast.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 .alert-icon { flex-shrink: 0; }
+.field-hint { display: block; margin-top: 4px; font-size: 0.7rem; color: #6b7280; }
 </style>

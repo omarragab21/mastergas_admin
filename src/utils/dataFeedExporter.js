@@ -1,5 +1,5 @@
 /**
- * Product Data Feed Exporter for Tijara CMS
+ * Product Data Feed Exporter for Mastergas CMS
  * Transforms product data into Facebook Catalog CSV, Google Shopping XML, and JSON feeds.
  */
 
@@ -165,14 +165,14 @@ export function generateJSONFeed(products = [], storeUrl = 'https://mastergas.sa
       price: `${parseFloat(product.price || 0).toFixed(2)} ${currency}`,
       currency: currency,
       condition: 'new',
-      brand: product.brand_name || product.brand?.name || 'Tijara',
+      brand: product.brand_name || product.brand?.name || 'Mastergas',
       category: product.category_name || product.category?.name || ''
     };
   });
 
   return JSON.stringify({
     version: 'https://jsonfeed.org/version/1.1',
-    title: 'Tijara Product Data Feed',
+    title: 'Mastergas Product Data Feed',
     home_page_url: baseUrl,
     feed_url: `${baseUrl}/api/feeds/products.json`,
     items: items

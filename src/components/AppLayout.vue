@@ -236,6 +236,9 @@ let lastOrdersFetchTime = 0;
 const ORDERS_CACHE_TTL = 30000; // 30 seconds
 
 const fetchOrdersCount = async (force = false) => {
+    // The Tijara v1 Admin contract does not expose the legacy dashboard
+    // orders endpoints used by the old local snapshot shell.
+    if (import.meta.env.VITE_ADMIN_LEGACY_DASHBOARD !== 'true') return;
     const now = Date.now();
     if (!force && now - lastOrdersFetchTime < ORDERS_CACHE_TTL) {
         return;
@@ -288,6 +291,16 @@ const toggleLanguage = () => {
 };
 
 const updateFaviconFromSettings = async () => {
+    if (import.meta.env.VITE_ADMIN_LEGACY_DASHBOARD !== 'true') {
+        let link = document.querySelector("link[rel*='icon']");
+        if (!link) {
+            link = document.createElement('link');
+            link.rel = 'icon';
+            document.head.appendChild(link);
+        }
+        link.href = '/brand/mastergas-icon.png';
+        return;
+    }
     try {
         const isIrisAsset = (val) => {
             if (!val) return false;

@@ -87,8 +87,6 @@
           <option value="">كل العروض</option>
           <option value="percentage">نسبة مئوية</option>
           <option value="fixed">قيمة ثابتة</option>
-          <option value="buy_x_get_y">اشتري X واحصل على Y</option>
-          <option value="free_shipping">شحن مجاني</option>
         </select>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="select-icon" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -154,8 +152,8 @@
               <td class="col-start">{{ formatDate(offer.start_date) }}</td>
               <td class="col-end">{{ formatDate(offer.end_date) }}</td>
               <td class="col-used">
-                <div class="usage-text">{{ offer.total_uses || 0 }} / {{ offer.max_uses || '∞' }}</div>
-                <div class="usage-bar-bg">
+                <div class="usage-text">{{ offer.total_uses || 0 }}<template v-if="offer.max_uses"> / {{ offer.max_uses }}</template></div>
+                <div class="usage-bar-bg" v-if="offer.max_uses">
                   <div class="usage-bar-fill" :style="{ width: offer.usage_percentage + '%' }"></div>
                 </div>
               </td>
@@ -220,11 +218,12 @@
             <div class="header-icon-main">
                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
             </div>
-            <h3 class="modal-title-main">{{ isEdit ? 'تعديل العرض' : 'إنشاء عرض جديد' }}</h3>
-            <p class="modal-subtitle-main">أدخل تفاصيل العرض الترويجي الجديد</p>
+            <h3 class="modal-title-main">{{ isView ? 'تفاصيل العرض' : (isEdit ? 'تعديل العرض' : 'إنشاء عرض جديد') }}</h3>
+            <p class="modal-subtitle-main">{{ isView ? 'عرض البيانات فقط — للتعديل استخدم زر التعديل' : 'أدخل تفاصيل العرض الترويجي الجديد' }}</p>
         </div>
 
         <form @submit.prevent="submitForm" class="offer-form">
+          <fieldset class="form-fieldset" :disabled="isView">
             <div class="form-section">
                 <label class="form-label">صورة العرض <span class="req">*</span></label>
                 <div class="upload-wrapper" @click="fileInputRef?.click()">
@@ -270,97 +269,35 @@
                         <span class="card-label">نسبة مئوية</span>
                         <p class="card-desc">خصم نسبة مئوية من الإجمالي</p>
                     </div>
-                    <div class="type-card" :class="{ active: form.type === 'buy_x_get_y' }" @click="form.type = 'buy_x_get_y'">
-                        <div class="card-icon">🎁</div>
-                        <span class="card-label">اشتري X واحصل على Y</span>
-                        <p class="card-desc">عرض الهدايا والكميات</p>
-                    </div>
-                    <div class="type-card" :class="{ active: form.type === 'free_shipping' }" @click="form.type = 'free_shipping'">
-                        <div class="card-icon">🚚</div>
-                        <span class="card-label">شحن مجاني</span>
-                        <p class="card-desc">إلغاء رسوم الشحن للطلب</p>
-                    </div>
                 </div>
             </div>
 
             <div class="form-grid">
-                <div class="form-group" v-if="form.type !== 'free_shipping' && form.type !== 'buy_x_get_y'">
+                <div class="form-group">
                     <label class="form-label">قيمة الخصم {{ form.type === 'percentage' ? '%' : '(د.أ)' }} <span class="req">*</span></label>
-                    <input type="number" step="0.01" v-model="form.value" class="form-control" placeholder="0.00" required />
+                    <input type="number" step="0.01" min="0.01" :max="form.type === 'percentage' ? 100 : undefined" v-model="form.value" class="form-control" placeholder="0.00" required />
                 </div>
 
-                <template v-if="form.type === 'buy_x_get_y'">
-                   <div class="form-group">
-                      <label class="form-label">اشتري (الكمية X) <span class="req">*</span></label>
-                      <input type="number" v-model="form.buy_x" class="form-control" placeholder="مثلاً: 2" required />
-                   </div>
-                   <div class="form-group">
-                      <label class="form-label">واحصل على (الكمية Y) <span class="req">*</span></label>
-                      <input type="number" v-model="form.get_y" class="form-control" placeholder="مثلاً: 1" required />
-                   </div>
-                </template>
-
                 <div class="form-group">
-                    <label class="form-label">كود الخصم (اختياري)</label>
-                    <input type="text" v-model="form.code" class="form-control ltr-text" placeholder="SPRING20" />
+                    <label class="form-label">كود الخصم <span class="req">*</span></label>
+                    <input type="text" v-model="form.code" class="form-control ltr-text" placeholder="SPRING20" required />
                 </div>
 
                 <div class="form-group" v-if="form.type === 'percentage'">
                     <label class="form-label">الحد الأقصى للخصم (د.أ)</label>
-                    <input type="number" step="0.01" v-model="form.max_discount" class="form-control" placeholder="مثلاً: 10.00" />
+                    <input type="number" step="0.01" min="0" v-model="form.max_discount" class="form-control" placeholder="مثلاً: 10.00" />
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">الحد الأدنى للطلب</label>
-                    <input type="number" step="0.01" v-model="form.min_order_value" class="form-control" placeholder="0.00" />
+                    <input type="number" step="0.01" min="0" v-model="form.min_order_value" class="form-control" placeholder="0.00" />
                 </div>
 
-                <div class="form-group">
-                    <label class="form-label">الحد الأقصى للاستخدام الكلي</label>
-                    <input type="number" v-model="form.max_uses" class="form-control" placeholder="مثلاً: 500" />
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">عدد المرات لكل عميل</label>
-                    <input type="number" v-model="form.max_per_customer" class="form-control" placeholder="مثلاً: 1" />
-                </div>
             </div>
 
-            <div class="form-section">
-                <label class="form-label">ينطبق على <span class="req">*</span></label>
-                <div class="applies-cards-grid">
-                    <div class="apply-card" :class="{ active: form.applies_to === 'all' }" @click="form.applies_to = 'all'">
-                        <div class="apply-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg></div>
-                        <span>جميع المنتجات</span>
-                    </div>
-                    <div class="apply-card" :class="{ active: form.applies_to === 'categories' }" @click="form.applies_to = 'categories'">
-                        <div class="apply-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div>
-                        <span>أقسام محددة</span>
-                    </div>
-                    <div class="apply-card" :class="{ active: form.applies_to === 'products' }" @click="form.applies_to = 'products'">
-                        <div class="apply-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg></div>
-                        <span>منتجات محددة</span>
-                    </div>
-                </div>
-                <div class="selection-box-area" v-if="form.applies_to === 'categories'">
-                   <label class="form-label">اختر الأقسام</label>
-                   <div class="checkbox-list">
-                      <label v-for="cat in categoriesList" :key="cat.id" class="chk-item">
-                         <input type="checkbox" :value="cat.id" v-model="form.selected_categories">
-                         <span>{{ cat.name_i18n?.ar || cat.name }}</span>
-                      </label>
-                   </div>
-                </div>
-
-                <div class="selection-box-area" v-if="form.applies_to === 'products'">
-                   <label class="form-label">اختر المنتجات</label>
-                   <div class="checkbox-list">
-                      <label v-for="pro in productsList" :key="pro.id" class="chk-item">
-                         <input type="checkbox" :value="pro.id" v-model="form.selected_products">
-                         <span>{{ pro.name_i18n?.ar || pro.name }}</span>
-                      </label>
-                   </div>
-                </div>
+            <div class="form-section api-scope-note">
+                <strong>نطاق التطبيق:</strong>
+                كود الخصم العام مدعوم حاليًا من `discount_codes` ويطبق على الطلب. الربط المباشر بمنتجات أو أقسام يحتاج حقولًا/endpoint إضافيًا من الـ Backend؛ لا يتم عرض اختيارات وهمية حتى لا يتم حفظها بدون تأثير.
             </div>
 
             <div class="form-grid mt-1">
@@ -388,9 +325,11 @@
                </label>
             </div>
 
+          </fieldset>
             <div class="form-footer-btns">
-                <button type="button" class="btn-cancel-form" @click="showFormModal = false">إلغاء</button>
-                <button type="submit" class="btn-submit-form" :disabled="isSubmitting">
+                <button type="button" class="btn-cancel-form" @click="showFormModal = false">{{ isView ? 'إغلاق' : 'إلغاء' }}</button>
+                <button v-if="isView" type="button" class="btn-submit-form" @click="openEditModal(viewedOffer)">تعديل العرض</button>
+                <button v-else type="submit" class="btn-submit-form" :disabled="isSubmitting">
                     {{ isSubmitting ? 'جاري الحفظ...' : (isEdit ? 'حفظ التعديلات' : 'إنشاء العرض') }}
                 </button>
             </div>
@@ -433,7 +372,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import api from '../config/axios';
+import adminCatalogService from '../application/adminCatalogService';
+import { toDiscountPayload } from '../domain/catalog/adminCatalog';
 
 // States
 const offers = ref([]);
@@ -453,11 +393,13 @@ const totalOffersCount = ref(0);
 // Modals
 const showFormModal = ref(false);
 const isEdit = ref(false);
+const isView = ref(false);
+const viewedOffer = ref(null);
 const currentId = ref(null);
 const deleteTarget = ref(null);
 const isDeleting = ref(false);
 
-const backendOrigin = (import.meta.env.VITE_API_BASE_URL || 'https://backend-mastergas.be-kite.com/api')
+const backendOrigin = (import.meta.env.VITE_API_BASE_URL || 'https://backend-tijara.be-kite.com/api')
     .replace(/\/api\/?$/, '');
 
 const normalizeOfferImage = (value) => {
@@ -571,114 +513,13 @@ const goToPage = (page) => {
   fetchOffers();
 };
 
-const defaultDashboardOffers = [
-  {
-    id: 101,
-    name: 'عروض التصفية الكبرى',
-    name_ar: 'عروض التصفية الكبرى',
-    name_en: 'Grand Clearance Offers',
-    name_i18n: { ar: 'عروض التصفية الكبرى', en: 'Grand Clearance Offers' },
-    description_ar: 'تخفيضات كبرى تصل إلى 35% على طباخات وأفران الغاز الإيطالية',
-    description_en: 'Clearance discounts up to 35% on Italian gas hobs and cookers',
-    code: 'CLEARANCE35',
-    type: 'percentage',
-    value: 35,
-    status: 'active',
-    is_active: true,
-    applies_to: 'categories',
-    selected_categories: [57],
-    selected_products: [],
-    start_date: '2026-09-01',
-    end_date: '2026-10-31',
-    total_uses: 48,
-    max_uses: 100,
-    usage_percentage: 48,
-    image: '/images/home/offer_clearance_pro.jpg'
-  },
-  {
-    id: 102,
-    name: 'باقة المطابخ المدمجة',
-    name_ar: 'باقة المطابخ المدمجة',
-    name_en: 'Built-in Kitchen Suite',
-    name_i18n: { ar: 'باقة المطابخ المدمجة', en: 'Built-in Kitchen Suite' },
-    description_ar: 'وفر 25% عند شراء أجهزة المطابخ البلت إن الإيطالية المتكاملة',
-    description_en: 'Save 25% on Italian built-in kitchen appliance suites',
-    code: 'BUILTIN25',
-    type: 'percentage',
-    value: 25,
-    status: 'active',
-    is_active: true,
-    applies_to: 'categories',
-    selected_categories: [57],
-    selected_products: [],
-    start_date: '2026-09-01',
-    end_date: '2026-10-31',
-    total_uses: 32,
-    max_uses: 100,
-    usage_percentage: 32,
-    image: '/images/home/offer_builtin_pro.jpg'
-  },
-  {
-    id: 103,
-    name: 'باقة الأمان الإيطالية',
-    name_ar: 'باقة الأمان الإيطالية',
-    name_en: 'Italian Safety Pack',
-    name_i18n: { ar: 'باقة الأمان الإيطالية', en: 'Italian Safety Pack' },
-    description_ar: 'منظومات ومحابس الأمان الإيطالية الأصلية مع فحص معتمد وضمان 5 سنوات',
-    description_en: 'Authentic Italian gas regulators and safety valves with certified 5-year warranty',
-    code: 'SAFETY15',
-    type: 'percentage',
-    value: 15,
-    status: 'active',
-    is_active: true,
-    applies_to: 'categories',
-    selected_categories: [52],
-    selected_products: [],
-    start_date: '2026-09-01',
-    end_date: '2026-12-31',
-    total_uses: 67,
-    max_uses: 200,
-    usage_percentage: 33.5,
-    image: '/images/home/offer_safety_pro.jpg'
-  },
-  {
-    id: 104,
-    name: 'شوايات الحدائق الفاخرة',
-    name_ar: 'شوايات الحدائق الفاخرة',
-    name_en: 'Luxury Outdoor BBQ Grills',
-    name_i18n: { ar: 'شوايات الحدائق الفاخرة', en: 'Luxury Outdoor BBQ Grills' },
-    description_ar: 'عروض موسمية خاصة على شوايات الغاز الخارجية الفاخرة للحدائق والرحلات',
-    description_en: 'Special seasonal offers on luxury outdoor BBQ gas grills',
-    code: 'GRILL20',
-    type: 'percentage',
-    value: 20,
-    status: 'active',
-    is_active: true,
-    applies_to: 'categories',
-    selected_categories: [59],
-    selected_products: [],
-    start_date: '2026-09-01',
-    end_date: '2026-10-15',
-    total_uses: 19,
-    max_uses: 50,
-    usage_percentage: 38,
-    image: '/images/home/offer_bbq_pro.jpg'
-  }
-];
-
 // Fetch Data
 const fetchOffers = async () => {
   loading.value = true;
   try {
-    const res = await api.get('/dashboard/offers', {
-      params: {
-        page: currentPage.value,
-        per_page: perPage.value
-      }
-    });
-    offers.value = Array.isArray(res.data?.data) ? res.data.data : [];
-    totalOffersCount.value = res.data?.meta?.total ?? res.data?.total ?? offers.value.length;
-  } catch (err) {
+    offers.value = await adminCatalogService.listDiscountCodes();
+    totalOffersCount.value = offers.value.length;
+  } catch {
     offers.value = [];
     totalOffersCount.value = 0;
     triggerAlert('فشل تحميل العروض من الخادم', 'error');
@@ -696,11 +537,11 @@ const fetchSelectionData = async () => {
     isFetchingSelection.value = true;
     try {
         const [cats, pros] = await Promise.all([
-            api.get('/dashboard/categories'),
-            api.get('/dashboard/products')
+            adminCatalogService.listCategories(),
+            adminCatalogService.listProducts({ per_page: 1000 }),
         ]);
-        categoriesList.value = cats.data.data;
-        productsList.value = pros.data.data;
+        categoriesList.value = cats;
+        productsList.value = pros.data || pros.items || [];
     } catch (err) {
         console.error('Failed to fetch selection data', err);
     } finally {
@@ -731,6 +572,7 @@ const filteredOffers = computed(() => {
 // Actions
 const openAddModal = () => {
     isEdit.value = false;
+    isView.value = false;
     currentId.value = null;
     form.value = { ...initialForm };
     imagePreview.value = null;
@@ -741,6 +583,7 @@ const openAddModal = () => {
 
 const openEditModal = (offer) => {
     isEdit.value = true;
+    isView.value = false;
     currentId.value = offer.id;
     const nameObj = offer.name_i18n && typeof offer.name_i18n === 'object' ? offer.name_i18n : null;
     const descObj = offer.description_i18n && typeof offer.description_i18n === 'object' ? offer.description_i18n : null;
@@ -764,8 +607,9 @@ const openEditModal = (offer) => {
 };
 
 const openViewModal = (offer) => {
-    // We can implement a separate view modal or just use edit for now
     openEditModal(offer);
+    viewedOffer.value = offer;
+    isView.value = true;
 };
 
 const duplicateOffer = async (offer) => {
@@ -788,10 +632,20 @@ const duplicateOffer = async (offer) => {
         delete dup.name_i18n;
         delete dup.description_i18n;
         
-        await api.post('/dashboard/offers', dup);
+        await adminCatalogService.createDiscountCode(toDiscountPayload({
+            ...offer,
+            name_ar: `${baseNameAr} (نسخة)`,
+            name_en: baseNameEn ? `${baseNameEn} (Copy)` : '',
+            description_ar: baseDescAr,
+            description_en: baseDescEn,
+            start_date: formatDate(offer.start_date),
+            end_date: offer.end_date ? formatDate(offer.end_date) : '',
+            no_end_date: !offer.end_date,
+            code: offer.code ? `${offer.code}-COPY` : '',
+        }));
         triggerAlert('تم تكرار العرض بنجاح');
         fetchOffers();
-    } catch (err) {
+    } catch {
         triggerAlert('فشل تكرار العرض', 'error');
     }
 };
@@ -808,6 +662,19 @@ const handleImageUpload = (e) => {
   imagePreview.value = URL.createObjectURL(file);
 };
 
+const validateOfferForm = (f) => {
+    const value = Number(f.value);
+    if (!String(f.code || '').trim()) return 'كود الخصم مطلوب';
+    if (!Number.isFinite(value) || value <= 0) return 'قيمة الخصم يجب أن تكون أكبر من صفر';
+    if (f.type === 'percentage' && value > 100) return 'نسبة الخصم لا يمكن أن تتجاوز 100%';
+    if (!f.start_date) return 'تاريخ البدء مطلوب';
+    if (!f.no_end_date && f.end_date && f.start_date && f.end_date < f.start_date) return 'تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء';
+    for (const [field, label] of [['min_order_value', 'الحد الأدنى للطلب'], ['max_discount', 'الحد الأقصى للخصم']]) {
+        if (f[field] !== '' && f[field] != null && Number(f[field]) < 0) return `${label} لا يمكن أن يكون سالباً`;
+    }
+    return '';
+};
+
 const submitForm = async () => {
     // Validate bilingual fields
     if (!String(form.value.name_ar || '').trim()) {
@@ -821,41 +688,20 @@ const submitForm = async () => {
         return;
     }
 
+    const validationError = validateOfferForm(form.value);
+    if (validationError) {
+        triggerAlert(validationError, 'error');
+        return;
+    }
+
     isSubmitting.value = true;
     try {
-        const formData = new FormData();
-
-        formData.append('name', JSON.stringify({ ar: form.value.name_ar || '', en: form.value.name_en || '' }));
-        if (form.value.description_ar || form.value.description_en) {
-            formData.append('description', JSON.stringify({ ar: form.value.description_ar || '', en: form.value.description_en || '' }));
-        }
-        
-        Object.keys(form.value).forEach(key => {
-            if (['name_ar','name_en','description_ar','description_en'].includes(key)) return;
-            if (key === 'image' && !form.value[key]) return; // Handle file
-            if (key === 'selected_categories' || key === 'selected_products') {
-                form.value[key].forEach((val, i) => formData.append(`${key}[${i}]`, val));
-                return;
-            }
-            if (form.value[key] !== null && form.value[key] !== '') {
-                 if (typeof form.value[key] === 'boolean') {
-                     formData.append(key, form.value[key] ? 1 : 0);
-                 } else {
-                     formData.append(key, form.value[key]);
-                 }
-            }
-        });
-
+        const payload = toDiscountPayload(form.value);
         if (isEdit.value) {
-            formData.append('_method', 'PUT');
-            await api.post(`/dashboard/offers/${currentId.value}`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            await adminCatalogService.updateDiscountCode(currentId.value, payload);
             triggerAlert('تم تحديث العرض بنجاح');
         } else {
-            await api.post('/dashboard/offers', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            await adminCatalogService.createDiscountCode(payload);
             triggerAlert('تم إنشاء العرض بنجاح');
         }
         showFormModal.value = false;
@@ -877,12 +723,12 @@ const submitForm = async () => {
 const toggleOfferStatus = async (offer) => {
     try {
         const newStatus = !offer.is_active;
-        await api.put(`/dashboard/offers/${offer.id}`, { is_active: newStatus });
+        await adminCatalogService.updateDiscountCode(offer.id, { is_active: newStatus });
         offer.is_active = newStatus;
         // Re-fetch or manually update status for badges (logic is in model, so re-fetching is safer or we can mimic)
         fetchOffers(); 
         triggerAlert(newStatus ? 'تم تفعيل العرض' : 'تم تعطيل العرض');
-    } catch (err) {
+    } catch {
         triggerAlert('فشل تحديث الحالة', 'error');
     }
 };
@@ -901,7 +747,7 @@ const executeDelete = async () => {
     const target = deleteTarget.value;
     isDeleting.value = true;
     try {
-        await api.delete(`/dashboard/offers/${target.id}`);
+        await adminCatalogService.deleteDiscountCode(target.id);
         offers.value = offers.value.filter((offer) => offer.id !== target.id);
         totalOffersCount.value = Math.max(0, totalOffersCount.value - 1);
         deleteTarget.value = null;
@@ -1128,4 +974,6 @@ const executeDelete = async () => {
   .applies-cards-grid { grid-template-columns: 1fr; }
   .form-grid { grid-template-columns: 1fr; }
 }
+.form-fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.form-fieldset:disabled .form-control { background: #f9fafb; cursor: default; }
 </style>

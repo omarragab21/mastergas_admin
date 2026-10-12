@@ -210,7 +210,7 @@ export const getPaymentReturnState = (query = {}, storage) => {
       if (latestPending?.attemptId) {
         attemptId = latestPending.attemptId;
       }
-    } catch (_) {}
+    } catch (_) { /* storage unavailable; keep the current attempt id */ }
   }
 
   const gatewayError = normalizeQueryValue(query.error).toString().trim();

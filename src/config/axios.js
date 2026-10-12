@@ -6,6 +6,8 @@ const envUrl = import.meta.env.VITE_API_BASE_URL;
 
 const isBrowser = typeof window !== 'undefined';
 const frappeMode = import.meta.env.VITE_FRAPPE_MODE === 'true';
+// VITE_DATA_MODE=api sends every request to the backend; anything else keeps the local snapshot for catalog/content.
+const useLiveApi = import.meta.env.VITE_DATA_MODE === 'api';
 
 // Dashboard data uses the local snapshot for now; authentication remains remote.
 const baseURL = envUrl || (import.meta.env.DEV && isBrowser ? '/api' : serverUrl);
@@ -24,6 +26,16 @@ const REMOTE_AUTH_PATHS = new Set([
   '/frontend/change-password',
   '/frontend/forgot-password',
 ]);
+
+// These Admin resources are backed by the Tijara API even when the rest of
+// the dashboard is running from the local snapshot during development.
+const LIVE_ADMIN_PATH_PREFIXES = [
+  '/v1/users',
+  '/v1/categories',
+  '/v1/discount_codes',
+  '/v1/products',
+  '/v1/attributes',
+];
 
 const normalizePath = (url = '') => String(url).split('?')[0].replace(/^\/api/, '') || '/';
 
@@ -65,7 +77,7 @@ const performanceMark = (name) => {
     if (typeof performance !== 'undefined' && typeof performance.mark === 'function') {
       performance.mark(name);
     }
-  } catch (_) {
+  } catch {
     // Performance marks must never affect a customer request.
   }
 };
@@ -129,7 +141,9 @@ api.interceptors.request.use(config => {
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  if (!REMOTE_AUTH_PATHS.has(cleanPath)) {
+  const isLiveAdminPath = LIVE_ADMIN_PATH_PREFIXES.some((prefix) => cleanPath === prefix || cleanPath.startsWith(`${prefix}/`));
+  if (!useLiveApi && !REMOTE_AUTH_PATHS.has(cleanPath) && !isLiveAdminPath) {
+    config.__localApi = true;
     config.adapter = localApiAdapter;
   }
   if (frappeMode && cleanPath.startsWith('/frontend') && config.method?.toLowerCase() === 'get') {
@@ -153,7 +167,7 @@ const performanceNow = () => {
     return typeof performance !== 'undefined' && typeof performance.now === 'function'
       ? performance.now()
       : Date.now();
-  } catch (_) {
+  } catch {
     return Date.now();
   }
 };
@@ -200,7 +214,11 @@ api.interceptors.response.use(
       aborted: isCancelledRequest(error),
       errorType: classifyApiError(error),
     });
-    if (error.response && error.response.status === 401) {
+    // The Tijara backend currently answers a missing/expired token with HTTP 500 {"message":"Unauthenticated."}
+    // instead of 401, so treat that exact payload as an auth failure too.
+    const isUnauthenticated = error.response?.status === 401
+      || (error.response?.status === 500 && error.response?.data?.message === 'Unauthenticated.');
+    if (error.response && isUnauthenticated && !error.config?.__localApi) {
       const url = error.config?.url || '';
       const cleanPath = url.split('?')[0].replace(/^\/api/, '');
       const isFrontendReq = cleanPath.startsWith('/frontend');

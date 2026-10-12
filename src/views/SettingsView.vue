@@ -7,7 +7,7 @@ const activeTab = ref('general'); // 'general' or 'social'
 const loading = ref(false);
 const isSaving = ref(false);
 const settings = ref({
-    site_name: 'Tijara',
+    site_name: 'Mastergas',
     free_delivery_threshold: '10',
     shipping_cost: '15',
     tax_rate: '0',
@@ -16,8 +16,8 @@ const settings = ref({
     use_city_specific_rates: '0',
     default_city_shipping_rate: '0',
     support_phone: '+962712345678',
-    support_email: 'info@tijara.com',
-    email: 'support@tijaracms.com',
+    support_email: 'info@mastergas.sa',
+    email: 'support@mastergas.sa',
     address_ar: 'عمان، الأردن - شارع الملك عبدالله الثاني',
     address_en: 'Amman, Jordan - King Abdullah II Street',
     working_hours_ar: 'السبت - الخميس: 9:00 صباحاً - 9:00 مساءً',
@@ -70,13 +70,15 @@ const fetchSettings = async () => {
     loading.value = true;
     try {
         const response = await api.get('/dashboard/settings');
+        const payload = response.data?.data ?? response.data;
+        const data = Array.isArray(payload) ? payload : Object.entries(payload || {}).map(([key, value]) => ({ key, value }));
         const isIrisAsset = (val) => {
             if (!val) return false;
             const str = String(val).toLowerCase();
             return str.includes('iris') || str.includes('t3jcwn2n2rvkxvcva') || str.includes('dobvpg934hatbpm5') || str.includes('yugdc4mk4vmsf6el');
         };
         data.forEach(s => {
-            if (settings.value.hasOwnProperty(s.key)) {
+            if (Object.hasOwn(settings.value, s.key)) {
                 // Sanitize empty arrays stored as string '[]' or actual empty arrays
                 if (s.value === '[]' || (Array.isArray(s.value) && s.value.length === 0)) {
                     settings.value[s.key] = null;
@@ -268,7 +270,7 @@ const triggerAlert = (message, type = 'success') => {
             <div class="form-grid">
                 <div class="form-group">
                     <label>اسم الموقع <span class="req">*</span></label>
-                    <input type="text" v-model="settings.site_name" placeholder="Tijara" />
+                    <input type="text" v-model="settings.site_name" placeholder="Mastergas" />
                 </div>
                 <div class="form-group">
                     <label>حد التوصيل المجاني (د.أ) <span class="req">*</span></label>
@@ -334,11 +336,11 @@ const triggerAlert = (message, type = 'success') => {
                 </div>
                 <div class="form-group">
                     <label>البريد الإلكتروني الرئيسي <span class="req">*</span></label>
-                    <input type="email" v-model="settings.email" placeholder="support@tijaracms.com" class="ltr-input" />
+                    <input type="email" v-model="settings.email" placeholder="support@mastergas.sa" class="ltr-input" />
                 </div>
                 <div class="form-group">
                     <label>بريد الدعم <span class="req">*</span></label>
-                    <input type="email" v-model="settings.support_email" placeholder="info@tijara.com" class="ltr-input" />
+                    <input type="email" v-model="settings.support_email" placeholder="info@mastergas.sa" class="ltr-input" />
                 </div>
                 
                 <div class="form-group full-width">

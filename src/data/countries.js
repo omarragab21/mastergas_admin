@@ -83,7 +83,7 @@ export function findCountryByCode(code) {
 // Validator for phone numbers by country
 export function validatePhoneByCountry(phone, countryCode, lang = 'ar') {
   const country = findCountryByCode(countryCode);
-  const cleaned = phone ? String(phone).replace(/[\s\-\+\(\)]/g, '') : '';
+  const cleaned = phone ? String(phone).replace(/[\s\-+()]/g, '') : '';
   const isEn = lang === 'en';
 
   if (!cleaned) {
