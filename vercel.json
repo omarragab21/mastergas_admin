@@ -4,11 +4,11 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://backend-mastergas.be-kite.com/api/:path*"
+      "destination": "https://backend-tijara.be-kite.com/api/:path*"
     },
     {
       "source": "/storage/:path*",
-      "destination": "https://backend-mastergas.be-kite.com/storage/:path*"
+      "destination": "https://backend-tijara.be-kite.com/storage/:path*"
     },
     {
       "source": "/(.*)",

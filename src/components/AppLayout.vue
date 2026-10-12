@@ -215,6 +215,11 @@ const mobileSidebarOpen = ref(false);
 const userMenuOpen = ref(false);
 const ordersCount = ref(0);
 const expandedGroup = ref('');
+// The deployed Admin is backed by the Tijara v1 API. The old `/dashboard/*`
+// endpoints are only useful for the local legacy snapshot and must never be
+// called by a production build, even if a stale Vercel environment variable
+// is still present.
+const legacyDashboardEnabled = import.meta.env.DEV && import.meta.env.VITE_ADMIN_LEGACY_DASHBOARD === 'true';
 
 const toggleGroup = (label) => {
   expandedGroup.value = expandedGroup.value === label ? '' : label;
@@ -238,7 +243,7 @@ const ORDERS_CACHE_TTL = 30000; // 30 seconds
 const fetchOrdersCount = async (force = false) => {
     // The Tijara v1 Admin contract does not expose the legacy dashboard
     // orders endpoints used by the old local snapshot shell.
-    if (import.meta.env.VITE_ADMIN_LEGACY_DASHBOARD !== 'true') return;
+    if (!legacyDashboardEnabled) return;
     const now = Date.now();
     if (!force && now - lastOrdersFetchTime < ORDERS_CACHE_TTL) {
         return;
@@ -291,7 +296,7 @@ const toggleLanguage = () => {
 };
 
 const updateFaviconFromSettings = async () => {
-    if (import.meta.env.VITE_ADMIN_LEGACY_DASHBOARD !== 'true') {
+    if (!legacyDashboardEnabled) {
         let link = document.querySelector("link[rel*='icon']");
         if (!link) {
             link = document.createElement('link');
