@@ -14,12 +14,11 @@
       <div class="modal-content">
         <button class="modal-close" @click="closeAttributeModal">×</button>
         <h3 class="modal-title">{{ editingAttributeId ? 'تعديل خاصية منتج' : 'إضافة خاصية منتج' }}</h3>
-        <p class="modal-subtitle">{{ editingAttributeId ? 'عدّل الاسم أو النوع — القيم تُدار من زر إدارة القيم' : 'أضف اللون أو المقاس أو أي خاصية نصية جديدة' }}</p>
+        <p class="modal-subtitle">{{ editingAttributeId ? 'عدّل الاسم أو النوع — القيم تُدار من زر إدارة القيم' : 'أضف خاصية نصية أو خاصية لون، ثم أضف قيمها لاحقاً من زر إدارة القيم' }}</p>
         <form class="value-form" @submit.prevent="submitAttribute">
           <div class="form-group"><label class="form-label">الاسم بالعربي *</label><input v-model="attributeForm.name_ar" class="form-control" required placeholder="اللون" /></div>
           <div class="form-group"><label class="form-label">الاسم بالإنجليزية *</label><input v-model="attributeForm.name_en" class="form-control" required placeholder="Color" /></div>
-          <div class="form-group"><label class="form-label">نوع الخاصية</label><select v-model="attributeForm.type" class="form-control"><option value="color">لون</option><option value="select">اختيارات</option><option value="text">نص</option></select></div>
-          <div class="form-group" v-if="!editingAttributeId"><label class="form-label">القيم (افصل بينها بفاصلة)</label><input v-model="attributeForm.values_list" class="form-control" placeholder="أسود|#111827, أبيض|#ffffff" /><span class="help-text">الفاصلة تفصل بين القيم، فلا تستخدمها داخل القيمة نفسها — أضف القيم المركّبة لاحقاً من زر «إضافة قيمة».</span></div>
+          <div class="form-group"><label class="form-label">نوع الخاصية</label><select v-model="attributeForm.type" class="form-control"><option value="color">لون</option><option value="text">نص</option><option v-if="editingAttributeId && attributeForm.type === 'select'" value="select">اختيارات (قديم)</option></select></div>
           <div class="form-actions">
             <button class="btn-cancel" type="button" @click="closeAttributeModal">إلغاء</button>
             <button class="btn-submit" type="submit" :disabled="isSubmitting">{{ isSubmitting ? 'جاري الحفظ...' : (editingAttributeId ? 'حفظ التعديلات' : 'حفظ الخاصية') }}</button>
@@ -238,7 +237,7 @@ const valueForm = ref({
 
 const showManageModal = ref(false);
 const showAttributeModal = ref(false);
-const attributeForm = ref({ name_ar: '', name_en: '', label_ar: '', label_en: '', type: 'select', values_list: '', is_active: true, sort_order: 1 });
+const attributeForm = ref({ name_ar: '', name_en: '', label_ar: '', label_en: '', type: 'text', is_active: true, sort_order: 1 });
 
 // Alerts
 const showAlert = ref(false);
@@ -300,15 +299,14 @@ const openEditAttributeModal = (attr) => {
   attributeForm.value = {
     name_ar: attr.translations?.ar?.name || attr.name || '',
     name_en: attr.translations?.en?.name || attr.name || '',
-    type: attr.type || 'select',
-    values_list: '',
+    type: attr.type || 'text',
   };
   showAttributeModal.value = true;
 };
 
 const openAttributeModal = () => {
   editingAttributeId.value = null;
-  attributeForm.value = { name_ar: '', name_en: '', label_ar: '', label_en: '', type: 'select', values_list: '', is_active: true, sort_order: attributes.value.length + 1 };
+  attributeForm.value = { name_ar: '', name_en: '', label_ar: '', label_en: '', type: 'text', is_active: true, sort_order: attributes.value.length + 1 };
   showAttributeModal.value = true;
 };
 

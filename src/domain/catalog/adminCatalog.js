@@ -222,19 +222,27 @@ export const toDiscountPayload = (form) => ({
   description_ar: String(form.description_ar || '').trim(),
 });
 
-export const toAttributePayload = (form) => ({
-  type: form.type === 'color' ? 'color_swatch' : (form.type || 'select'),
-  name_en: String(form.name_en || '').trim(),
-  name_ar: String(form.name_ar || '').trim(),
-  options: String(form.values_list || '')
-    .split(',')
-    .map((value) => value.trim())
-    .filter(Boolean)
-    .map((value) => {
-      const [name, valueCode] = value.split('|', 2);
-      return { name_en: name.trim(), name_ar: name.trim(), value_code: valueCode?.trim() || null };
-    }),
-});
+export const toAttributePayload = (form) => {
+  const payload = {
+    type: form.type === 'color' ? 'color_swatch' : (form.type || 'select'),
+    name_en: String(form.name_en || '').trim(),
+    name_ar: String(form.name_ar || '').trim(),
+  };
+  // Values are managed separately from the attribute. Keep the legacy bulk
+  // parser for callers that still provide values_list, but never send an
+  // unrelated empty options array for the new attribute form.
+  if (Object.prototype.hasOwnProperty.call(form, 'values_list')) {
+    payload.options = String(form.values_list || '')
+      .split(',')
+      .map((value) => value.trim())
+      .filter(Boolean)
+      .map((value) => {
+        const [name, valueCode] = value.split('|', 2);
+        return { name_en: name.trim(), name_ar: name.trim(), value_code: valueCode?.trim() || null };
+      });
+  }
+  return payload;
+};
 
 // Editing an attribute renames it / changes its type; its options are managed separately (never replaced here).
 export const toAttributeUpdatePayload = (form) => {
