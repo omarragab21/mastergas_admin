@@ -224,7 +224,9 @@ export const toDiscountPayload = (form) => ({
 
 export const toAttributePayload = (form) => {
   const payload = {
-    type: form.type === 'color' ? 'color_swatch' : (form.type || 'select'),
+    // Tijara accepts only `color_swatch` and `select`. The Admin UI calls the
+    // latter "نص" for a non-colour product property, so translate it here.
+    type: form.type === 'color' ? 'color_swatch' : 'select',
     name_en: String(form.name_en || '').trim(),
     name_ar: String(form.name_ar || '').trim(),
   };
