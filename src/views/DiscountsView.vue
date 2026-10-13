@@ -4,21 +4,21 @@
     <div class="page-header">
       <div class="header-titles">
         <div class="title-with-icon">
-          <h2 class="page-title">العروض والخصومات</h2>
+          <h2 class="page-title">أكواد الخصم</h2>
           <div class="tag-icon-wrapper">
              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
              </svg>
           </div>
         </div>
-        <p class="page-subtitle">إنشاء وإدارة العروض الترويجية</p>
+        <p class="page-subtitle">إنشاء وإدارة أكواد الخصم</p>
       </div>
       <button class="add-btn" @click="openAddModal">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="12" y1="5" x2="12" y2="19"/>
           <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        إنشاء عرض جديد
+        إنشاء كود خصم
       </button>
     </div>
 
@@ -31,7 +31,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">إجمالي العروض</span>
+          <span class="stat-label">إجمالي أكواد الخصم</span>
           <h3 class="stat-value">{{ offers.length }}</h3>
         </div>
       </div>
@@ -43,7 +43,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">العروض النشطة</span>
+          <span class="stat-label">الأكواد النشطة</span>
           <h3 class="stat-value">{{ activeOffersCount }}</h3>
         </div>
       </div>
@@ -79,12 +79,12 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="search-icon">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" v-model="searchQuery" placeholder="البحث باسم العرض أو الكود..." class="search-input" />
+        <input type="text" v-model="searchQuery" placeholder="البحث باسم كود الخصم أو الكود..." class="search-input" />
       </div>
       
       <div class="filter-select">
         <select v-model="typeFilter" class="form-select">
-          <option value="">كل العروض</option>
+          <option value="">كل أكواد الخصم</option>
           <option value="percentage">نسبة مئوية</option>
           <option value="fixed">قيمة ثابتة</option>
         </select>
@@ -115,7 +115,7 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th class="col-name text-right">اسم العرض</th>
+            <th class="col-name text-right">اسم كود الخصم</th>
             <th class="col-type">النوع</th>
             <th class="col-value">قيمة الخصم</th>
             <th class="col-code">كود الخصم</th>
@@ -128,7 +128,7 @@
         </thead>
         <tbody>
           <tr v-if="loading" class="state-row"><td colspan="9">جاري التحميل...</td></tr>
-          <tr v-else-if="filteredOffers.length === 0" class="state-row"><td colspan="9">لا توجد عروض مطابقة</td></tr>
+          <tr v-else-if="filteredOffers.length === 0" class="state-row"><td colspan="9">لا توجد أكواد خصم مطابقة</td></tr>
           <template v-else>
             <tr v-for="offer in filteredOffers" :key="offer.id" class="data-row">
               <td class="col-name text-right">
@@ -194,7 +194,7 @@
 
     <!-- Pagination placeholder -->
     <div class="pagination-footer" v-if="totalOffersCount > perPage">
-       <span class="results-text">عرض {{ (currentPage - 1) * perPage + 1 }} - {{ Math.min(currentPage * perPage, totalOffersCount) }} من {{ totalOffersCount }} عرض</span>
+       <span class="results-text">عرض {{ (currentPage - 1) * perPage + 1 }} - {{ Math.min(currentPage * perPage, totalOffersCount) }} من {{ totalOffersCount }} كود خصم</span>
        <div class="pagination-btns">
          <button class="p-btn prev" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
@@ -218,21 +218,21 @@
             <div class="header-icon-main">
                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
             </div>
-            <h3 class="modal-title-main">{{ isView ? 'تفاصيل العرض' : (isEdit ? 'تعديل العرض' : 'إنشاء عرض جديد') }}</h3>
-            <p class="modal-subtitle-main">{{ isView ? 'عرض البيانات فقط — للتعديل استخدم زر التعديل' : 'أدخل تفاصيل العرض الترويجي الجديد' }}</p>
+            <h3 class="modal-title-main">{{ isView ? 'تفاصيل كود الخصم' : (isEdit ? 'تعديل كود الخصم' : 'إنشاء كود خصم جديد') }}</h3>
+            <p class="modal-subtitle-main">{{ isView ? 'عرض البيانات فقط — للتعديل استخدم زر التعديل' : 'أدخل تفاصيل كود الخصم الجديد' }}</p>
         </div>
 
         <form @submit.prevent="submitForm" class="offer-form">
           <fieldset class="form-fieldset" :disabled="isView">
             <div class="form-section">
-                <label class="form-label">صورة العرض <span class="req">*</span></label>
+                <label class="form-label">صورة كود الخصم <span class="req">*</span></label>
                 <div class="upload-wrapper" @click="fileInputRef?.click()">
                     <input type="file" ref="fileInputRef" @change="handleImageUpload" accept="image/*" hidden />
                     <div class="upload-box">
                         <img v-if="imagePreview" :src="imagePreview" class="preview-image" alt="Preview" />
                         <div v-else class="upload-placeholder">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                            <p>انقر لرفع صورة العرض</p>
+                            <p>انقر لرفع صورة كود الخصم</p>
                             <span>الحد الأقصى 1 ميجابايت</span>
                         </div>
                     </div>
@@ -245,19 +245,19 @@
                   <button type="button" class="i18n-btn" :class="{ active: activeLang === 'ar' }" @click="activeLang = 'ar'">العربية</button>
                 </div>
 
-                <label class="form-label">اسم العرض <span class="req">*</span></label>
+                <label class="form-label">اسم كود الخصم <span class="req">*</span></label>
                 <input v-show="activeLang === 'ar'" type="text" v-model="form.name_ar" class="form-control" placeholder="مثلاً: خصم الربيع الكبير" />
-                <input v-show="activeLang === 'en'" type="text" v-model="form.name_en" class="form-control" placeholder="Offer name in English" />
+                <input v-show="activeLang === 'en'" type="text" v-model="form.name_en" class="form-control" placeholder="Discount code name in English" />
             </div>
 
             <div class="form-section">
-                <label class="form-label">وصف العرض (اختياري)</label>
+                <label class="form-label">وصف كود الخصم (اختياري)</label>
                 <textarea v-show="activeLang === 'ar'" v-model="form.description_ar" class="form-control" placeholder="وصف قصير للعرض بالعربي..." rows="3"></textarea>
-                <textarea v-show="activeLang === 'en'" v-model="form.description_en" class="form-control" placeholder="Short offer description in English..." rows="3"></textarea>
+                <textarea v-show="activeLang === 'en'" v-model="form.description_en" class="form-control" placeholder="Short discount code description in English..." rows="3"></textarea>
             </div>
 
             <div class="form-section">
-                <label class="form-label">نوع العرض <span class="req">*</span></label>
+                <label class="form-label">نوع كود الخصم <span class="req">*</span></label>
                 <div class="type-cards-grid">
                     <div class="type-card" :class="{ active: form.type === 'fixed' }" @click="form.type = 'fixed'">
                         <div class="card-icon">💵</div>
@@ -316,7 +316,7 @@
             </div>
 
             <div class="form-section-toggle">
-               <span class="toggle-lbl">تفعيل العرض</span>
+               <span class="toggle-lbl">تفعيل كود الخصم</span>
                <label class="toggle-switch">
                   <input type="checkbox" v-model="form.is_active" hidden>
                   <div class="t-slider" :class="{ on: form.is_active }">
@@ -328,9 +328,9 @@
           </fieldset>
             <div class="form-footer-btns">
                 <button type="button" class="btn-cancel-form" @click="showFormModal = false">{{ isView ? 'إغلاق' : 'إلغاء' }}</button>
-                <button v-if="isView" type="button" class="btn-submit-form" @click="openEditModal(viewedOffer)">تعديل العرض</button>
+                  <button v-if="isView" type="button" class="btn-submit-form" @click="openEditModal(viewedOffer)">تعديل كود الخصم</button>
                 <button v-else type="submit" class="btn-submit-form" :disabled="isSubmitting">
-                    {{ isSubmitting ? 'جاري الحفظ...' : (isEdit ? 'حفظ التعديلات' : 'إنشاء العرض') }}
+                    {{ isSubmitting ? 'جاري الحفظ...' : (isEdit ? 'حفظ التعديلات' : 'إنشاء كود الخصم') }}
                 </button>
             </div>
         </form>
@@ -346,14 +346,14 @@
           </svg>
         </div>
         <div class="delete-copy">
-          <h2 id="delete-offer-title">تأكيد حذف العرض</h2>
-          <p>هل أنت متأكد من حذف عرض «{{ deleteTarget.name_i18n?.ar || deleteTarget.name }}»؟ لا يمكن التراجع عن هذا الإجراء.</p>
+          <h2 id="delete-offer-title">تأكيد حذف كود الخصم</h2>
+          <p>هل أنت متأكد من حذف كود الخصم «{{ deleteTarget.code || deleteTarget.name_i18n?.ar || deleteTarget.name }}»؟ لا يمكن التراجع عن هذا الإجراء.</p>
         </div>
         <div class="modal-footer delete-footer">
           <button class="btn-cancel-form" type="button" :disabled="isDeleting" @click="cancelDelete">إلغاء</button>
           <button class="btn-delete-confirm" type="button" :disabled="isDeleting" @click="executeDelete">
             <span v-if="isDeleting" class="delete-spinner" aria-hidden="true"></span>
-            {{ isDeleting ? 'جاري الحذف...' : 'حذف العرض' }}
+            {{ isDeleting ? 'جاري الحذف...' : 'حذف كود الخصم' }}
           </button>
         </div>
       </div>
@@ -522,7 +522,7 @@ const fetchOffers = async () => {
   } catch {
     offers.value = [];
     totalOffersCount.value = 0;
-    triggerAlert('فشل تحميل العروض من الخادم', 'error');
+    triggerAlert('فشل تحميل أكواد الخصم من الخادم', 'error');
   } finally {
     loading.value = false;
   }
@@ -643,10 +643,10 @@ const duplicateOffer = async (offer) => {
             no_end_date: !offer.end_date,
             code: offer.code ? `${offer.code}-COPY` : '',
         }));
-        triggerAlert('تم تكرار العرض بنجاح');
+        triggerAlert('تم تكرار كود الخصم بنجاح');
         fetchOffers();
     } catch {
-        triggerAlert('فشل تكرار العرض', 'error');
+        triggerAlert('فشل تكرار كود الخصم', 'error');
     }
 };
 
@@ -679,12 +679,12 @@ const submitForm = async () => {
     // Validate bilingual fields
     if (!String(form.value.name_ar || '').trim()) {
         activeLang.value = 'ar';
-        triggerAlert('اسم العرض بالعربي مطلوب', 'error');
+        triggerAlert('اسم كود الخصم بالعربي مطلوب', 'error');
         return;
     }
     if (!String(form.value.name_en || '').trim()) {
         activeLang.value = 'en';
-        triggerAlert('اسم العرض بالإنجليزية مطلوب', 'error');
+        triggerAlert('اسم كود الخصم بالإنجليزية مطلوب', 'error');
         return;
     }
 
@@ -699,10 +699,10 @@ const submitForm = async () => {
         const payload = toDiscountPayload(form.value);
         if (isEdit.value) {
             await adminCatalogService.updateDiscountCode(currentId.value, payload);
-            triggerAlert('تم تحديث العرض بنجاح');
+            triggerAlert('تم تحديث كود الخصم بنجاح');
         } else {
             await adminCatalogService.createDiscountCode(payload);
-            triggerAlert('تم إنشاء العرض بنجاح');
+            triggerAlert('تم إنشاء كود الخصم بنجاح');
         }
         showFormModal.value = false;
         fetchOffers();
@@ -727,7 +727,7 @@ const toggleOfferStatus = async (offer) => {
         offer.is_active = newStatus;
         // Re-fetch or manually update status for badges (logic is in model, so re-fetching is safer or we can mimic)
         fetchOffers(); 
-        triggerAlert(newStatus ? 'تم تفعيل العرض' : 'تم تعطيل العرض');
+        triggerAlert(newStatus ? 'تم تفعيل كود الخصم' : 'تم تعطيل كود الخصم');
     } catch {
         triggerAlert('فشل تحديث الحالة', 'error');
     }
@@ -751,9 +751,9 @@ const executeDelete = async () => {
         offers.value = offers.value.filter((offer) => offer.id !== target.id);
         totalOffersCount.value = Math.max(0, totalOffersCount.value - 1);
         deleteTarget.value = null;
-        triggerAlert('تم حذف العرض بنجاح');
+        triggerAlert('تم حذف كود الخصم بنجاح');
     } catch (err) {
-        const message = err.response?.data?.message || 'فشل حذف العرض. حاول مرة أخرى.';
+        const message = err.response?.data?.message || 'فشل حذف كود الخصم. حاول مرة أخرى.';
         triggerAlert(message, 'error');
     } finally {
         isDeleting.value = false;

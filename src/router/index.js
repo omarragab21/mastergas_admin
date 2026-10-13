@@ -25,8 +25,12 @@ const routes = [
       { path: 'dynamic-pages', name: 'DynamicPages', component: () => import('../views/DynamicPagesView.vue') },
       { path: 'reviews', name: 'Reviews', component: () => import('../views/ReviewsView.vue') },
       { path: 'customers', name: 'Customers', component: () => import('../views/CustomersView.vue') },
-      { path: 'coupons', name: 'Coupons', component: () => import('../views/CouponsView.vue') },
-      { path: 'discounts', name: 'Discounts', component: () => import('../views/DiscountsView.vue') },
+      // Keep the old URL as a compatibility redirect, but use the Tijara
+      // discount-codes screen/API as the single Admin destination.
+      { path: 'coupons', redirect: '/admin/discounts' },
+      { path: 'discounts', name: 'DiscountCodes', component: () => import('../views/DiscountsView.vue') },
+      { path: 'offers', name: 'Offers', component: () => import('../views/ApiPendingView.vue') },
+      { path: 'promotions', name: 'Promotions', component: () => import('../views/ApiPendingView.vue') },
       { path: 'payments', name: 'Payments', component: () => import('../views/PaymentsView.vue') },
       { path: 'collector', name: 'Collector', component: () => import('../views/DeliveryManagementView.vue') },
       { path: 'driver-notifications', name: 'DriverNotifications', component: () => import('../views/DashboardView.vue') },
