@@ -202,7 +202,7 @@ const formatDate = (date) => {
         </div>
         <div class="left-actions">
             <button class="add-btn" @click="openAddModal">
-               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                إضافة صفحة جديدة
             </button>
         </div>
@@ -362,24 +362,38 @@ const formatDate = (date) => {
 /* Breadcrumbs */
 .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #9ca3af; }
 .breadcrumb svg { transform: rotate(180deg); color: #d1d5db; }
-.breadcrumb .active { color: #873260; font-weight: 700; }
+.breadcrumb .active { color: #000000; font-weight: 700; }
 
 /* Header */
 .header-section { display: flex; justify-content: space-between; align-items: center; }
 .page-title-area h1 { font-size: 1.5rem; font-weight: 800; color: #1f2937; margin: 0; }
 .page-title-area p { color: #6b7280; font-size: 0.875rem; margin: 0; }
 .title-with-icon { display: flex; align-items: center; gap: 12px; }
-.icon-box { background: #fdf2f8; color: #873260; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.icon-box { background: #f3f4f6; color: #000000; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 
-.add-btn { background: #873260; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; box-shadow: 0 4px 12px rgba(139, 34, 82, 0.2); }
-.add-btn:hover { background: #721c43; transform: translateY(-2px); }
+.add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #000000;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.add-btn:hover { background: #262626; }
 
 /* Filter Bar */
 .filter-card { background: white; border-radius: 12px; padding: 12px; border: 1px solid #e5e7eb; }
 .search-wrapper { position: relative; width: 100%; max-width: 100%; }
 .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
 .search-input { width: 100%; padding: 12px 45px 12px 15px; border: 1px solid #e5e7eb; border-radius: 10px; outline: none; transition: 0.3s; font-family: inherit; font-size: 0.9rem; }
-.search-input:focus { border-color: #873260; box-shadow: 0 0 0 3px rgba(139, 34, 82, 0.1); }
+.search-input:focus { border-color: #000000; box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
 
 /* Table */
 .table-container { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb; }
@@ -391,7 +405,7 @@ const formatDate = (date) => {
 
 .i18n-toggle { display: inline-flex; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; margin: 0 auto 18px; }
 .i18n-btn { border: none; background: transparent; padding: 0.4rem 0.9rem; font-weight: 800; font-size: 0.85rem; cursor: pointer; color: #6b7280; min-width: 96px; font-family: 'IBM Plex Sans Arabic', sans-serif; }
-.i18n-btn.active { background: #873260; color: #fff; }
+.i18n-btn.active { background: #000000; color: #fff; }
 .category-badge { background: #f3f4f6; color: #4b5563; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
 
 .status-btn { padding: 5px 15px; border-radius: 8px; border: none; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
@@ -401,10 +415,10 @@ const formatDate = (date) => {
 .actions-group { display: flex; gap: 8px; justify-content: center; }
 .action-btn { width: 32px; height: 32px; border-radius: 6px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
 .action-btn.view { background: #f0f9ff; color: #0369a1; }
-.action-btn.edit { background: #f5f3ff; color: #8b5cf6; }
+.action-btn.edit { background: #f3f4f6; color: #000000; }
 .action-btn.delete { background: #fef2f2; color: #ef4444; }
 .action-btn.website { background: #ecfdf5; color: #059669; text-decoration: none; }
-.topic-link { font-size: 0.85rem; color: #873260; font-weight: 600; text-decoration: none; direction: ltr; display: inline-block; }
+.topic-link { font-size: 0.85rem; color: #000000; font-weight: 600; text-decoration: none; direction: ltr; display: inline-block; }
 .topic-link:hover { text-decoration: underline; }
 
 /* Modals */
@@ -424,11 +438,11 @@ const formatDate = (date) => {
 .full-width { grid-column: span 2; }
 .form-group label { font-size: 0.85rem; font-weight: 700; color: #374151; }
 .form-group input, .form-group select, .form-group textarea { padding: 10px 15px; border: 1px solid #e5e7eb; border-radius: 8px; outline: none; transition: 0.3s; font-family: inherit; }
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #873260; box-shadow: 0 0 0 3px rgba(139, 34, 82, 0.1); }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: #000000; box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
 
 .modal-footer { padding: 20px 24px; background: #f9fafb; display: flex; justify-content: flex-end; gap: 12px; }
 .btn-cancel { background: white; border: 1px solid #e5e7eb; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; color: #4b5563; }
-.btn-submit { background: #873260; color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+.btn-submit { background: #000000; color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; }
 
 /* View Topic Specific */
 .view-modal-topic { background: white; border-radius: 24px; width: 100%; max-width: 600px; padding: 30px; position: relative; }
@@ -446,7 +460,7 @@ const formatDate = (date) => {
 .status-pill.draft { background: #f3f4f6; color: #6b7280; }
 
 .view-footer-topic { margin-top: 30px; display: flex; justify-content: flex-start; }
-.btn-primary-small { background: #873260; color: white; border: none; padding: 8px 30px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+.btn-primary-small { background: #000000; color: white; border: none; padding: 8px 30px; border-radius: 10px; font-weight: 700; cursor: pointer; }
 
 /* Alert */
 .alert-toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 10px; color: white; font-weight: 700; z-index: 2000; box-shadow: 0 10px 15px rgba(0,0,0,0.1); animation: toastIn 0.3s ease-out; }

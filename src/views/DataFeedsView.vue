@@ -500,7 +500,7 @@ const downloadJsonFeed = () => {
 
 .meta-icon { background: #1877f2; }
 .google-icon { background: #ea4335; }
-.json-icon { background: #8b5cf6; font-size: 16px; }
+.json-icon { background: #000000; font-size: 16px; }
 
 .platform-title {
   font-size: 15px;
@@ -523,7 +523,7 @@ const downloadJsonFeed = () => {
 }
 
 .format-badge.xml { background: #fef2f2; color: #dc2626; }
-.format-badge.json { background: #f5f3ff; color: #7c3aed; }
+.format-badge.json { background: #f3f4f6; color: #000000; }
 
 .feed-desc {
   font-size: 13px;
@@ -582,8 +582,8 @@ const downloadJsonFeed = () => {
 .meta-btn:hover { background: #166fe5; }
 .google-btn { background: #ea4335; }
 .google-btn:hover { background: #d93829; }
-.json-btn { background: #8b5cf6; }
-.json-btn:hover { background: #7c3aed; }
+.json-btn { background: #000000; }
+.json-btn:hover { background: #000000; }
 
 /* Stats */
 .stats-section {

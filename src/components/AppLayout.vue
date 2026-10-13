@@ -201,6 +201,7 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import api from '../config/axios';
+import adminOrderService from '../application/adminOrderService';
 import { useTheme } from '../composables/useTheme';
 
 const { isDark, toggleTheme } = useTheme();
@@ -241,43 +242,13 @@ let lastOrdersFetchTime = 0;
 const ORDERS_CACHE_TTL = 30000; // 30 seconds
 
 const fetchOrdersCount = async (force = false) => {
-    // The Tijara v1 Admin contract does not expose the legacy dashboard
-    // orders endpoints used by the old local snapshot shell.
-    if (!legacyDashboardEnabled) return;
     const now = Date.now();
     if (!force && now - lastOrdersFetchTime < ORDERS_CACHE_TTL) {
         return;
     }
     try {
         lastOrdersFetchTime = now;
-        // 1. Try dedicated count endpoint
-        try {
-            const countRes = await api.get('/dashboard/orders/count');
-            const c = countRes.data?.count ?? countRes.data?.data?.count ?? countRes.data?.data;
-            if (typeof c === 'number') {
-                ordersCount.value = c;
-                return;
-            }
-        } catch (_) {
-            // Count endpoint not available, fallback to pagination meta
-        }
-
-        // 2. Try lightweight 1-item pagination to read total from meta
-        try {
-            const pageRes = await api.get('/dashboard/orders?per_page=1');
-            const total = pageRes.data?.total ?? pageRes.data?.meta?.total;
-            if (typeof total === 'number') {
-                ordersCount.value = total;
-                return;
-            }
-        } catch (_) {
-            // Fallback to legacy full list
-        }
-
-        // 3. Fallback: full orders array length
-        const res = await api.get('/dashboard/orders');
-        const list = Array.isArray(res.data?.data) ? res.data.data : (Array.isArray(res.data) ? res.data : []);
-        ordersCount.value = list.length;
+        ordersCount.value = await adminOrderService.countOrders();
     } catch (err) {
         console.error('Failed to fetch orders count', err);
     }
@@ -611,7 +582,7 @@ const menuItems = [
 .logo-ar {
   font-size: 1.1rem;
   font-weight: 800;
-  color: #0d9488;
+  color: #000000;
 }
 .logo-en {
   font-size: 0.75rem;
@@ -648,7 +619,7 @@ const menuItems = [
 .nav-item.active {
   background: #000000;
   color: #fff;
-  box-shadow: 0 4px 10px rgba(139, 34, 82, 0.2);
+  box-shadow: 0 4px 10px rgba(0,0,0, 0.2);
 }
 .nav-icon {
   display: flex;
@@ -704,7 +675,7 @@ const menuItems = [
   color: var(--text-main);
 }
 .nav-group.active .nav-group-header {
-  background: rgba(135, 50, 96, 0.08);
+  background: rgba(0,0,0, 0.08);
   color: #000000;
 }
 .nav-chevron {
@@ -736,7 +707,7 @@ const menuItems = [
   color: var(--text-main);
 }
 .nav-sub-item.active {
-  background: rgba(135, 50, 96, 0.08);
+  background: rgba(0,0,0, 0.08);
   color: #000000;
   font-weight: 600;
 }

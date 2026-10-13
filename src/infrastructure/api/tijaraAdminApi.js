@@ -43,6 +43,11 @@ export const tijaraAdminApi = {
   createDiscountCode: (payload) => api.post('/v1/discount_codes', payload, json),
   updateDiscountCode: (id, payload) => api.put(`/v1/discount_codes/${id}`, payload, json),
   deleteDiscountCode: (id) => api.delete(`/v1/discount_codes/${id}`),
+
+  listOrders: (params = {}) => api.get('/v1/orders', { params }),
+  getOrder: (id) => api.get(`/v1/orders/${id}`),
+  updateOrder: (id, payload) => api.patch(`/v1/orders/${id}`, payload, json),
+  deleteOrder: (id) => api.delete(`/v1/orders/${id}`),
 };
 
 export default tijaraAdminApi;

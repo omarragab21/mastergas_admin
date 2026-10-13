@@ -244,9 +244,9 @@ const copyLink = (text) => {
 
        <div class="page-title-area">
           <button class="add-btn" @click="openAddModal">
-         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-         إضافة شريحة جديدة
-       </button>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            إضافة شريحة جديدة
+          </button>
        </div>
     </div>
 
@@ -478,20 +478,34 @@ const copyLink = (text) => {
 
 /* Header */
 .header-action { display: flex; justify-content: space-between; align-items: center; }
-.add-btn { background: #873260; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
-.add-btn:hover { background: #6b1a3f; transform: translateY(-2px); }
+.add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #000000;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.add-btn:hover { background: #262626; }
 
 .page-title-area h1 { font-size: 1.5rem; font-weight: 800; color: var(--text-main); margin: 0; }
 .page-title-area p { color: var(--text-muted); font-size: 0.875rem; margin: 0; }
 .title-with-icon { display: flex; align-items: center; gap: 12px; }
-.icon-box { background: #fdf2f8; color: #873260; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.icon-box { background: #f3f4f6; color: #000000; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 
 /* Filters */
 .filters-card { background: var(--bg-card); padding: 12px; border-radius: 12px; border: 1px solid var(--border-color); }
 .search-box { position: relative; width: 100%; }
 .search-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 .search-box input { width: 100%; padding: 10px 44px 10px 12px; border: 1px solid var(--border-color); border-radius: 8px; outline: none; transition: 0.3s; font-family: inherit; background: var(--input-bg); color: var(--text-main); }
-.search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 34, 82, 0.1); }
+.search-box input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
 
 /* Table */
 .table-container { background: var(--bg-card); border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color); }
@@ -533,12 +547,12 @@ const copyLink = (text) => {
 .action-btn { width: 32px; height: 32px; border-radius: 8px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
 .action-btn.view { background: #f0f9ff; color: #0ea5e9; }
 .action-btn.view:hover { background: #e0f2fe; }
-.action-btn.edit { background: #f5f3ff; color: #8b5cf6; }
+.action-btn.edit { background: #f3f4f6; color: #000000; }
 .i18n-toggle { display: inline-flex; border: 1px solid var(--border-color); border-radius: 12px; overflow: hidden; background: var(--bg-card); margin: 0 auto 18px; }
 .i18n-btn { border: none; background: transparent; padding: 0.4rem 0.9rem; font-weight: 800; font-size: 0.85rem; cursor: pointer; color: var(--text-muted); min-width: 96px; font-family: inherit; }
-.i18n-btn.active { background: #873260; color: #fff; }
+.i18n-btn.active { background: #000000; color: #fff; }
 
-.action-btn.edit:hover { background: #ede9fe; }
+.action-btn.edit:hover { background: #e5e7eb; }
 .action-btn.delete { background: #fef2f2; color: #ef4444; }
 .action-btn.delete:hover { background: #fee2e2; }
 
@@ -569,7 +583,7 @@ const copyLink = (text) => {
 
 .form-label { display: block; font-weight: 700; font-size: 0.9rem; margin-bottom: 8px; color: var(--text-main); }
 .form-control { width: 100%; padding: 10px 14px; border: 1.5px solid var(--border-color); background: var(--input-bg); color: var(--text-main); border-radius: 10px; outline: none; transition: 0.30s; font-family: inherit; }
-.form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(139, 34, 82, 0.1); }
+.form-control:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
 
 .link-input { position: relative; }
 .link-input input { padding-left: 40px; }

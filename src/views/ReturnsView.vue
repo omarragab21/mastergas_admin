@@ -292,7 +292,7 @@ onMounted(() => {
   width: 40px;
   height: 40px;
   border: 3px solid #e5e7eb;
-  border-top-color: #873260;
+  border-top-color: #000000;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -325,7 +325,7 @@ onMounted(() => {
   border: 0;
   border-radius: 8px;
   padding: 10px 18px;
-  background: #873260;
+  background: #000000;
   color: #fff;
   cursor: pointer;
   font-weight: 700;
@@ -345,8 +345,8 @@ onMounted(() => {
 }
 
 .return-card:hover {
-  border-color: #873260;
-  box-shadow: 0 4px 12px rgba(135, 50, 96, 0.1);
+  border-color: #000000;
+  box-shadow: 0 4px 12px rgba(0,0,0, 0.1);
 }
 
 .return-header {
@@ -430,7 +430,7 @@ onMounted(() => {
 
 .refund-amount {
   font-weight: 800;
-  color: #873260;
+  color: #000000;
   font-size: 16px;
 }
 
@@ -580,8 +580,8 @@ onMounted(() => {
 }
 
 .modal-body textarea:focus {
-  border-color: #873260;
-  box-shadow: 0 0 0 3px rgba(135, 50, 96, 0.05);
+  border-color: #000000;
+  box-shadow: 0 0 0 3px rgba(0,0,0, 0.05);
 }
 
 .modal-actions {

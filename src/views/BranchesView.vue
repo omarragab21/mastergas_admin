@@ -164,7 +164,7 @@ const triggerAlert = (message, type = 'success') => {
 
        <div class="left-actions">
            <button class="add-btn" @click="openAddModal">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
               إضافة فرع جديد
            </button>
        </div>
@@ -415,10 +415,24 @@ const triggerAlert = (message, type = 'success') => {
 .page-title-area h1 { font-size: 1.5rem; font-weight: 800; color: #1f2937; margin: 0; }
 .page-title-area p { color: #6b7280; font-size: 0.875rem; margin: 0; }
 .title-with-icon { display: flex; align-items: center; gap: 12px; }
-.icon-box { background: #fdf2f8; color: #873260; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.icon-box { background: #f3f4f6; color: #000000; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 
-.add-btn { background: #873260; color: white; border: none; padding: 10px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; box-shadow: 0 4px 12px rgba(139, 34, 82, 0.2); }
-.add-btn:hover { background: #721c43; transform: translateY(-2px); }
+.add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #000000;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.add-btn:hover { background: #262626; }
 
 /* Stats */
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -426,7 +440,7 @@ const triggerAlert = (message, type = 'success') => {
 .stat-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 .stat-icon.total { background: #eff6ff; color: #2563eb; }
 .stat-icon.active { background: #f0fdf4; color: #16a34a; }
-.stat-icon.managers { background: #faf5ff; color: #9333ea; }
+.stat-icon.managers { background: #f3f4f6; color: #000000; }
 .stat-val { display: block; font-size: 1.25rem; font-weight: 800; color: #111827; }
 .stat-label { font-size: 0.8rem; color: #6b7280; }
 
@@ -435,7 +449,7 @@ const triggerAlert = (message, type = 'success') => {
 .search-wrapper { position: relative; width: 100%; max-width: 100%; }
 .search-icon { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
 .search-input { width: 100%; padding: 12px 45px 12px 15px; border: 1px solid #e5e7eb; border-radius: 10px; outline: none; transition: 0.3s; font-family: inherit; font-size: 0.9rem; }
-.search-input:focus { border-color: #873260; box-shadow: 0 0 0 3px rgba(139, 34, 82, 0.1); }
+.search-input:focus { border-color: #000000; box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
 
 /* Table */
 .table-container { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb; }
@@ -457,7 +471,7 @@ const triggerAlert = (message, type = 'success') => {
 .actions-group { display: flex; gap: 8px; justify-content: center; }
 .action-btn { width: 32px; height: 32px; border-radius: 6px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
 .action-btn.view { background: #f0f9ff; color: #0369a1; }
-.action-btn.edit { background: #f5f3ff; color: #8b5cf6; }
+.action-btn.edit { background: #f3f4f6; color: #000000; }
 .action-btn.delete { background: #fef2f2; color: #ef4444; }
 
 /* Modals */
@@ -477,11 +491,11 @@ const triggerAlert = (message, type = 'success') => {
 .full-width { grid-column: span 2; }
 .form-group label { font-size: 0.85rem; font-weight: 700; color: #374151; }
 .form-group input, .form-group select { padding: 10px 15px; border: 1px solid #e5e7eb; border-radius: 8px; outline: none; transition: 0.3s; }
-.form-group input:focus { border-color: #873260; box-shadow: 0 0 0 3px rgba(139, 34, 82, 0.1); }
+.form-group input:focus { border-color: #000000; box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
 
 .modal-footer { padding: 20px 24px; background: #f9fafb; display: flex; justify-content: flex-end; gap: 12px; }
 .btn-cancel { background: white; border: 1px solid #e5e7eb; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; color: #4b5563; }
-.btn-submit { background: #873260; color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+.btn-submit { background: #000000; color: white; border: none; padding: 10px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; }
 
 /* New View Modal Styles */
 .view-modal-detailed { background: white; border-radius: 24px; width: 100%; max-width: 600px; padding: 30px; position: relative; }
@@ -502,7 +516,7 @@ const triggerAlert = (message, type = 'success') => {
 .status-pill.inactive { background: #fee2e2; color: #b91c1c; }
 
 .view-footer-new { margin-top: 30px; display: flex; justify-content: flex-start; }
-.btn-primary-small { background: #873260; color: white; border: none; padding: 8px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; }
-.btn-primary-small:hover { background: #721c43; }
+.btn-primary-small { background: #000000; color: white; border: none; padding: 8px 25px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: 0.3s; }
+.btn-primary-small:hover { background: #262626; }
 
 </style>

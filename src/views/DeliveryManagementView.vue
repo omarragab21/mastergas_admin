@@ -59,7 +59,7 @@
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(139, 34, 82, 0.1);
+  border: 1px solid rgba(0,0,0, 0.1);
   border-radius: 30px;
   padding: 4rem 3rem;
   text-align: center;
@@ -91,7 +91,7 @@
 }
 
 .main-icon {
-  background: #873260;
+  background: #000000;
   color: white;
   width: 100px;
   height: 100px;
@@ -99,7 +99,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 25px rgba(139, 34, 82, 0.3);
+  box-shadow: 0 10px 25px rgba(0,0,0, 0.3);
   z-index: 2;
   animation: float 3s ease-in-out infinite;
 }
@@ -121,7 +121,7 @@
   font-weight: 800;
   font-size: 0.75rem;
   box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  color: #873260;
+  color: #000000;
   border: 1px solid #f3f4f6;
 }
 
@@ -152,8 +152,8 @@
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  background: #fdf2f8;
-  color: #db2777;
+  background: #f3f4f6;
+  color: #000000;
   padding: 0.5rem 1.25rem;
   border-radius: 100px;
   font-weight: 700;
@@ -164,15 +164,15 @@
 .pulse-dot {
   width: 8px;
   height: 8px;
-  background: #db2777;
+  background: #000000;
   border-radius: 50%;
   animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(219, 39, 119, 0.7); }
-  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(219, 39, 119, 0); }
-  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(219, 39, 119, 0); }
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0,0,0, 0.7); }
+  70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0,0,0, 0); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0,0,0, 0); }
 }
 
 .features-preview {

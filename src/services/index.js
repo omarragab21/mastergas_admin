@@ -3,6 +3,7 @@ export { orderService } from './orderService';
 export { authService } from './authService';
 export { settingsService } from './settingsService';
 export { adminCatalogService } from '../application/adminCatalogService';
+export { adminOrderService } from '../application/adminOrderService';
 export {
   API_TTL,
   clearApiCache,

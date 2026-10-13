@@ -445,17 +445,27 @@ const confirmDelete = async (brand) => {
 }
 
 .i18n-btn.active {
-  background: #873260;
+  background: #000000;
   color: #fff;
 }
 .page-title { font-size: 1.4rem; font-weight: 800; color: #111827; }
 .page-subtitle { font-size: 0.85rem; color: #6b7280; }
 .add-btn {
-  display: flex; align-items: center; gap: 0.5rem;
-  background: #873260; color: #fff; border: none;
-  padding: 0.65rem 1.1rem; border-radius: 8px;
-  font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 600; cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #000000;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
 }
+.add-btn:hover { background: #262626; }
 
 /* Stats */
 .stats-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
@@ -480,7 +490,7 @@ const confirmDelete = async (brand) => {
 .stat-value { font-size: 1.5rem; font-weight: 800; color: #1f2937; margin-top: 2px; }
 .stat-icon-wrapper { width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 .total-icon { background: #f0fdf4; color: #16a34a; }
-.active-icon { background: #fdf2f8; color: #db2777; }
+.active-icon { background: #f3f4f6; color: #000000; }
 
 /* Filters */
 .filters-row { display: flex; gap: 1rem; }
@@ -502,7 +512,7 @@ const confirmDelete = async (brand) => {
 .data-table { width: 100%; border-collapse: collapse; }
 .data-table th, .data-table td { padding: 1rem; text-align: right; border-bottom: 1px solid #f3f4f6; }
 .data-table th { background: #f9fafb; font-size: 0.75rem; color: #6b7280; font-weight: 700; }
-.data-row:hover td { background: #fdfafb; }
+.data-row:hover td { background: #f3f4f6; }
 
 .col-logo { width: 100px; text-align: center; }
 .brand-image { width: 48px; height: 48px; border-radius: 8px; overflow: hidden; background: #f8fafc; border: 1px solid #f1f5f9; margin: 0 auto; }
@@ -581,8 +591,8 @@ const confirmDelete = async (brand) => {
 .form-label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; }
 .form-control { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 10px; font-family: 'IBM Plex Sans Arabic'; outline: none; }
 .form-control:focus {
-  border-color: rgba(135, 50, 96, 0.6);
-  box-shadow: 0 0 0 4px rgba(135, 50, 96, 0.12);
+  border-color: rgba(0,0,0, 0.6);
+  box-shadow: 0 0 0 4px rgba(0,0,0, 0.12);
 }
 .image-upload-box { border: 2px dashed #e2e8f0; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; background: #f8fafc; }
 .preview-img { max-height: 100px; border-radius: 8px; }
@@ -611,18 +621,18 @@ const confirmDelete = async (brand) => {
 .btn-submit {
   width: 100%;
   padding: 0.8rem;
-  background: linear-gradient(135deg, #873260, #a53c76);
+  background: linear-gradient(135deg, #000000, #a53c76);
   color: #fff;
   border: none;
   border-radius: 12px;
   font-weight: 800;
   cursor: pointer;
-  box-shadow: 0 10px 20px rgba(135, 50, 96, 0.25);
+  box-shadow: 0 10px 20px rgba(0,0,0, 0.25);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 .btn-submit:hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 26px rgba(135, 50, 96, 0.32);
+  box-shadow: 0 14px 26px rgba(0,0,0, 0.32);
 }
 .btn-submit:disabled,
 .btn-secondary:disabled {

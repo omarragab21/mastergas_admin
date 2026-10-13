@@ -59,7 +59,7 @@ const deleteLog = async (id) => {
 // Helpers
 const getActionTypeColor = (type) => {
     switch (type) {
-        case 'order': return '#873260';
+        case 'order': return '#000000';
         case 'product': return '#10b981';
         case 'user': return '#3b82f6';
         case 'setting': return '#f59e0b';
@@ -194,14 +194,14 @@ const triggerAlert = (message, type = 'success') => {
 /* Breadcrumbs */
 .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #9ca3af; }
 .breadcrumb svg { transform: rotate(180deg); color: #d1d5db; }
-.breadcrumb .active { color: #873260; font-weight: 700; }
+.breadcrumb .active { color: #000000; font-weight: 700; }
 
 /* Header */
 .header-section { display: flex; justify-content: space-between; align-items: center; }
 .page-title-area h1 { font-size: 1.4rem; font-weight: 800; color: #1f2937; margin: 0; }
 .page-title-area p { color: #6b7280; font-size: 0.85rem; margin: 0; }
 .title-with-icon { display: flex; align-items: center; gap: 12px; }
-.icon-box { background: #fdf2f8; color: #873260; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.icon-box { background: #f3f4f6; color: #000000; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
 
 /* Filters Card */
 .filters-card { background: white; border-radius: 12px; padding: 15px; border: 1px solid #f3f4f6; }
@@ -222,7 +222,7 @@ const triggerAlert = (message, type = 'success') => {
   position: relative;
   transition: 0.2s;
 }
-.log-card:hover { border-color: #fce7f3; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
+.log-card:hover { border-color: #e5e7eb; box-shadow: 0 4px 15px rgba(0,0,0,0.02); }
 
 .delete-btn { background: none; border: none; cursor: pointer; padding: 8px; display: flex; align-items: center; justify-content: center; opacity: 0.4; transition: 0.2s; margin-left: 20px; }
 .delete-btn:hover { opacity: 1; background: #fef2f2; border-radius: 8px; }
@@ -241,7 +241,7 @@ const triggerAlert = (message, type = 'success') => {
 
 .admin-avatar { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; background: #f3f4f6; flex-shrink: 0; }
 .admin-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.avatar-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f3f4f6; color: #873260; font-weight: 800; font-size: 0.85rem; }
+.avatar-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f3f4f6; color: #000000; font-weight: 800; font-size: 0.85rem; }
 
 .log-footer { margin-right: 20px; border-right: 1px solid #f3f4f6; padding-right: 20px; }
 .time-stamp { display: flex; align-items: center; gap: 6px; color: #9ca3af; font-size: 0.75rem; font-weight: 600; font-family: sans-serif; }

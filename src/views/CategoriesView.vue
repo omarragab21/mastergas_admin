@@ -175,12 +175,11 @@
     <!-- Modals -->
     <!-- Form Modal (Add/Edit) -->
     <div class="modal-overlay" v-if="showFormModal" @click.self="closeModal">
-      <div class="modal-content">
+      <div class="modal-content form-modal">
         <button class="modal-close" @click="closeModal">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
-        <h3 class="modal-title">{{ isEdit ? 'تعديل قسم' : (form.parent_id ? 'إضافة قسم فرعي جديد' : 'إضافة قسم رئيسي جديد') }}</h3>
-        <p class="modal-subtitle">أدخل معلومات القسم لإتمام العملية</p>
+        <div class="form-header"><div class="header-icon-main"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><h3 class="modal-title-main">{{ isEdit ? 'تعديل قسم' : (form.parent_id ? 'إضافة قسم فرعي جديد' : 'إضافة قسم رئيسي جديد') }}</h3><p class="modal-subtitle-main">أدخل معلومات القسم لإتمام العملية</p></div>
 
         <div class="i18n-toggle" role="tablist" aria-label="Language">
           <button type="button" class="i18n-btn" :class="{ active: activeLang === 'en' }" @click="activeLang = 'en'">English</button>
@@ -251,6 +250,7 @@
           </div>
 
           <div class="form-actions">
+            <button type="button" class="btn-cancel" @click="closeModal">إلغاء</button>
             <button type="submit" class="btn-submit" :disabled="isSubmitting">
               {{ isSubmitting ? 'جاري الحفظ...' : (isEdit ? 'حفظ التعديلات' : 'إضافة القسم') }}
             </button>
@@ -576,7 +576,7 @@ const confirmDelete = async (cat) => {
 }
 
 .i18n-btn.active {
-  background: #873260;
+  background: #000000;
   color: #fff;
 }
 .page-title {
@@ -593,7 +593,7 @@ const confirmDelete = async (cat) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #873260;
+  background: #000000;
   color: #fff;
   border: none;
   padding: 0.65rem 1.1rem;
@@ -604,7 +604,7 @@ const confirmDelete = async (cat) => {
   cursor: pointer;
   transition: all 0.2s;
 }
-.add-btn:hover { background: #6E1A41; }
+.add-btn:hover { background: #262626; }
 
 /* Stats Cards */
 .stats-cards {
@@ -647,7 +647,7 @@ const confirmDelete = async (cat) => {
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.active-icon { background: #fdf2f8; color: #db2777; }
+.active-icon { background: #f3f4f6; color: #000000; }
 .total-icon { background: #ecfdf5; color: #059669; }
 .sub-icon { background: #f3f4f6; color: #4b5563; }
 .main-icon { background: #fefce8; color: #ca8a04; }
@@ -680,7 +680,7 @@ const confirmDelete = async (cat) => {
   background: #fff;
   transition: border-color 0.2s;
 }
-.search-input:focus { border-color: #873260; }
+.search-input:focus { border-color: #000000; }
 
 .filter-select {
   position: relative;
@@ -737,7 +737,7 @@ const confirmDelete = async (cat) => {
   color: #374151;
   vertical-align: middle;
 }
-.data-row:hover td { background: #fdfafb; }
+.data-row:hover td { background: #f3f4f6; }
 .state-row td { text-align: center; color: #6b7280; padding: 2rem; }
 
 /* Columns alignment based on Figma */
@@ -782,7 +782,7 @@ const confirmDelete = async (cat) => {
 .status-badge.inactive { background: #f3f4f6; color: #4b5563; }
 
 .parent-badge {
-  background: #fdf2f8; color: #db2777;
+  background: #f3f4f6; color: #000000;
   padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;
 }
 .dash-mark { color: #9ca3af; }
@@ -815,7 +815,7 @@ const confirmDelete = async (cat) => {
 .delete-btn:hover { color: #dc2626; background: #fef2f2; }
 .edit-btn:hover { color: #2563eb; background: #eff6ff; }
 .view-btn:hover { color: #059669; background: #ecfdf5; }
-.add-sub-btn:hover { color: #db2777; background: #fdf2f8; }
+.add-sub-btn:hover { color: #000000; background: #f3f4f6; }
 
 /* Modal */
 .modal-overlay {
@@ -844,7 +844,7 @@ const confirmDelete = async (cat) => {
   width: 100%; padding: 0.65rem 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px;
   font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; color: #1f2937; outline: none; transition: border-color 0.2s; text-align: right;
 }
-.form-control:focus { border-color: #873260; }
+.form-control:focus { border-color: #000000; }
 .textarea { resize: vertical; min-height: 80px; }
 
 .select-wrapper { position: relative; display: flex; align-items: center; }
@@ -855,7 +855,7 @@ const confirmDelete = async (cat) => {
   border: 1.5px dashed #d1d5db; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;
   transition: border-color 0.2s, background 0.2s; background: #fafafa;
 }
-.image-upload-box:hover { border-color: #873260; background: #fdfafb; }
+.image-upload-box:hover { border-color: #000000; background: #f3f4f6; }
 .hidden-input { display: none; }
 .upload-icon { color: #9ca3af; margin-bottom: 0.5rem; display: inline-flex; }
 .upload-placeholder p { font-size: 0.85rem; font-weight: 600; color: #374151; margin: 0 0 0.2rem; }
@@ -865,11 +865,11 @@ const confirmDelete = async (cat) => {
 
 .form-actions { margin-top: 1.5rem; display: flex; justify-content: center; }
 .btn-submit {
-  background: #873260; color: #fff; border: none; padding: 0.7rem 2rem; border-radius: 8px;
+  background: #000000; color: #fff; border: none; padding: 0.7rem 2rem; border-radius: 8px;
   font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: background 0.2s;
   width: 100%;
 }
-.btn-submit:hover:not(:disabled) { background: #6E1A41; }
+.btn-submit:hover:not(:disabled) { background: #262626; }
 .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
 
 /* View Modal */
@@ -898,4 +898,30 @@ const confirmDelete = async (cat) => {
 .alert-toast.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
 .alert-toast.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 .alert-icon { flex-shrink: 0; }
+
+/* ===== Unified form-modal design (matches "إنشاء عرض جديد") ===== */
+.modal-overlay:has(.form-modal) { z-index: 1000; backdrop-filter: blur(4px); }
+.modal-content.form-modal { max-width: 650px; padding: 0; border-radius: 20px; box-shadow: 0 25px 70px rgba(0,0,0,0.25); max-height: 95vh; overflow-y: auto; }
+.modal-content.form-modal.form-content { max-width: 700px; }
+.form-modal .modal-close { top: 1.5rem; left: 1.5rem; background: #f3f4f6; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; color: #9ca3af; font-size: 1.2rem; line-height: 1; }
+.form-modal .form-header { text-align: center; padding: 2rem 2rem 1.5rem 2rem; position: relative; }
+.form-modal .header-icon-main { width: 50px; height: 50px; background: #f3f4f6; color: #000000; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+.form-modal .modal-title-main { font-size: 1.3rem; font-weight: 800; color: #111827; margin: 0; }
+.form-modal .modal-subtitle-main { font-size: 0.85rem; color: #9ca3af; margin-top: 0.4rem; }
+.form-modal .cat-form, .form-modal .prod-form, .form-modal .value-form { padding: 0 2.5rem 2.5rem 2.5rem; }
+.form-modal .i18n-toggle { display: flex; width: fit-content; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; margin: 0 auto 1.1rem; }
+.form-modal .i18n-btn { padding: 0.4rem 0.9rem; font-weight: 800; font-size: 0.85rem; min-width: 96px; font-family: 'IBM Plex Sans Arabic', sans-serif; }
+.form-modal .modal-tabs { margin: 0 2.5rem 1.5rem; }
+.form-modal .form-group { margin-bottom: 1.5rem; }
+.form-modal .form-label { font-size: 0.85rem; font-weight: 700; color: #374151; margin-bottom: 0.75rem; }
+.form-modal .form-control { padding: 0.8rem 1rem; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; transition: 0.2s; }
+.form-modal .form-control:focus { background: #fff; border-color: #000000; box-shadow: 0 0 0 4px rgba(0,0,0,0.08); }
+.form-modal .image-upload-box, .form-modal .upload-box { border: 2px dashed #e5e7eb; border-radius: 12px; background: #f9fafb; }
+.form-modal .image-upload-box:hover, .form-modal .upload-box:hover { border-color: #000000; background: #fff; }
+.form-modal .form-actions { margin-top: 2rem; display: flex; gap: 1rem; justify-content: stretch; align-items: stretch; }
+.form-modal .btn-cancel { flex: 1; width: auto; padding: 0.85rem; border-radius: 10px; border: 1px solid #e5e7eb; background: #fff; color: #6b7280; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.form-modal .btn-submit { flex: 2; width: auto; min-width: 0; padding: 0.85rem; border-radius: 10px; border: none; background: #000000; color: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
+.form-modal .btn-submit:hover:not(:disabled) { background: #262626; }
+.form-modal .btn-submit:disabled { opacity: 0.6; }
+@media (max-width: 600px) { .form-modal .cat-form, .form-modal .prod-form, .form-modal .value-form { padding: 0 1.25rem 1.5rem; } .form-modal .modal-tabs { margin: 0 1.25rem 1.5rem; } }
 </style>

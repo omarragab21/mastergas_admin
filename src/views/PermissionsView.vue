@@ -157,7 +157,7 @@ const triggerAlert = (message, type = 'success') => {
         </div>
         <div class="left-actions">
             <button class="add-btn" @click="openAddModal">
-               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                إنشاء صلاحية جديدة
             </button>
         </div>
@@ -219,7 +219,7 @@ const triggerAlert = (message, type = 'success') => {
               <td class="col-id">#{{ permission.id }}</td>
               <td class="col-name text-right">
                 <div class="flex-center gap-2">
-                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#873260" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                    <span class="perm-name-text">{{ permission.name }}</span>
                 </div>
               </td>
@@ -323,17 +323,31 @@ const triggerAlert = (message, type = 'success') => {
 /* Breadcrumbs */
 .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #9ca3af; }
 .breadcrumb svg { transform: rotate(180deg); color: #d1d5db; }
-.breadcrumb .active { color: #873260; font-weight: 700; }
+.breadcrumb .active { color: #000000; font-weight: 700; }
 
 /* Header */
 .header-section { display: flex; justify-content: space-between; align-items: center; }
 .page-title-area h1 { font-size: 1.4rem; font-weight: 800; color: #1f2937; margin: 0; }
 .page-title-area p { color: #6b7280; font-size: 0.85rem; margin: 0; }
 .title-with-icon { display: flex; align-items: center; gap: 12px; }
-.icon-box { background: #fdf2f8; color: #873260; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.icon-box { background: #f3f4f6; color: #000000; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
 
-.add-btn { background: #873260; color: white; border: none; padding: 10px 22px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 0.9rem; }
-.add-btn:hover { background: #721c43; transform: translateY(-2px); }
+.add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #000000;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.add-btn:hover { background: #262626; }
 
 /* Stats */
 .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
@@ -354,7 +368,7 @@ const triggerAlert = (message, type = 'success') => {
 .data-table { width: 100%; border-collapse: collapse; }
 .data-table th { background: #f9fafb; padding: 15px; font-weight: 700; color: #6b7280; font-size: 0.8rem; border-bottom: 2px solid #f3f4f6; text-align: center; }
 .data-table td { padding: 15px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; color: #374151; font-size: 0.85rem; text-align: center; }
-.data-row:hover { background: #fdfafb; }
+.data-row:hover { background: #f3f4f6; }
 
 .col-id { color: #9ca3af; font-weight: 700; font-family: sans-serif; width: 100px; }
 .perm-name-text { font-weight: 700; color: #111827; font-size: 0.9rem; }
@@ -363,8 +377,8 @@ const triggerAlert = (message, type = 'success') => {
 .users-avatars { display: flex; align-items: center; justify-content: center; position: relative; }
 .avatar-item-wrapper { width: 30px; height: 30px; border-radius: 50%; border: 2px solid white; overflow: hidden; margin-left: -12px; position: relative; z-index: 1; }
 .avatar-item-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-.avatar-placeholder-inline { width: 100%; height: 100%; background: #873260; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
-.avatar-placeholder-sm { width: 32px; height: 32px; border-radius: 50%; background: #f3f4f6; color: #873260; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; }
+.avatar-placeholder-inline { width: 100%; height: 100%; background: #000000; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+.avatar-placeholder-sm { width: 32px; height: 32px; border-radius: 50%; background: #f3f4f6; color: #000000; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; }
 .user-count-badge { font-size: 0.75rem; color: #9ca3af; margin-right: 15px; }
 
 .status-badge-new { padding: 4px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; }
@@ -372,7 +386,7 @@ const triggerAlert = (message, type = 'success') => {
 
 .actions-group { display: flex; gap: 8px; justify-content: center; }
 .action-btn { width: 30px; height: 30px; border-radius: 6px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-.action-btn.edit { background: #f5f3ff; color: #8b5cf6; }
+.action-btn.edit { background: #f3f4f6; color: #000000; }
 .action-btn.delete { background: #fef2f2; color: #ef4444; }
 
 /* MODAL - Premium Form */
@@ -386,7 +400,7 @@ const triggerAlert = (message, type = 'success') => {
 
 .form-group-perm label { display: block; font-weight: 800; font-size: 0.85rem; color: #374151; margin-bottom: 8px; text-align: right; }
 .form-group-perm input, .form-group-perm textarea { width: 100%; padding: 12px 15px; border: 1px solid #e5e7eb; border-radius: 10px; outline: none; transition: 0.3s; font-family: inherit; font-size: 0.9rem; }
-.form-group-perm input:focus, .form-group-perm textarea:focus { border-color: #873260; box-shadow: 0 0 0 3px rgba(139, 34, 82, 0.1); }
+.form-group-perm input:focus, .form-group-perm textarea:focus { border-color: #000000; box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
 .req { color: #dc2626; }
 
 /* Admin List in Modal */
@@ -406,7 +420,7 @@ const triggerAlert = (message, type = 'success') => {
 
 .modal-footer-perm { display: flex; gap: 12px; margin-top: 30px; }
 .btn-cancel-new { flex: 1; padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 700; cursor: pointer; color: #4b5563; }
-.btn-submit-new { flex: 2; padding: 12px; border: none; border-radius: 10px; background: #873260; color: white; font-weight: 700; cursor: pointer; }
+.btn-submit-new { flex: 2; padding: 12px; border: none; border-radius: 10px; background: #000000; color: white; font-weight: 700; cursor: pointer; }
 
 /* Alert */
 .alert-toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 10px; color: white; font-weight: 700; z-index: 2000; box-shadow: 0 10px 15px rgba(0,0,0,0.1); animation: toastIn 0.3s ease-out; }

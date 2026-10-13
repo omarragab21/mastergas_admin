@@ -449,14 +449,14 @@ const filteredCustomers = computed(() => {
 .page-header { display: flex; align-items: center; justify-content: space-between; }
 .title-with-icon { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.2rem; }
 .page-title { font-size: 1.4rem; font-weight: 800; color: #111827; margin: 0; }
-.count-badge { background: #fdf2f8; color: #db2777; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+.count-badge { background: #f3f4f6; color: #000000; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
 .page-subtitle { font-size: 0.85rem; color: #6b7280; margin: 0; }
 
 .filters-row { display: flex; gap: 1rem; align-items: center; }
 .search-box { flex: 1; position: relative; display: flex; align-items: center; }
 .search-icon { position: absolute; right: 1rem; color: #9ca3af; }
 .search-input { width: 100%; padding: 0.7rem 2.8rem 0.7rem 1rem; border: 1px solid #e5e7eb; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; outline: none; background: #fff; transition: border-color 0.2s; }
-.search-input:focus { border-color: #873260; }
+.search-input:focus { border-color: #000000; }
 
 .filter-select { position: relative; display: flex; align-items: center; min-width: 180px; }
 .form-select { width: 100%; padding: 0.7rem 1rem 0.7rem 2.5rem; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; color: #374151; appearance: none; outline: none; cursor: pointer; }
@@ -467,7 +467,7 @@ const filteredCustomers = computed(() => {
 .data-table th, .data-table td { padding: 1.1rem 1rem; border-bottom: 1px solid #f3f4f6; vertical-align: middle; text-align: center; }
 .data-table th { background: #f9fafb; font-size: 0.75rem; font-weight: 700; color: #6b7280; white-space: nowrap; }
 .data-table td { font-size: 0.85rem; color: #374151; }
-.data-row:hover td { background: #fdfafb; }
+.data-row:hover td { background: #f3f4f6; }
 .state-row td { text-align: center; color: #6b7280; padding: 2.5rem; }
 
 .text-right { text-align: right !important; }
@@ -482,8 +482,8 @@ const filteredCustomers = computed(() => {
 
 .actions-group { display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
 .action-btn { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: none; cursor: pointer; transition: all 0.2s; }
-.view-btn { background: #fdf2f8; color: #db2777; }
-.view-btn:hover { background: #fce7f3; }
+.view-btn { background: #f3f4f6; color: #000000; }
+.view-btn:hover { background: #e5e7eb; }
 .delete-btn { background: #fef2f2; color: #dc2626; }
 .delete-btn:hover { background: #fee2e2; }
 
@@ -562,8 +562,8 @@ const filteredCustomers = computed(() => {
 .detail-tab-btn span { font-size: 0.95rem; }
 .tab-count { background: #f3f4f6; padding: 0.1rem 0.5rem; border-radius: 50px; font-size: 0.75rem; }
 
-.detail-tab-btn.active { color: #873260; border-bottom-color: #873260; }
-.detail-tab-btn.active .tab-count { background: #fce7f3; color: #873260; }
+.detail-tab-btn.active { color: #000000; border-bottom-color: #000000; }
+.detail-tab-btn.active .tab-count { background: #e5e7eb; color: #000000; }
 
 /* Detail Table */
 .tab-content-area { background: #fff; border-radius: 12px; padding: 0; border: 1px solid #f3f4f6; overflow: hidden; min-height: 200px; }
@@ -572,7 +572,7 @@ const filteredCustomers = computed(() => {
 .detail-table td { padding: 1.25rem; text-align: right; border-bottom: 1px solid #f3f4f6; font-size: 0.9rem; color: #374151; font-weight: 500; }
 .detail-table tr:last-child td { border-bottom: none; }
 
-.order-id { font-weight: 700; color: #873260; }
+.order-id { font-weight: 700; color: #000000; }
 .order-amount { font-weight: 700; }
 
 .status-badge-detail { padding: 0.4rem 1rem; border-radius: 50px; font-size: 0.75rem; font-weight: 700; }
@@ -586,7 +586,7 @@ const filteredCustomers = computed(() => {
 .wishlist-img { width: 100%; height: 150px; object-fit: cover; }
 .wishlist-info { padding: 1rem; text-align: center; }
 .wishlist-info h4 { font-size: 0.9rem; margin-bottom: 0.5rem; }
-.wishlist-info p { font-weight: 800; color: #873260; }
+.wishlist-info p { font-weight: 800; color: #000000; }
 
 /* Addresses Grid */
 .addresses-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; padding: 1.5rem; }

@@ -570,24 +570,24 @@ const triggerAlert = (message, type = 'success') => {
 /* Breadcrumbs */
 .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #9ca3af; }
 .breadcrumb svg { transform: rotate(180deg); color: #d1d5db; }
-.breadcrumb .active { color: #873260; font-weight: 700; }
+.breadcrumb .active { color: #000000; font-weight: 700; }
 
 /* Header */
 .header-section { display: flex; justify-content: space-between; align-items: center; }
 .page-title-area h1 { font-size: 1.4rem; font-weight: 800; color: #1f2937; margin: 0; }
 .page-title-area p { color: #6b7280; font-size: 0.85rem; margin: 0; }
 .title-with-icon { display: flex; align-items: center; gap: 12px; }
-.icon-box { background: #fdf2f8; color: #873260; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.icon-box { background: #f3f4f6; color: #000000; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
 
-.save-btn { background: #873260; color: white; border: none; padding: 10px 22px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 0.9rem; }
-.save-btn:hover { background: #721c43; transform: translateY(-2px); }
+.save-btn { background: #000000; color: white; border: none; padding: 10px 22px; border-radius: 10px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 0.9rem; }
+.save-btn:hover { background: #262626; transform: translateY(-2px); }
 .save-btn:disabled { background: #9ca3af; }
 
 /* Tabs */
 .tabs-nav { display: flex; gap: 25px; border-bottom: 1px solid #f3f4f6; }
 .tab-link { background: none; border: none; padding: 12px 5px; color: #6b7280; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 0.95rem; position: relative; border-bottom: 2px solid transparent; transition: 0.2s; }
-.tab-link.active { color: #873260; border-bottom-color: #873260; }
-.tab-link:hover { color: #873260; }
+.tab-link.active { color: #000000; border-bottom-color: #000000; }
+.tab-link:hover { color: #000000; }
 
 /* Content */
 .settings-content { background: white; border-radius: 20px; padding: 40px; border: 1px solid #f3f4f6; }
@@ -597,7 +597,7 @@ const triggerAlert = (message, type = 'success') => {
 
 .form-group label { display: block; font-weight: 700; font-size: 0.9rem; color: #374151; margin-bottom: 10px; text-align: right; }
 .form-group input, .form-group textarea { width: 100%; padding: 14px 18px; border: 1px solid #f3f4f6; border-radius: 12px; outline: none; transition: 0.3s; font-family: inherit; font-size: 0.95rem; background: #fafafa; color: #1f2937; }
-.form-group input:focus, .form-group textarea:focus { border-color: #873260; background: white; box-shadow: 0 0 0 4px rgba(139, 34, 82, 0.05); }
+.form-group input:focus, .form-group textarea:focus { border-color: #000000; background: white; box-shadow: 0 0 0 4px rgba(0,0,0, 0.05); }
 
 .ltr-input { direction: ltr; text-align: left; }
 .req { color: #dc2626; }
@@ -611,7 +611,7 @@ const triggerAlert = (message, type = 'success') => {
 .toggle-switch input { opacity: 0; width: 0; height: 0; }
 .toggle-slider { position: absolute; cursor: pointer; inset: 0; background: #e5e7eb; border-radius: 28px; transition: 0.3s; }
 .toggle-slider::before { position: absolute; content: ''; height: 22px; width: 22px; right: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; box-shadow: 0 1px 4px rgba(0,0,0,0.2); }
-.toggle-switch input:checked + .toggle-slider { background: #873260; }
+.toggle-switch input:checked + .toggle-slider { background: #000000; }
 .toggle-switch input:checked + .toggle-slider::before { transform: translateX(-24px); }
 
 /* Logo Upload */
@@ -630,7 +630,7 @@ const triggerAlert = (message, type = 'success') => {
 
 /* Custom Select and Alert */
 .custom-select-v2 { width: 100%; padding: 14px 18px; border: 1px solid #f3f4f6; border-radius: 12px; outline: none; background: #fafafa; color: #1f2937; font-family: inherit; font-size: 0.95rem; cursor: pointer; }
-.custom-select-v2:focus { border-color: #873260; background: white; }
+.custom-select-v2:focus { border-color: #000000; background: white; }
 
 .info-alert { background: #eff6ff; color: #1e40af; padding: 15px; border-radius: 12px; display: flex; align-items: center; gap: 12px; font-size: 0.85rem; font-weight: 600; border: 1px solid #dbeafe; }
 .mb-4 { margin-bottom: 1rem; }

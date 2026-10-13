@@ -73,11 +73,7 @@
         <div class="filter-select">
           <select v-model="statusFilter" class="form-select">
             <option value="">جميع الحالات</option>
-            <option value="pending">قيد الانتظار</option>
-            <option value="processing">قيد المعالجة</option>
-            <option value="shipped">قيد الشحن</option>
-            <option value="delivered">تم التوصيل</option>
-            <option value="cancelled">ملغي</option>
+            <option v-for="status in ORDER_STATUSES" :key="status" :value="status">{{ statusText(status) }}</option>
           </select>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="select-icon" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
@@ -165,7 +161,7 @@
             <span class="status-badge" :class="viewOrder?.status">{{ statusText(viewOrder?.status) }}</span>
           </div>
           <div class="left-col">
-            <button class="btn-outline" @click="openStatusModal">
+            <button v-if="allowedStatuses.length" class="btn-outline" @click="openStatusModal">
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.59-9.21l5.67-2.36"/></svg>
               تحديث الحالة
             </button>
@@ -183,6 +179,13 @@
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
               </div>
               <span>استلام الطلب</span>
+            </div>
+            <div class="step-line" :class="getLineClass('paid_confirmed')"></div>
+            <div class="step" :class="getStepClass('paid_confirmed')">
+              <div class="step-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <span>تأكيد الدفع</span>
             </div>
             <div class="step-line" :class="getLineClass('processing')"></div>
             <div class="step" :class="getStepClass('processing')">
@@ -255,7 +258,7 @@
                   </div>
                   <div class="info-item">
                     <span class="info-label">الهاتف</span>
-                    <span class="info-val ltr flex-end" style="direction:ltr; text-align:right; width: 100%">{{ viewOrder?.customerPhone }}</span>
+                    <span class="info-val ltr flex-end" style="direction:ltr; text-align:right; width: 100%">{{ viewOrder?.customerPhone || 'لا يوجد' }}</span>
                   </div>
                   <div class="info-item">
                     <span class="info-label">البريد الإلكتروني</span>
@@ -264,6 +267,10 @@
                   <div class="info-item">
                     <span class="info-label">العنوان</span>
                     <span class="info-val">{{ viewOrder?.customerAddress || 'لا يوجد' }}</span>
+                  </div>
+                  <div class="info-item" v-if="viewOrder?.notes">
+                    <span class="info-label">ملاحظات العميل</span>
+                    <span class="info-val">{{ viewOrder.notes }}</span>
                   </div>
                 </div>
               </div>
@@ -298,7 +305,11 @@
                   </div>
                   <div class="s-row" v-if="viewOrder?.discount > 0">
                     <span>الخصم</span>
-                    <span class="green-text">-{{ formatPrice(viewOrder?.discount) }} د.أ</span>
+                    <span class="green-text">-{{ formatPrice(viewOrder?.discount) }} د.أ<template v-if="viewOrder?.couponCode"> ({{ viewOrder.couponCode }})</template></span>
+                  </div>
+                  <div class="s-row">
+                    <span>الضريبة</span>
+                    <span>{{ formatPrice(viewOrder?.tax) }} د.أ</span>
                   </div>
                   <div class="s-row total">
                     <span>الإجمالي</span>
@@ -306,7 +317,8 @@
                   </div>
                   <div class="s-row flex-start mt-1">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-                    <span class="text-gray">{{ getPaymentMethodText(viewOrder) }}</span>
+                    <span class="text-gray">{{ paymentMethodLabel(viewOrder?.paymentMethod) }}</span>
+                    <span class="payment-badge" :class="viewOrder?.paymentStatus">{{ paymentStatusLabel(viewOrder?.paymentStatus) }}</span>
                   </div>
                 </div>
               </div>
@@ -350,20 +362,11 @@
             <label class="form-label">الحالة الجديدة <span class="req">*</span></label>
             <div class="select-wrapper">
               <select v-model="statusForm.status" class="form-control" required>
-                <option value="pending">قيد الانتظار</option>
-                <option value="processing">قيد المعالجة</option>
-                <option value="shipped">قيد الشحن</option>
-                <option value="delivered">تم التوصيل</option>
-                <option value="cancelled">ملغي</option>
+                <option v-for="status in allowedStatuses" :key="status" :value="status">{{ statusText(status) }}</option>
               </select>
               <svg class="select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-label">ملاحظة إضافية للمستخدم (اختياري)</label>
-            <textarea v-model="statusForm.note" class="form-control text-area" placeholder="أضف ملاحظة توضح سبب التحديث..."></textarea>
-          </div>
-
           <div class="form-actions">
             <button type="button" class="btn-cancel" @click="showStatusModal = false;">إلغاء</button>
             <button type="submit" class="btn-submit" :disabled="isSubmittingStatus">
@@ -387,7 +390,15 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue';
-import api from '../config/axios';
+import adminOrderService from '../application/adminOrderService';
+import {
+  ORDER_STATUSES,
+  ORDER_STEPS,
+  nextStatuses,
+  paymentMethodLabel,
+  paymentStatusLabel,
+  statusLabel,
+} from '../domain/orders/adminOrder';
 
 const orders = ref([]);
 const loading = ref(false);
@@ -402,35 +413,10 @@ const showStatusModal = ref(false);
 const viewOrder = ref(null);
 
 const isSubmittingStatus = ref(false);
-const statusForm = ref({ status: '', note: '' });
+const statusForm = ref({ status: '' });
 
-// Dictionary
-const statuses = {
-  pending: 'قيد الانتظار',
-  processing: 'قيد المعالجة',
-  shipped: 'قيد الشحن',
-  delivered: 'تم التوصيل',
-  cancelled: 'ملغي'
-};
-const paymentMethods = {
-  cod: 'دفع عند الاستلام (COD)',
-  cash: 'دفع عند الاستلام',
-  card: 'بطاقة ائتمان (Paytabs)',
-  paytabs: 'بطاقة ائتمان (Paytabs)',
-  credit_card: 'بطاقة ائتمان',
-  wallet: 'المحفظة الإلكترونية',
-  bank_transfer: 'تحويل بنكي'
-};
-
-const getPaymentMethodText = (order) => {
-  if (!order) return 'غير محدد';
-  const method = order.paymentMethod || order.payment_method || order.payment_type;
-  if (!method) return 'دفع عند الاستلام';
-  const key = method.toString().toLowerCase().trim();
-  return paymentMethods[key] || method;
-};
-
-const statusText = (status) => statuses[status] || status;
+const statusText = statusLabel;
+const allowedStatuses = computed(() => nextStatuses(viewOrder.value?.status));
 
 // Stats
 const totalOrders = computed(() => orders.value.length);
@@ -469,8 +455,7 @@ const formatPrice = (p) => Number(p || 0).toLocaleString('en-US', { minimumFract
 const fetchOrders = async () => {
   loading.value = true;
   try {
-    const res = await api.get('/dashboard/orders');
-    orders.value = res.data.data;
+    orders.value = await adminOrderService.listOrders();
   } catch (err) {
     triggerAlert('فشل استيراد الطلبات', 'error');
   } finally {
@@ -488,12 +473,12 @@ const openViewModal = (order) => {
 };
 
 const openStatusModal = () => {
-  statusForm.value = { status: viewOrder.value.status, note: '' };
+  statusForm.value = { status: allowedStatuses.value[0] || '' };
   showStatusModal.value = true;
 };
 
 // Stepper Logic
-const orderSteps = ['pending', 'processing', 'shipped', 'delivered'];
+const orderSteps = ORDER_STEPS;
 const getStepClass = (step) => {
   if (!viewOrder.value) return '';
   const cIdx = orderSteps.indexOf(viewOrder.value.status);
@@ -515,16 +500,16 @@ const getLineClass = (stepTo) => {
 const submitStatusUpdate = async () => {
   isSubmittingStatus.value = true;
   try {
-    const res = await api.patch(`/dashboard/orders/${viewOrder.value.id}/status`, statusForm.value);
+    const updated = await adminOrderService.updateStatus(viewOrder.value, statusForm.value.status);
     triggerAlert('تم تحديث حالة الطلب بنجاح');
     showStatusModal.value = false;
-    viewOrder.value = res.data.data; // update local view
+    viewOrder.value = updated; // update local view
     // Update in array
-    const idx = orders.value.findIndex(o => o.id === viewOrder.value.id);
-    if (idx !== -1) orders.value[idx] = res.data.data;
+    const idx = orders.value.findIndex(o => o.id === updated.id);
+    if (idx !== -1) orders.value[idx] = updated;
     window.dispatchEvent(new CustomEvent('orders-updated'));
   } catch (err) {
-    triggerAlert(err.response?.data?.message || 'فشل التحديث', 'error');
+    triggerAlert(err.response?.data?.message || err.message || 'فشل التحديث', 'error');
   } finally {
     isSubmittingStatus.value = false;
   }
@@ -533,12 +518,12 @@ const submitStatusUpdate = async () => {
 const confirmDelete = async (order) => {
   if (confirm(`تأكيد حذف الطلب #${order.orderNumber}؟ لا يمكن التراجع.`)) {
     try {
-      await api.delete(`/dashboard/orders/${order.id}`);
+      await adminOrderService.deleteOrder(order.id);
       triggerAlert('تم الحذف بنجاح');
       fetchOrders();
       window.dispatchEvent(new CustomEvent('orders-updated'));
     } catch (err) {
-      triggerAlert('فشل عملية الحذف', 'error');
+      triggerAlert(err.response?.data?.message || 'فشل عملية الحذف', 'error');
     }
   }
 };
@@ -562,7 +547,7 @@ const confirmDelete = async (order) => {
 .stat-value { font-size: 1.6rem; font-weight: 800; color: #111827; margin-bottom: 0.2rem; line-height: 1.2; }
 .stat-label { font-size: 0.8rem; font-weight: 700; color: #6b7280; }
 .stat-icon-wrapper { width: 42px; height: 42px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.total-icon { background: #fdf2f8; color: #db2777; }
+.total-icon { background: #f3f4f6; color: #000000; }
 .pending-icon { background: #fffbeb; color: #d97706; }
 .processing-icon { background: #eff6ff; color: #3b82f6; }
 .success-icon { background: #ecfdf5; color: #059669; }
@@ -572,7 +557,7 @@ const confirmDelete = async (order) => {
 .search-box { flex: 1; min-width: 250px; position: relative; display: flex; align-items: center; }
 .search-icon { position: absolute; right: 1rem; color: #9ca3af; }
 .search-input { width: 100%; padding: 0.7rem 2.8rem 0.7rem 1rem; border: 1px solid #e5e7eb; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; outline: none; background: #fff; transition: border-color 0.2s; }
-.search-input:focus { border-color: #873260; }
+.search-input:focus { border-color: #000000; }
 
 .filter-group { display: flex; gap: 0.8rem; align-items: center; }
 .date-filter { display: flex; align-items: center; gap: 0.5rem; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 0.3rem 0.5rem; }
@@ -589,7 +574,7 @@ const confirmDelete = async (order) => {
 .data-table th { background: #f9fafb; font-size: 0.75rem; font-weight: 700; color: #6b7280; white-space: nowrap; }
 .data-table td { font-size: 0.85rem; color: #374151; }
 .data-table tr:last-child td { border-bottom: none; }
-.data-row:hover td { background: #fdfafb; }
+.data-row:hover td { background: #f3f4f6; }
 .state-row td { text-align: center; color: #6b7280; padding: 2.5rem; }
 
 /* Columns */
@@ -604,8 +589,8 @@ const confirmDelete = async (order) => {
 .data-table th.col-actions, .data-table th.col-status, .data-table th.col-total, .data-table th.col-date { text-align: center; }
 .data-table th.col-actions { text-align: left; padding-left: 1.5rem !important; }
 
-.order-number { font-weight: 800; color: #db2777; font-size: 0.85rem; background: #fdf2f8; padding: 0.2rem 0.6rem; border-radius: 6px; }
-.gift-badge-icon { color: #db2777; margin-right: 8px; font-size: 14px; animation: gift-bounce 2s infinite; }
+.order-number { font-weight: 800; color: #000000; font-size: 0.85rem; background: #f3f4f6; padding: 0.2rem 0.6rem; border-radius: 6px; }
+.gift-badge-icon { color: #000000; margin-right: 8px; font-size: 14px; animation: gift-bounce 2s infinite; }
 @keyframes gift-bounce {
   0%, 100% { transform: scale(1); }
   50% { transform: scale(1.2); }
@@ -616,7 +601,7 @@ const confirmDelete = async (order) => {
 .products-imgs-group { display: flex; align-items: center; }
 .product-img-circle { width: 34px; height: 34px; border-radius: 6px; overflow: hidden; border: 2px solid #fff; background: #f3f4f6; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 .product-img-circle img { width: 100%; height: 100%; object-fit: cover; }
-.more-images-circle { width: 34px; height: 34px; border-radius: 6px; border: 2px solid #fff; background: #fdf2f8; color: #873260; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.more-images-circle { width: 34px; height: 34px; border-radius: 6px; border: 2px solid #fff; background: #f3f4f6; color: #000000; font-size: 0.75rem; font-weight: 800; display: flex; align-items: center; justify-content: center; position: relative; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
 .products-imgs-group > div:not(:last-child) { margin-left: -12px; }
 .img-placeholder { color: #9ca3af; }
 .products-count { font-weight: 600; color: #4b5563; font-size: 0.8rem; }
@@ -625,8 +610,9 @@ const confirmDelete = async (order) => {
 
 .status-badge { display: inline-block; padding: 0.3rem 0.7rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
 .status-badge.pending { background: #fffbeb; color: #d97706; }
+.status-badge.paid_confirmed { background: #f0fdf4; color: #15803d; }
 .status-badge.processing { background: #eff6ff; color: #3b82f6; }
-.status-badge.shipped { background: #f3e8ff; color: #7e22ce; }
+.status-badge.shipped { background: #f3f4f6; color: #000000; }
 .status-badge.delivered { background: #ecfdf5; color: #059669; }
 .status-badge.cancelled { background: #fef2f2; color: #dc2626; }
 
@@ -634,7 +620,7 @@ const confirmDelete = async (order) => {
 .action-btn { width: 28px; height: 28px; border-radius: 6px; border: none; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #9ca3af; transition: all 0.2s; }
 .action-btn:hover { background: #f3f4f6; }
 .delete-btn:hover { color: #dc2626; background: #fef2f2; }
-.view-btn:hover { color: #873260; background: #fdf2f8; }
+.view-btn:hover { color: #000000; background: #f3f4f6; }
 
 /* Modals */
 .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; overflow-y: auto; }
@@ -660,10 +646,10 @@ const confirmDelete = async (order) => {
 .step span { font-size: 0.8rem; font-weight: 700; color: #9ca3af; transition: color 0.3s; }
 .step-line { flex: 1; height: 2px; background: #e5e7eb; margin: 0 1rem; margin-top: -1.2rem; transition: background 0.3s; }
 /* active / completed */
-.step.completed .step-icon { background: #873260; border-color: #873260; color: #fff; }
-.step.completed span { color: #873260; }
-.step-line.completed { background: #873260; }
-.step.active .step-icon { border-color: #873260; color: #873260; box-shadow: 0 0 0 4px #fdf2f8; }
+.step.completed .step-icon { background: #000000; border-color: #000000; color: #fff; }
+.step.completed span { color: #000000; }
+.step-line.completed { background: #000000; }
+.step.active .step-icon { border-color: #000000; color: #000000; box-shadow: 0 0 0 4px #f3f4f6; }
 .step.active span { color: #111827; }
 
 /* Grid layout for details */
@@ -673,7 +659,7 @@ const confirmDelete = async (order) => {
 
 .card-section { background: #fff; border-radius: 12px; border: 1px solid #f3f4f6; padding: 1.5rem; box-shadow: 0 1px 2px rgba(0,0,0,0.01); }
 .section-heading { font-size: 0.95rem; font-weight: 800; color: #111827; margin: 0 0 1.25rem 0; display: flex; align-items: center; gap: 0.5rem; }
-.section-heading svg { color: #873260; }
+.section-heading svg { color: #000000; }
 
 /* Table inside modal */
 .products-table { width: 100%; border-collapse: collapse; }
@@ -685,7 +671,7 @@ const confirmDelete = async (order) => {
 .p-texts { display: flex; flex-direction: column; gap: 2px; }
 .p-name { font-weight: 700; color: #111827; }
 .p-attrs-v2 { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 2px; }
-.attr-tag-v2 { font-size: 10px; background: #fdf2f8; color: #873260; padding: 1px 6px; border-radius: 4px; font-weight: 700; border: 1px solid #fce7f3; }
+.attr-tag-v2 { font-size: 10px; background: #f3f4f6; color: #000000; padding: 1px 6px; border-radius: 4px; font-weight: 700; border: 1px solid #e5e7eb; }
 .text-center { text-align: center !important; }
 .text-right { text-align: right !important; }
 
@@ -715,6 +701,9 @@ const confirmDelete = async (order) => {
 .s-row.total { font-size: 1.1rem; font-weight: 800; color: #111827; border-top: 1px solid #e5e7eb; padding-top: 1rem; border-bottom: none; }
 .green-text { color: #059669; }
 .text-gray { color: #6b7280; font-size: 0.8rem; }
+.payment-badge { margin-inline-start: auto; padding: 0.15rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: 700; background: #fffbeb; color: #d97706; }
+.payment-badge.paid { background: #ecfdf5; color: #059669; }
+.payment-badge.refunded { background: #f3f4f6; color: #374151; }
 .flex-start { justify-content: flex-start; gap: 0.5rem; border: none; padding: 0; margin-top: 0.5rem; }
 
 /* Shipping Block */
@@ -727,7 +716,7 @@ const confirmDelete = async (order) => {
 /* Status Modal */
 .status-content { max-width: 450px; padding: 2rem; background: #fff; }
 .status-header { text-align: center; margin-bottom: 1.5rem; }
-.icon-circle { width: 50px; height: 50px; background: #fdf2f8; color: #db2777; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+.icon-circle { width: 50px; height: 50px; background: #f3f4f6; color: #000000; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
 .modal-title { font-size: 1.25rem; font-weight: 800; color: #111827; margin: 0 0 0.5rem 0; }
 .modal-subtitle { font-size: 0.85rem; font-weight: 600; color: #6b7280; margin: 0; }
 
@@ -735,7 +724,7 @@ const confirmDelete = async (order) => {
 .form-label { display: block; font-size: 0.85rem; font-weight: 700; color: #374151; margin-bottom: 0.5rem; }
 .req { color: #dc2626; }
 .form-control { width: 100%; padding: 0.8rem 1rem; border: 1px solid #e5e7eb; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; color: #1f2937; outline: none; transition: border-color 0.2s; }
-.form-control:focus { border-color: #873260; }
+.form-control:focus { border-color: #000000; }
 .text-area { resize: vertical; min-height: 80px; }
 
 .select-wrapper { position: relative; }
@@ -746,8 +735,8 @@ const confirmDelete = async (order) => {
 .form-actions button { flex: 1; padding: 0.8rem; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; outline: none; }
 .btn-cancel { background: #f3f4f6; color: #374151; border: none; }
 .btn-cancel:hover { background: #e5e7eb; color: #111827; }
-.btn-submit { background: #873260; color: #fff; border: none; }
-.btn-submit:hover:not(:disabled) { background: #6E1A41; }
+.btn-submit { background: #000000; color: #fff; border: none; }
+.btn-submit:hover:not(:disabled) { background: #262626; }
 .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
 
 /* Alert */
@@ -759,12 +748,12 @@ const confirmDelete = async (order) => {
 
 /* Gift Admin Styles */
 .gift-admin-section {
-  border: 1px solid #fce7f3;
-  background: #fff9fc;
+  border: 1px solid #e5e7eb;
+  background: #f3f4f6;
 }
 .gift-msg-admin {
   background: #fff;
-  border: 1px solid #fce7f3;
+  border: 1px solid #e5e7eb;
   padding: 1rem;
   border-radius: 8px;
 }
@@ -772,7 +761,7 @@ const confirmDelete = async (order) => {
   margin: 0.5rem 0 0;
   font-size: 0.9rem;
   font-weight: 600;
-  color: #873260;
+  color: #000000;
   white-space: pre-wrap;
 }
 </style>

@@ -6,15 +6,20 @@
         <h2 class="page-title">خصائص المنتجات</h2>
         <p class="page-subtitle">إدارة القيم المتاحة ضمن خصائص المنتجات المعرفة مسبقاً</p>
       </div>
-      <button class="header-add-btn" type="button" @click="openAttributeModal">+ إضافة خاصية</button>
+      <button class="add-btn" type="button" @click="openAttributeModal">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="5" x2="12" y2="19"/>
+          <line x1="5" y1="12" x2="19" y2="12"/>
+        </svg>
+        إضافة خاصية
+      </button>
     </div>
 
     <!-- Add Attribute Modal -->
     <div class="modal-overlay" v-if="showAttributeModal" @click.self="closeAttributeModal">
-      <div class="modal-content">
+      <div class="modal-content form-modal">
         <button class="modal-close" @click="closeAttributeModal">×</button>
-        <h3 class="modal-title">{{ editingAttributeId ? 'تعديل خاصية منتج' : 'إضافة خاصية منتج' }}</h3>
-        <p class="modal-subtitle">{{ editingAttributeId ? 'عدّل الاسم أو النوع — القيم تُدار من زر إدارة القيم' : 'أضف خاصية نصية أو خاصية لون، ثم أضف قيمها لاحقاً من زر إدارة القيم' }}</p>
+        <div class="form-header"><div class="header-icon-main"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><h3 class="modal-title-main">{{ editingAttributeId ? 'تعديل خاصية منتج' : 'إضافة خاصية منتج' }}</h3><p class="modal-subtitle-main">{{ editingAttributeId ? 'عدّل الاسم أو النوع — القيم تُدار من زر إدارة القيم' : 'أضف خاصية نصية أو خاصية لون، ثم أضف قيمها لاحقاً من زر إدارة القيم' }}</p></div>
         <form class="value-form" @submit.prevent="submitAttribute">
           <div class="form-group"><label class="form-label">الاسم بالعربي *</label><input v-model="attributeForm.name_ar" class="form-control" required placeholder="اللون" /></div>
           <div class="form-group"><label class="form-label">الاسم بالإنجليزية *</label><input v-model="attributeForm.name_en" class="form-control" required placeholder="Color" /></div>
@@ -104,12 +109,11 @@
     <!-- Modals -->
     <!-- Add/Edit Value Modal -->
     <div class="modal-overlay" v-if="showValueModal" @click.self="closeValueModal">
-      <div class="modal-content">
+      <div class="modal-content form-modal">
         <button class="modal-close" @click="closeValueModal">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
-        <h3 class="modal-title">{{ isEditingValue ? 'تعديل قيمة خاصية' : 'إضافة قيمة جديدة' }}</h3>
-        <p class="modal-subtitle">إضافة أو تعديل قيمة لظهورها في خيارات المنتج</p>
+        <div class="form-header"><div class="header-icon-main"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><h3 class="modal-title-main">{{ isEditingValue ? 'تعديل قيمة خاصية' : 'إضافة قيمة جديدة' }}</h3><p class="modal-subtitle-main">إضافة أو تعديل قيمة لظهورها في خيارات المنتج</p></div>
         
         <form @submit.prevent="submitValue" class="value-form">
           
@@ -453,29 +457,25 @@ const deleteValueItem = async (val) => {
   font-size: 0.85rem;
   color: #6b7280;
 }
+.add-btn,
 .header-add-btn {
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 6px;
-  width: fit-content;
-  max-width: max-content;
-  white-space: nowrap;
-  padding: 6px 12px;
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
-  font-size: 0.82rem;
-  font-weight: 600;
-  border-radius: 6px;
+  gap: 0.5rem;
   background: #000000;
-  color: #ffffff;
-  border: 1px solid #000000;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  line-height: 1.2;
+  transition: all 0.2s;
 }
+.add-btn:hover,
 .header-add-btn:hover {
   background: #262626;
-  border-color: #262626;
 }
 
 /* Table */
@@ -596,8 +596,8 @@ const deleteValueItem = async (val) => {
   cursor: pointer; color: #9ca3af; transition: all 0.2s;
 }
 .action-btn:hover { background: #f3f4f6; color: #111827; }
-.add-btn { color: #000000; }
-.add-btn:hover { background: #f3f4f6; color: #000000; }
+.action-btn.add-btn { color: #000000; }
+.action-btn.add-btn:hover { background: #f3f4f6; color: #000000; }
 .view-btn { color: #f59e0b; }
 .view-btn:hover { background: #fef3c7; color: #d97706; }
 .delete-btn { color: #dc2626; }
@@ -743,4 +743,30 @@ const deleteValueItem = async (val) => {
 .alert-toast.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
 .alert-toast.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 .alert-icon { flex-shrink: 0; }
+
+/* ===== Unified form-modal design (matches "إنشاء عرض جديد") ===== */
+.modal-overlay:has(.form-modal) { z-index: 1000; backdrop-filter: blur(4px); }
+.modal-content.form-modal { max-width: 650px; padding: 0; border-radius: 20px; box-shadow: 0 25px 70px rgba(0,0,0,0.25); max-height: 95vh; overflow-y: auto; }
+.modal-content.form-modal.form-content { max-width: 700px; }
+.form-modal .modal-close { top: 1.5rem; left: 1.5rem; background: #f3f4f6; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; color: #9ca3af; font-size: 1.2rem; line-height: 1; }
+.form-modal .form-header { text-align: center; padding: 2rem 2rem 1.5rem 2rem; position: relative; }
+.form-modal .header-icon-main { width: 50px; height: 50px; background: #f3f4f6; color: #000000; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+.form-modal .modal-title-main { font-size: 1.3rem; font-weight: 800; color: #111827; margin: 0; }
+.form-modal .modal-subtitle-main { font-size: 0.85rem; color: #9ca3af; margin-top: 0.4rem; }
+.form-modal .cat-form, .form-modal .prod-form, .form-modal .value-form { padding: 0 2.5rem 2.5rem 2.5rem; }
+.form-modal .i18n-toggle { display: flex; width: fit-content; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; margin: 0 auto 1.1rem; }
+.form-modal .i18n-btn { padding: 0.4rem 0.9rem; font-weight: 800; font-size: 0.85rem; min-width: 96px; font-family: 'IBM Plex Sans Arabic', sans-serif; }
+.form-modal .modal-tabs { margin: 0 2.5rem 1.5rem; }
+.form-modal .form-group { margin-bottom: 1.5rem; }
+.form-modal .form-label { font-size: 0.85rem; font-weight: 700; color: #374151; margin-bottom: 0.75rem; }
+.form-modal .form-control { padding: 0.8rem 1rem; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; transition: 0.2s; }
+.form-modal .form-control:focus { background: #fff; border-color: #000000; box-shadow: 0 0 0 4px rgba(0,0,0,0.08); }
+.form-modal .image-upload-box, .form-modal .upload-box { border: 2px dashed #e5e7eb; border-radius: 12px; background: #f9fafb; }
+.form-modal .image-upload-box:hover, .form-modal .upload-box:hover { border-color: #000000; background: #fff; }
+.form-modal .form-actions { margin-top: 2rem; display: flex; gap: 1rem; justify-content: stretch; align-items: stretch; }
+.form-modal .btn-cancel { flex: 1; width: auto; padding: 0.85rem; border-radius: 10px; border: 1px solid #e5e7eb; background: #fff; color: #6b7280; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.form-modal .btn-submit { flex: 2; width: auto; min-width: 0; padding: 0.85rem; border-radius: 10px; border: none; background: #000000; color: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
+.form-modal .btn-submit:hover:not(:disabled) { background: #262626; }
+.form-modal .btn-submit:disabled { opacity: 0.6; }
+@media (max-width: 600px) { .form-modal .cat-form, .form-modal .prod-form, .form-modal .value-form { padding: 0 1.25rem 1.5rem; } .form-modal .modal-tabs { margin: 0 1.25rem 1.5rem; } }
 </style>

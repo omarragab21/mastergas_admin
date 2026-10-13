@@ -106,7 +106,7 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title-wrap">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#873260" stroke-width="2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2">
                 <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
                 <line x1="3" y1="6" x2="21" y2="6"/>
                 <path d="M16 10a4 4 0 0 1-8 0"/>
@@ -147,7 +147,7 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title-wrap">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/>
                 <path d="M12 6v6l4 2"/>
               </svg>
@@ -202,7 +202,7 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title-wrap">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2">
                 <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 0 6.74 2.74L21 8"/>
                 <path d="M21 3v5h-5"/>
                 <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 0-6.74-2.74L3 16"/>
@@ -242,7 +242,7 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title-wrap">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2">
                 <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
                 <line x1="12" y1="9" x2="12" y2="13"/>
                 <line x1="12" y1="17" x2="12.01" y2="17"/>
@@ -328,10 +328,10 @@ const hasStatusBreakdown = ref(false);
 
 const orderStatusData = ref([
   { key: 'completed',  label: 'مكتمل',        count: 0, color: '#10B981' },
-  { key: 'pending',    label: 'قيد الانتظار', count: 0, color: '#F59E0B' },
-  { key: 'processing', label: 'قيد المعالجة', count: 0, color: '#3B82F6' },
-  { key: 'shipped',    label: 'قيد الشحن',    count: 0, color: '#F97316' },
-  { key: 'cancelled',  label: 'ملغي',         count: 0, color: '#8B5CF6' },
+  { key: 'pending',    label: 'قيد الانتظار', count: 0, color: "#9ca3af" },
+  { key: 'processing', label: 'قيد المعالجة', count: 0, color: "#374151" },
+  { key: 'shipped',    label: 'قيد الشحن',    count: 0, color: "#6b7280" },
+  { key: 'cancelled',  label: 'ملغي',         count: 0, color: '#000000' },
   { key: 'returned',   label: 'مرتجع',        count: 0, color: '#EF4444' },
 ]);
 
@@ -342,8 +342,8 @@ const statCards = ref([
     value: '0',
     trend: '0%',
     trendUp: true,
-    iconBg: '#FFF3E0',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="1.8"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`,
+    iconBg: "#f3f4f6",
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.8"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`,
   },
   {
     key: 'customers',
@@ -351,8 +351,8 @@ const statCards = ref([
     value: '0',
     trend: '0%',
     trendUp: true,
-    iconBg: '#E0F7FA',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
+    iconBg: "#f3f4f6",
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>`,
   },
   {
     key: 'today_orders',
@@ -360,8 +360,8 @@ const statCards = ref([
     value: '0',
     trend: '0%',
     trendUp: true,
-    iconBg: '#EFF6FF',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
+    iconBg: "#f3f4f6",
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.8"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>`,
   },
   {
     key: 'monthly_sales',
@@ -369,8 +369,8 @@ const statCards = ref([
     value: '0 د.أ',
     trend: '0%',
     trendUp: true,
-    iconBg: '#ECFDF5',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="1.8"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+    iconBg: "#f3f4f6",
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.8"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
   },
   {
     key: 'today_sales',
@@ -378,12 +378,12 @@ const statCards = ref([
     value: '0 د.أ',
     trend: '0%',
     trendUp: true,
-    iconBg: '#F5F3FF',
-    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
+    iconBg: '#f3f4f6',
+    icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`,
   },
 ]);
 
-const INV_COLORS = ['#F97316', '#0891B2', '#3B82F6', '#10B981', '#7C3AED'];
+const INV_COLORS = ["#000000", "#374151", "#6b7280", "#9ca3af", "#d1d5db"];
 
 // ─── Computed ──────────────────────────────────────────────────────────────────
 const formattedDate = computed(() => {
@@ -731,11 +731,11 @@ function initLineChart() {
       datasets: [{
         label: 'المبيعات',
         data: values.length ? values : [0],
-        borderColor: '#873260',
+        borderColor: '#000000',
         backgroundColor: (ctx) => {
           const gradient = ctx.chart.ctx.createLinearGradient(0, 0, 0, 220);
-          gradient.addColorStop(0, 'rgba(135, 50, 96, 0.18)');
-          gradient.addColorStop(1, 'rgba(135, 50, 96, 0)');
+          gradient.addColorStop(0, 'rgba(0,0,0, 0.18)');
+          gradient.addColorStop(1, 'rgba(0,0,0, 0)');
           return gradient;
         },
         borderWidth: 2.5,
@@ -743,7 +743,7 @@ function initLineChart() {
         tension: 0.45,
         pointRadius: 0,
         pointHoverRadius: 5,
-        pointHoverBackgroundColor: '#873260',
+        pointHoverBackgroundColor: '#000000',
       }],
     },
     options: {
@@ -1029,7 +1029,7 @@ watch(isDark, () => {
 }
 .toggle-btn.active {
   background: #fff;
-  color: #873260;
+  color: #000000;
   box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 .line-wrapper {
@@ -1080,7 +1080,7 @@ watch(isDark, () => {
   gap: 0.2rem;
   font-size: 0.73rem;
   font-weight: 600;
-  color: #873260;
+  color: #000000;
   text-decoration: none;
   transition: opacity 0.2s;
 }
@@ -1110,7 +1110,7 @@ watch(isDark, () => {
 }
 .data-table tr:last-child td { border-bottom: none; }
 .data-table tr:hover td { background: #fafafa; }
-.td-order-id { font-weight: 700; color: #873260; }
+.td-order-id { font-weight: 700; color: #000000; }
 .td-amount   { font-weight: 700; color: #111827; }
 .td-num      { font-weight: 600; color: #374151; }
 .td-product-name { color: #374151; max-width: 150px; overflow: hidden; text-overflow: ellipsis; }
@@ -1130,7 +1130,7 @@ watch(isDark, () => {
 .status-shipped    { background: #ffedd5; color: #9a3412; }
 .status-pending    { background: #fef3c7; color: #92400e; }
 .status-cancelled  { background: #fee2e2; color: #991b1b; }
-.status-returned   { background: #f3e8ff; color: #6b21a8; }
+.status-returned   { background: #f3f4f6; color: #6b21a8; }
 
 /* Rank numbers */
 .rank-num {
@@ -1290,7 +1290,7 @@ watch(isDark, () => {
   width: 38px;
   height: 38px;
   border: 3px solid #f3f3f3;
-  border-top: 3px solid #873260;
+  border-top: 3px solid #000000;
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
@@ -1308,7 +1308,7 @@ watch(isDark, () => {
   color: #b91c1c;
 }
 .retry-btn {
-  background: #873260;
+  background: #000000;
   color: #fff;
   border: none;
   padding: 0.55rem 1.5rem;
@@ -1339,7 +1339,7 @@ watch(isDark, () => {
   text-align: center;
 }
 .section-retry-btn {
-  background: #873260;
+  background: #000000;
   color: #fff;
   border: none;
   padding: 0.35rem 1rem;

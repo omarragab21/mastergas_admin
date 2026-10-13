@@ -185,7 +185,10 @@ const getRoleBadge = (role) => {
         </div>
         
        <button class="add-btn" @click="openAddModal">
-         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="17" y1="11" x2="23" y2="11"/></svg>
+         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+           <line x1="12" y1="5" x2="12" y2="19"/>
+           <line x1="5" y1="12" x2="19" y2="12"/>
+         </svg>
          إضافة مدير جديد
        </button>
        
@@ -375,13 +378,27 @@ const getRoleBadge = (role) => {
 
 /* Header Section */
 .header-section { display: flex; justify-content: space-between; align-items: center; }
-.add-btn { background: #873260; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
-.add-btn:hover { background: #6b1a3f; transform: translateY(-2px); }
+.add-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #000000;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.add-btn:hover { background: #262626; }
 
 .page-title-area h1 { font-size: 1.5rem; font-weight: 800; color: #1f2937; margin: 0; }
 .page-title-area p { color: #6b7280; font-size: 0.875rem; margin: 0; }
 .title-with-icon { display: flex; align-items: center; gap: 12px; }
-.icon-box { background: #fdf2f8; color: #873260; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.icon-box { background: #f3f4f6; color: #000000; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 
 /* Stats grid */
 .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
@@ -397,7 +414,7 @@ const getRoleBadge = (role) => {
 .search-box { position: relative; width: 100%; }
 .search-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
 .search-box input { width: 100%; padding: 10px 44px 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; outline: none; transition: 0.3s; font-family: inherit; font-size: 0.9rem; }
-.search-box input:focus { border-color: #873260; box-shadow: 0 0 0 3px rgba(139, 34, 82, 0.1); }
+.search-box input:focus { border-color: #000000; box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
 
 /* Table */
 .table-container { background: white; border-radius: 12px; overflow: hidden; border: 1px solid #e5e7eb; }
@@ -416,15 +433,15 @@ const getRoleBadge = (role) => {
 
 .admin-avatar-table { width: 40px; height: 40px; border-radius: 50%; overflow: hidden; background: #f3f4f6; border: 1px solid #e5e7eb; margin: 0 auto; }
 .admin-avatar-table img { width: 100%; height: 100%; object-fit: cover; }
-.avatar-placeholder-table { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #873260; color: white; font-weight: 700; }
+.avatar-placeholder-table { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #000000; color: white; font-weight: 700; }
 
 .admin-name-text { font-weight: 700; color: #111827; }
 .email-text { color: #6b7280; font-size: 0.85rem; }
 .date-text { color: #9ca3af; font-size: 0.85rem; }
 
 .role-chip { padding: 4px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; display: inline-block; }
-.role-chip.super_admin { background: #f3e8ff; color: #7e22ce; }
-.role-chip.admin { background: #fdf2f8; color: #873260; }
+.role-chip.super_admin { background: #f3f4f6; color: #000000; }
+.role-chip.admin { background: #f3f4f6; color: #000000; }
 .role-chip.editor { background: #eff6ff; color: #1d4ed8; }
 
 .status-btn { padding: 4px 14px; border-radius: 8px; border: none; font-size: 0.75rem; font-weight: 700; cursor: pointer; transition: 0.2s; }
@@ -434,8 +451,8 @@ const getRoleBadge = (role) => {
 
 .actions-group { display: flex; gap: 8px; justify-content: center; }
 .action-btn { width: 32px; height: 32px; border-radius: 6px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-.action-btn.edit { background: #f5f3ff; color: #8b5cf6; }
-.action-btn.edit:hover { background: #ede9fe; }
+.action-btn.edit { background: #f3f4f6; color: #000000; }
+.action-btn.edit:hover { background: #e5e7eb; }
 .action-btn.delete { background: #fef2f2; color: #ef4444; }
 .action-btn.delete:hover { background: #fee2e2; }
 
@@ -456,22 +473,22 @@ const getRoleBadge = (role) => {
 /* Avatar Upload */
 .avatar-upload-section { display: flex; align-items: center; gap: 20px; }
 .avatar-preview-box { width: 80px; height: 80px; border-radius: 20px; background: #f9fafb; border: 2.5px dashed #e5e7eb; position: relative; cursor: pointer; overflow: hidden; transition: 0.3s; }
-.avatar-preview-box:hover { border-color: #873260; background: #fffcfd; }
+.avatar-preview-box:hover { border-color: #000000; background: #fffcfd; }
 .avatar-preview-box img { width: 100%; height: 100%; object-fit: cover; }
 .upload-icon { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #d1d5db; }
-.edit-overlay { position: absolute; inset: 0; background: rgba(139, 34, 82, 0.4); opacity: 0; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s; }
+.edit-overlay { position: absolute; inset: 0; background: rgba(0,0,0, 0.4); opacity: 0; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s; }
 .avatar-preview-box:hover .edit-overlay { opacity: 1; }
 .upload-text span { display: block; font-weight: 700; color: #374151; font-size: 0.95rem; }
 .upload-text small { color: #9ca3af; font-size: 0.75rem; }
 
 .form-label { display: block; font-weight: 700; color: #374151; font-size: 0.9rem; margin-bottom: 10px; }
 .form-control { width: 100%; padding: 12px 16px; border: 1.5px solid #e5e7eb; border-radius: 10px; outline: none; transition: 0.3s; font-family: inherit; font-size: 0.9rem; }
-.form-control:focus { border-color: #873260; box-shadow: 0 0 0 3px rgba(139, 34, 82, 0.1); }
+.form-control:focus { border-color: #000000; box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
 .form-row { display: flex; gap: 15px; }
 
 .modal-footer { padding: 25px 30px; background: #f9fafb; border-top: 1px solid #f3f4f6; display: flex; gap: 15px; }
-.btn-save { background: #873260; color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; flex: 2; transition: 0.3s; }
-.btn-save:hover { background: #6b1a3f; }
+.btn-save { background: #000000; color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; flex: 2; transition: 0.3s; }
+.btn-save:hover { background: #262626; }
 .btn-save:disabled { background: #d1d5db; cursor: not-allowed; }
 .btn-cancel { background: white; color: #6b7280; border: 1.5px solid #e5e7eb; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; flex: 1; transition: 0.2s; }
 .btn-cancel:hover { background: #f3f4f6; }

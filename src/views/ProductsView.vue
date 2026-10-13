@@ -179,12 +179,11 @@
 
     <!-- Add/Edit Modal -->
     <div class="modal-overlay" v-if="showFormModal" @click.self="closeModal">
-      <div class="modal-content form-content">
+      <div class="modal-content form-modal form-content">
         <button class="modal-close" @click="closeModal">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
-        <h3 class="modal-title">{{ isEdit ? 'تعديل المنتج' : 'إضافة منتج جديدة' }}</h3>
-        <p class="modal-subtitle">أدخل معلومات السلعة للجدول</p>
+        <div class="form-header"><div class="header-icon-main"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><h3 class="modal-title-main">{{ isEdit ? 'تعديل المنتج' : 'إضافة منتج جديدة' }}</h3><p class="modal-subtitle-main">أدخل معلومات السلعة للجدول</p></div>
 
         <div class="i18n-toggle" role="tablist" aria-label="Language">
           <button type="button" class="i18n-btn" :class="{ active: activeLang === 'en' }" @click="activeLang = 'en'">English</button>
@@ -211,7 +210,7 @@
                 <!-- Dropzone -->
                 <div class="upload-box" @click="triggerFileInput" v-if="(form.existing_images.length + form.new_images.length) < maxImages">
                   <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" multiple class="hidden-input" />
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#873260" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
                   <p>اضغط أو اسحب لرفع صور متعددة للمنتج<br><span>(JPG, PNG, WebP | بحد أقصى {{ maxImages }} صورة)</span></p>
                 </div>
                 <div class="upload-box disabled" v-else>
@@ -399,7 +398,8 @@
                     <input type="text" v-model="customColorHex" class="form-control custom-color-hex" placeholder="#111827" />
                   </div>
                   <button type="button" class="btn-add-variant" @click.prevent="addCustomColor">
-                    + إضافة اللون
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    إضافة اللون
                   </button>
                 </div>
               </div>
@@ -467,7 +467,8 @@
                     @keydown.enter.prevent="addCustomSize"
                   />
                   <button type="button" class="btn-add-variant" @click.prevent="addCustomSize">
-                    + إضافة المقاس
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    إضافة المقاس
                   </button>
                 </div>
               </div>
@@ -567,7 +568,8 @@
                   @keyup.enter.prevent="addCustomSpec"
                 />
                 <button type="button" class="btn-add-spec" @click.prevent="addCustomSpec">
-                  + إضافة
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                  إضافة
                 </button>
               </div>
 
@@ -599,6 +601,7 @@
           </div>
 
           <div class="form-actions">
+            <button type="button" class="btn-cancel" @click="closeModal">إلغاء</button>
             <button type="submit" class="btn-submit" :disabled="isSubmitting">
               {{ isSubmitting ? 'جاري الحفظ...' : (isEdit ? 'تعديل' : 'إضافة المنتج') }}
             </button>
@@ -1582,9 +1585,21 @@ const confirmDelete = async (prod) => {
 .page-title { font-size: 1.4rem; font-weight: 800; color: #111827; margin-bottom: 0.2rem; }
 .page-subtitle { font-size: 0.85rem; color: #6b7280; }
 .add-btn {
-  display: inline-flex; align-items: center; gap: 6px; background: #000000; color: #fff; border: 1px solid #000000; padding: 6px 14px; border-radius: 6px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 600; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; width: fit-content;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #000000;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.1rem;
+  border-radius: 8px;
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  font-weight: 600;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
 }
-.add-btn:hover { background: #262626; border-color: #262626; }
+.add-btn:hover { background: #262626; }
 
 /* Stats Cards */
 .stats-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
@@ -1595,7 +1610,7 @@ const confirmDelete = async (prod) => {
 .stat-label { font-size: 0.75rem; font-weight: 700; color: #6b7280; }
 .stat-value { font-size: 1.5rem; font-weight: 800; color: #1f2937; margin-top: 0.2rem; }
 .stat-icon-wrapper { width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.active-icon { background: #fdf2f8; color: #db2777; }
+.active-icon { background: #f3f4f6; color: #000000; }
 .empty-icon { background: #fee2e2; color: #dc2626; }
 .total-icon { background: #ecfdf5; color: #059669; }
 .main-icon { background: #fefce8; color: #ca8a04; }
@@ -1605,7 +1620,7 @@ const confirmDelete = async (prod) => {
 .search-box { flex: 1; position: relative; display: flex; align-items: center; }
 .search-icon { position: absolute; right: 1rem; color: #9ca3af; }
 .search-input { width: 100%; padding: 0.7rem 2.8rem 0.7rem 1rem; border: 1px solid #e5e7eb; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; outline: none; background: #fff; transition: border-color 0.2s; }
-.search-input:focus { border-color: #873260; }
+.search-input:focus { border-color: #000000; }
 .filter-select { position: relative; display: flex; align-items: center; min-width: 150px; }
 .form-select { width: 100%; padding: 0.7rem 1rem 0.7rem 2.5rem; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; color: #374151; appearance: none; outline: none; cursor: pointer; }
 .filter-select .select-icon { position: absolute; left: 1rem; color: #9ca3af; pointer-events: none; }
@@ -1617,7 +1632,7 @@ const confirmDelete = async (prod) => {
 .data-table th { background: #f9fafb; font-size: 0.75rem; font-weight: 700; color: #6b7280; white-space: nowrap; }
 .data-table td { font-size: 0.85rem; color: #374151; }
 .data-table tr:last-child td { border-bottom: none; }
-.data-row:hover td { background: #fdfafb; }
+.data-row:hover td { background: #f3f4f6; }
 .state-row td { text-align: center; color: #6b7280; padding: 2.5rem; }
 
 /* Columns */
@@ -1635,7 +1650,7 @@ const confirmDelete = async (prod) => {
 .prod-image img { width: 100%; height: 100%; object-fit: cover; }
 .prod-details { display: flex; flex-direction: column; align-items: flex-start; }
 .prod-title { font-weight: 700; color: #111827; font-size: 0.85rem; line-height: 1.3; margin-bottom: 0.2rem; }
-.prod-cat-badge { background: #fdf2f8; color: #db2777; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.65rem; font-weight: 600; }
+.prod-cat-badge { background: #f3f4f6; color: #000000; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.65rem; font-weight: 600; }
 
 .price-cell { display: flex; flex-direction: column; align-items: center; }
 .current-price { font-weight: 800; color: #059669; }
@@ -1671,13 +1686,13 @@ const confirmDelete = async (prod) => {
 
 .i18n-toggle { display: inline-flex; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; margin: 0.75rem auto 1.25rem; }
 .i18n-btn { border: none; background: transparent; padding: 0.4rem 0.9rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; color: #6b7280; min-width: 96px; }
-.i18n-btn.active { background: #873260; color: #fff; }
+.i18n-btn.active { background: #000000; color: #fff; }
 
 /* Tabs */
 .modal-tabs { display: flex; gap: 1rem; border-bottom: 1px solid #e5e7eb; margin-bottom: 1.5rem; justify-content: center; }
 .tab-btn { background: none; border: none; color: #6b7280; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; padding: 0.6rem 1rem; cursor: pointer; position: relative; }
-.tab-btn.active { color: #873260; }
-.tab-btn.active::after { content:''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: #873260; }
+.tab-btn.active { color: #000000; }
+.tab-btn.active::after { content:''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: #000000; }
 .tab-pane { animation: fadeIn 0.3s; }
 .attributes-tab-pane { display: flex; flex-direction: column; }
 .attributes-tab-pane > .variant-section-card { order: 1; }
@@ -1692,7 +1707,7 @@ const confirmDelete = async (prod) => {
 .req { color: #dc2626; }
 .form-control { width: 100%; padding: 0.65rem 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; color: #1f2937; outline: none; transition: border-color 0.2s; text-align: right; }
 .no-rtl-issue { direction: ltr; text-align: right; }
-.form-control:focus { border-color: #873260; }
+.form-control:focus { border-color: #000000; }
 
 .select-wrapper { position: relative; display: flex; align-items: center; }
 .select-wrapper .form-control { appearance: none; padding-left: 2rem; cursor: pointer; }
@@ -1700,7 +1715,7 @@ const confirmDelete = async (prod) => {
 
 /* Fake Toolbar */
 .rich-textarea-mock { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
-.rich-textarea-mock:focus-within { border-color: #873260; }
+.rich-textarea-mock:focus-within { border-color: #000000; }
 .rt-toolbar { padding: 0.4rem 0.8rem; background: #f9fafb; border-bottom: 1px solid #e5e7eb; display: flex; gap: 0.5rem; }
 .rt-icon { font-weight: 700; font-size: 0.8rem; color: #6b7280; cursor: pointer; padding: 0.1rem 0.3rem; border-radius: 3px; }
 .rt-icon:hover { background: #e5e7eb; }
@@ -1709,12 +1724,12 @@ const confirmDelete = async (prod) => {
 
 /* Image Uploader */
 .image-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
-.images-count-badge { font-size: 0.75rem; font-weight: 700; color: #873260; background: #fdf2f8; padding: 0.2rem 0.6rem; border-radius: 12px; }
+.images-count-badge { font-size: 0.75rem; font-weight: 700; color: #000000; background: #f3f4f6; padding: 0.2rem 0.6rem; border-radius: 12px; }
 .image-uploader { display: flex; flex-direction: column; gap: 0.8rem; }
 .upload-box {
   border: 1.5px dashed #d1d5db; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s; background: #fafafa;
 }
-.upload-box:hover { border-color: #873260; background: #fdf2f8; }
+.upload-box:hover { border-color: #000000; background: #f3f4f6; }
 .hidden-input { display: none; }
 .upload-box p { font-size: 0.85rem; font-weight: 600; color: #374151; margin: 0.5rem 0 0; }
 .upload-box span { font-size: 0.75rem; color: #9ca3af; }
@@ -1722,12 +1737,12 @@ const confirmDelete = async (prod) => {
 .preview-item { width: 90px; height: 90px; border-radius: 8px; border: 1.5px solid #e5e7eb; position: relative; overflow: hidden; background: #f9fafb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
 .preview-item img { width: 100%; height: 100%; object-fit: cover; }
 .primary-tag-badge {
-  position: absolute; bottom: 0; left: 0; right: 0; background: #873260; color: #fff; font-size: 0.65rem; font-weight: 700; text-align: center; padding: 2px 0; letter-spacing: 0.5px;
+  position: absolute; bottom: 0; left: 0; right: 0; background: #000000; color: #fff; font-size: 0.65rem; font-weight: 700; text-align: center; padding: 2px 0; letter-spacing: 0.5px;
 }
 .set-primary-btn {
   position: absolute; bottom: 0; left: 0; right: 0; background: rgba(17, 24, 39, 0.85); color: #fff; font-size: 0.6rem; font-weight: 700; border: none; padding: 3px 0; cursor: pointer; transition: background 0.2s; text-align: center;
 }
-.set-primary-btn:hover { background: #873260; }
+.set-primary-btn:hover { background: #000000; }
 .remove-img-btn {
   position: absolute; top: 3px; left: 3px; background: rgba(0,0,0,0.6); color: #fff; width: 20px; height: 20px; border-radius: 50%; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: background 0.2s; z-index: 2;
 }
@@ -1743,9 +1758,9 @@ const confirmDelete = async (prod) => {
 }
 .variant-section-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 0.8rem; }
 .variant-icon-wrapper { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.color-icon-bg { background: #fdf2f8; color: #db2777; }
+.color-icon-bg { background: #f3f4f6; color: #000000; }
 .size-icon-bg { background: #eff6ff; color: #2563eb; }
-.other-icon-bg { background: #f5f3ff; color: #7c3aed; }
+.other-icon-bg { background: #f3f4f6; color: #000000; }
 .variant-section-title { font-size: 0.95rem; font-weight: 800; color: #111827; margin: 0 0 0.2rem 0; }
 .variant-section-desc { font-size: 0.75rem; color: #6b7280; margin: 0; }
 
@@ -1756,11 +1771,11 @@ const confirmDelete = async (prod) => {
 .color-preset-pill {
   display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.75rem; border: 1.5px solid #e5e7eb; border-radius: 20px; background: #fff; font-size: 0.8rem; font-weight: 700; color: #374151; cursor: pointer; transition: all 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
 }
-.color-preset-pill:hover { border-color: #873260; color: #873260; background: #fdfafb; }
-.color-preset-pill.active { border-color: #873260; background: #fdf2f8; color: #873260; box-shadow: 0 0 0 1px #873260; }
+.color-preset-pill:hover { border-color: #000000; color: #000000; background: #f3f4f6; }
+.color-preset-pill.active { border-color: #000000; background: #f3f4f6; color: #000000; box-shadow: 0 0 0 1px #000000; }
 .preset-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; }
 .dot-white { border: 1px solid #d1d5db; }
-.preset-check { font-size: 0.75rem; font-weight: 800; color: #873260; margin-right: 0.2rem; }
+.preset-check { font-size: 0.75rem; font-weight: 800; color: #000000; margin-right: 0.2rem; }
 
 .custom-variant-box { background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 8px; padding: 0.9rem; margin-bottom: 1rem; }
 .color-custom-row, .size-custom-row { display: flex; gap: 0.6rem; align-items: center; }
@@ -1770,7 +1785,7 @@ const confirmDelete = async (prod) => {
 .custom-color-hex { width: 80px; border: none; font-family: monospace; font-size: 0.8rem; font-weight: 700; padding: 0; }
 .custom-color-hex:focus { border: none; box-shadow: none; }
 .btn-add-variant {
-  background: #000000; color: #fff; border: 1px solid #000000; padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
+  display: inline-flex; align-items: center; gap: 0.4rem; background: #000000; color: #fff; border: 1px solid #000000; padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
 }
 .btn-add-variant:hover { background: #262626; border-color: #262626; }
 
@@ -1801,7 +1816,7 @@ const confirmDelete = async (prod) => {
 
 .add-spec-row { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 1rem; }
 .btn-add-spec {
-  background: #000000; color: #fff; border: 1px solid #000000; padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
+  display: inline-flex; align-items: center; gap: 0.4rem; background: #000000; color: #fff; border: 1px solid #000000; padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
 }
 .btn-add-spec:hover { background: #262626; border-color: #262626; }
 
@@ -1862,13 +1877,13 @@ const confirmDelete = async (prod) => {
 
 .view-thumbnails { display: flex; gap: 0.6rem; justify-content: center; margin-bottom: 1.5rem; }
 .thumb-img { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; cursor: pointer; border: 2px solid transparent; opacity: 0.5; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-.thumb-img.active { border-color: #873260; opacity: 1; transform: scale(1.05); }
+.thumb-img.active { border-color: #000000; opacity: 1; transform: scale(1.05); }
 .thumb-img:hover { opacity: 1; }
 
 .view-body-wrapper { padding: 0 0 0.5rem 0; }
 .view-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; gap: 1rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 1.25rem; }
 .view-title { font-size: 1.3rem; font-weight: 800; color: #111827; margin: 0 0 0.4rem 0; line-height: 1.3; }
-.view-subtitle { font-size: 0.85rem; font-weight: 700; color: #db2777; margin: 0; }
+.view-subtitle { font-size: 0.85rem; font-weight: 700; color: #000000; margin: 0; }
 .view-status-badge { padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; display: inline-block; }
 .view-status-badge.active { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
 .view-status-badge.inactive { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
@@ -1878,7 +1893,7 @@ const confirmDelete = async (prod) => {
 .v-stat-label { font-size: 0.7rem; color: #6b7280; font-weight: 700; margin-bottom: 0.4rem; }
 .v-stat-value { font-size: 1rem; font-weight: 800; color: #1f2937; }
 .green-text { color: #059669; font-size: 1.1rem; }
-.px-badge { background: #fdf2f8; color: #db2777; padding: 0.15rem 0.5rem; border-radius: 6px; font-size: 0.85rem; }
+.px-badge { background: #f3f4f6; color: #000000; padding: 0.15rem 0.5rem; border-radius: 6px; font-size: 0.85rem; }
 
 .view-sections { display: flex; flex-direction: column; gap: 0.6rem; border-top: 1px solid #f3f4f6; margin-bottom: 1.5rem; padding-top: 1.2rem;}
 .v-section { background: #f9fafb; padding: 1.25rem; border-radius: 8px; border: 1px solid #f3f4f6; }
@@ -1886,7 +1901,7 @@ const confirmDelete = async (prod) => {
 .v-section-content { font-size: 0.85rem; color: #4b5563; line-height: 1.7; font-weight: 500; }
 .v-feature-list { list-style: none; padding: 0; margin: 0; }
 .v-feature-list li { position: relative; padding-left: 1.2rem; margin-bottom: 0.4rem; font-size: 0.85rem; color: #4b5563; }
-.v-feature-list li::before { content: '•'; position: absolute; left: 0; color: #873260; font-weight: 700; }
+.v-feature-list li::before { content: '•'; position: absolute; left: 0; color: #000000; font-weight: 700; }
 
 .v-attr-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: flex-start; margin-bottom: 0.6rem; }
 .v-attr-key { font-weight: 700; color: #374151; font-size: 0.85rem; }
@@ -1899,12 +1914,12 @@ const confirmDelete = async (prod) => {
 .pagination-info { font-size: 0.85rem; color: #6b7280; font-weight: 600; }
 .pagination-controls { display: flex; align-items: center; gap: 0.4rem; }
 .pagination-btn { width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.2s; }
-.pagination-btn:hover:not(:disabled) { background: #873260; color: #fff; border-color: #873260; }
+.pagination-btn:hover:not(:disabled) { background: #000000; color: #fff; border-color: #000000; }
 .pagination-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .pagination-pages { display: flex; gap: 0.3rem; }
 .pagination-page-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; font-size: 0.85rem; color: #374151; cursor: pointer; transition: all 0.2s; }
 .pagination-page-btn:hover { background: #f3f4f6; }
-.pagination-page-btn.active { background: #873260; color: #fff; border-color: #873260; }
+.pagination-page-btn.active { background: #000000; color: #fff; border-color: #000000; }
 
 
 .v-attr-row { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.8rem; }
@@ -1928,8 +1943,8 @@ const confirmDelete = async (prod) => {
 .view-footer-actions button { flex: 1; padding: 0.75rem; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
 .btn-cancel { background: #f3f4f6; color: #374151; border: none; }
 .btn-cancel:hover { background: #e5e7eb; color: #111827; }
-.btn-outline-edit { background: #fff; border: 1px solid #873260; color: #873260; }
-.btn-outline-edit:hover { background: #fdf2f8; }
+.btn-outline-edit { background: #fff; border: 1px solid #000000; color: #000000; }
+.btn-outline-edit:hover { background: #f3f4f6; }
 
 /* Alert */
 .alert-toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-family: 'IBM Plex Sans Arabic', sans-serif; }
@@ -1938,4 +1953,30 @@ const confirmDelete = async (prod) => {
 .alert-toast.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 .alert-icon { flex-shrink: 0; }
 .field-hint { display: block; margin-top: 4px; font-size: 0.7rem; color: #6b7280; }
+
+/* ===== Unified form-modal design (matches "إنشاء عرض جديد") ===== */
+.modal-overlay:has(.form-modal) { z-index: 1000; backdrop-filter: blur(4px); }
+.modal-content.form-modal { max-width: 650px; padding: 0; border-radius: 20px; box-shadow: 0 25px 70px rgba(0,0,0,0.25); max-height: 95vh; overflow-y: auto; }
+.modal-content.form-modal.form-content { max-width: 700px; }
+.form-modal .modal-close { top: 1.5rem; left: 1.5rem; background: #f3f4f6; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; color: #9ca3af; font-size: 1.2rem; line-height: 1; }
+.form-modal .form-header { text-align: center; padding: 2rem 2rem 1.5rem 2rem; position: relative; }
+.form-modal .header-icon-main { width: 50px; height: 50px; background: #f3f4f6; color: #000000; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+.form-modal .modal-title-main { font-size: 1.3rem; font-weight: 800; color: #111827; margin: 0; }
+.form-modal .modal-subtitle-main { font-size: 0.85rem; color: #9ca3af; margin-top: 0.4rem; }
+.form-modal .cat-form, .form-modal .prod-form, .form-modal .value-form { padding: 0 2.5rem 2.5rem 2.5rem; }
+.form-modal .i18n-toggle { display: flex; width: fit-content; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; margin: 0 auto 1.1rem; }
+.form-modal .i18n-btn { padding: 0.4rem 0.9rem; font-weight: 800; font-size: 0.85rem; min-width: 96px; font-family: 'IBM Plex Sans Arabic', sans-serif; }
+.form-modal .modal-tabs { margin: 0 2.5rem 1.5rem; }
+.form-modal .form-group { margin-bottom: 1.5rem; }
+.form-modal .form-label { font-size: 0.85rem; font-weight: 700; color: #374151; margin-bottom: 0.75rem; }
+.form-modal .form-control { padding: 0.8rem 1rem; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; transition: 0.2s; }
+.form-modal .form-control:focus { background: #fff; border-color: #000000; box-shadow: 0 0 0 4px rgba(0,0,0,0.08); }
+.form-modal .image-upload-box, .form-modal .upload-box { border: 2px dashed #e5e7eb; border-radius: 12px; background: #f9fafb; }
+.form-modal .image-upload-box:hover, .form-modal .upload-box:hover { border-color: #000000; background: #fff; }
+.form-modal .form-actions { margin-top: 2rem; display: flex; gap: 1rem; justify-content: stretch; align-items: stretch; }
+.form-modal .btn-cancel { flex: 1; width: auto; padding: 0.85rem; border-radius: 10px; border: 1px solid #e5e7eb; background: #fff; color: #6b7280; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
+.form-modal .btn-submit { flex: 2; width: auto; min-width: 0; padding: 0.85rem; border-radius: 10px; border: none; background: #000000; color: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
+.form-modal .btn-submit:hover:not(:disabled) { background: #262626; }
+.form-modal .btn-submit:disabled { opacity: 0.6; }
+@media (max-width: 600px) { .form-modal .cat-form, .form-modal .prod-form, .form-modal .value-form { padding: 0 1.25rem 1.5rem; } .form-modal .modal-tabs { margin: 0 1.25rem 1.5rem; } }
 </style>

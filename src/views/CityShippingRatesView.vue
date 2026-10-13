@@ -277,7 +277,7 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: #873260;
+  background: #000000;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -462,7 +462,7 @@ onMounted(() => {
 }
 
 .option-card:hover {
-  border-color: #873260;
+  border-color: #000000;
 }
 
 .option-card label {
