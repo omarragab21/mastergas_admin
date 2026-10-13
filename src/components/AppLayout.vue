@@ -407,13 +407,8 @@ const menuItems = [
   },
   {
     route: '/admin/offers',
-    label: 'العروض',
+    label: 'العروض والخصومات',
     icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><path d="M7 7h.01"/><path d="M16 8l-5 8"/><circle cx="9" cy="9" r="1"/><circle cx="15" cy="15" r="1"/></svg>`,
-  },
-  {
-    route: '/admin/promotions',
-    label: 'الخصومات',
-    icon: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>`,
   },
   {
     route: '/admin/sliders',

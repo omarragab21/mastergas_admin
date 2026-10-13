@@ -30,7 +30,7 @@ const routes = [
       { path: 'coupons', redirect: '/admin/discounts' },
       { path: 'discounts', name: 'DiscountCodes', component: () => import('../views/DiscountsView.vue') },
       { path: 'offers', name: 'Offers', component: () => import('../views/ApiPendingView.vue') },
-      { path: 'promotions', name: 'Promotions', component: () => import('../views/ApiPendingView.vue') },
+      { path: 'promotions', redirect: '/admin/offers' },
       { path: 'payments', name: 'Payments', component: () => import('../views/PaymentsView.vue') },
       { path: 'collector', name: 'Collector', component: () => import('../views/DeliveryManagementView.vue') },
       { path: 'driver-notifications', name: 'DriverNotifications', component: () => import('../views/DashboardView.vue') },

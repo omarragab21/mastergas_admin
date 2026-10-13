@@ -293,11 +293,11 @@
                     <input type="number" step="0.01" min="0" v-model="form.min_order_value" class="form-control" placeholder="0.00" />
                 </div>
 
-            </div>
+                <div class="form-group">
+                    <label class="form-label">الحد الأقصى للاستخدام (عدد المرات)</label>
+                    <input type="number" step="1" min="1" inputmode="numeric" v-model="form.max_uses" class="form-control" placeholder="مثلاً: 100" />
+                </div>
 
-            <div class="form-section api-scope-note">
-                <strong>نطاق التطبيق:</strong>
-                كود الخصم العام مدعوم حاليًا من `discount_codes` ويطبق على الطلب. الربط المباشر بمنتجات أو أقسام يحتاج حقولًا/endpoint إضافيًا من الـ Backend؛ لا يتم عرض اختيارات وهمية حتى لا يتم حفظها بدون تأثير.
             </div>
 
             <div class="form-grid mt-1">
@@ -595,6 +595,8 @@ const openEditModal = (offer) => {
         description_ar: descObj?.ar ?? offer.description ?? '',
         description_en: descObj?.en ?? '',
         image: null,
+        min_order_value: offer.minimum_amount ?? '',
+        max_uses: offer.max_uses ?? '',
         selected_products: offer.selected_products || [],
         selected_categories: offer.selected_categories || [],
         start_date: formatDate(offer.start_date),
@@ -671,6 +673,9 @@ const validateOfferForm = (f) => {
     if (!f.no_end_date && f.end_date && f.start_date && f.end_date < f.start_date) return 'تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء';
     for (const [field, label] of [['min_order_value', 'الحد الأدنى للطلب'], ['max_discount', 'الحد الأقصى للخصم']]) {
         if (f[field] !== '' && f[field] != null && Number(f[field]) < 0) return `${label} لا يمكن أن يكون سالباً`;
+    }
+    if (f.max_uses !== '' && f.max_uses != null && (!Number.isInteger(Number(f.max_uses)) || Number(f.max_uses) < 1)) {
+        return 'الحد الأقصى للاستخدام يجب أن يكون عدداً صحيحاً أكبر من صفر';
     }
     return '';
 };
