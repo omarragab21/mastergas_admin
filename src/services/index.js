@@ -4,6 +4,7 @@ export { authService } from './authService';
 export { settingsService } from './settingsService';
 export { adminCatalogService } from '../application/adminCatalogService';
 export { adminOrderService } from '../application/adminOrderService';
+export { adminManagementService } from '../application/adminManagementService';
 export {
   API_TTL,
   clearApiCache,
@@ -21,4 +22,5 @@ export default {
   order: () => import('./orderService').then(m => m.orderService),
   auth: () => import('./authService').then(m => m.authService),
   settings: () => import('./settingsService').then(m => m.settingsService),
+  adminManagement: () => import('../application/adminManagementService').then(m => m.adminManagementService),
 };

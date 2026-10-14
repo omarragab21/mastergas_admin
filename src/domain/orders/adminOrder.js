@@ -3,6 +3,29 @@
 export const ORDER_STEPS = ['pending', 'paid_confirmed', 'processing', 'shipped', 'delivered'];
 export const ORDER_STATUSES = [...ORDER_STEPS, 'cancelled'];
 
+// Keep the admin order timeline identical to the customer website timeline.
+export const ORDER_TRACKING_STEPS = [
+  { key: 'received', rank: 1, label: 'تم استلام الطلب', icon: 'fas fa-inbox', dateField: 'createdAt' },
+  { key: 'confirmed', rank: 2, label: 'تم تأكيد الطلب', icon: 'fas fa-clipboard-check', dateField: 'paymentTime' },
+  { key: 'processing', rank: 3, label: 'تم تجهيز الطلب', icon: 'fas fa-box-open', dateField: 'updatedAt' },
+  { key: 'shipped', rank: 4, label: 'تم الشحن', icon: 'fas fa-box', dateField: 'shippedAt' },
+  { key: 'transit', rank: 5, label: 'الطلب في الطريق', icon: 'fas fa-truck', dateField: 'shippedAt', note: 'طلبك في طريقه إليك' },
+  { key: 'delivered', rank: 6, label: 'تم الاستلام', icon: 'fas fa-house', dateField: 'deliveredAt' },
+];
+
+const TRACKING_STATUS_RANKS = {
+  pending: 1,
+  confirmed: 2,
+  paid_confirmed: 2,
+  processing: 3,
+  shipped: 4,
+  shipping: 5,
+  delivering: 5,
+  in_delivery: 5,
+  delivered: 6,
+  completed: 6,
+};
+
 const STATUS_LABELS = {
   pending: 'قيد الانتظار',
   paid_confirmed: 'تم تأكيد الدفع',
@@ -41,6 +64,11 @@ const TRANSITIONS = {
 };
 
 export const statusLabel = (status) => STATUS_LABELS[status] || status;
+export const trackingStatusLabel = (status) => {
+  const normalized = String(status || '').toLowerCase();
+  const rank = TRACKING_STATUS_RANKS[normalized] || 0;
+  return ORDER_TRACKING_STEPS.find((step) => step.rank === rank)?.label || statusLabel(status);
+};
 export const paymentStatusLabel = (status) => PAYMENT_STATUS_LABELS[status] || status || 'غير محدد';
 export const paymentMethodLabel = (method) => {
   if (!method) return 'غير محدد';
@@ -125,8 +153,27 @@ export const toOrder = (raw) => {
     tax: money(order.tax_amount),
     total: money(order.total_amount),
     ...localDateTime(order.created_at),
+    createdAt: order.created_at ?? null,
+    updatedAt: order.updated_at ?? null,
     shippedAt: order.shipped_at ?? null,
     deliveredAt: order.delivered_at ?? null,
     estimatedDelivery: order.estimated_delivery ?? null,
   };
 };
+
+export const trackingRank = (order = {}) => {
+  const status = String(order.status || 'pending').toLowerCase();
+  const statusRank = TRACKING_STATUS_RANKS[status] || 0;
+  if (statusRank > 0) return statusRank;
+  if (order.deliveredAt) return 6;
+  if (order.shippedAt) return 5;
+  return order.createdAt || order.date ? 1 : 0;
+};
+
+export const trackingStepState = (order, step) => {
+  const rank = trackingRank(order);
+  if (rank >= step) return rank === step ? 'active' : 'completed';
+  return 'pending';
+};
+
+export const trackingStepIcon = (step, state) => state === 'pending' ? step.icon : 'fas fa-check';

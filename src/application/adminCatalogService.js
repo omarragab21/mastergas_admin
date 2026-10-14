@@ -29,6 +29,7 @@ export const adminCatalogService = {
   listCategories: (params = {}) => mapList(tijaraAdminApi.listCategories, toCategory, params),
   createCategory: (payload, image) => mapData(() => tijaraAdminApi.createCategory(payload, image), toCategory),
   updateCategory: (id, payload, image) => mapData(() => tijaraAdminApi.updateCategory(id, payload, image), toCategory),
+  getCategory: (id) => mapData(() => tijaraAdminApi.getCategory(id), toCategory),
   deleteCategory: tijaraAdminApi.deleteCategory,
 
   listProducts: (params) => tijaraAdminApi.listProducts(params).then((response) => ({
@@ -50,11 +51,13 @@ export const adminCatalogService = {
   },
   createProduct: (payload, files) => mapData(() => tijaraAdminApi.createProduct(payload, files), toProduct),
   updateProduct: (id, payload, files) => mapData(() => tijaraAdminApi.updateProduct(id, payload, files), toProduct),
+  getProduct: (id) => mapData(() => tijaraAdminApi.getProduct(id), toProduct),
   deleteProduct: tijaraAdminApi.deleteProduct,
 
   listAttributes: () => mapList(tijaraAdminApi.listAttributes, toAttribute),
   createAttribute: (payload) => mapData(() => tijaraAdminApi.createAttribute(payload), toAttribute),
   updateAttribute: (id, payload) => mapData(() => tijaraAdminApi.updateAttribute(id, payload), toAttribute),
+  getAttribute: (id) => mapData(() => tijaraAdminApi.getAttribute(id), toAttribute),
   deleteAttribute: tijaraAdminApi.deleteAttribute,
   createAttributeOption: (attributeId, payload) => mapData(() => tijaraAdminApi.createAttributeOption(attributeId, payload), toAttribute),
   updateAttributeOption: (attributeId, optionId, payload) => mapData(() => tijaraAdminApi.updateAttributeOption(attributeId, optionId, payload), toAttribute),
@@ -63,6 +66,7 @@ export const adminCatalogService = {
   listDiscountCodes: (params = {}) => mapList(tijaraAdminApi.listDiscountCodes, toDiscountCode, params),
   createDiscountCode: (payload) => mapData(() => tijaraAdminApi.createDiscountCode(payload), toDiscountCode),
   updateDiscountCode: (id, payload) => mapData(() => tijaraAdminApi.updateDiscountCode(id, payload), toDiscountCode),
+  getDiscountCode: (id) => mapData(() => tijaraAdminApi.getDiscountCode(id), toDiscountCode),
   deleteDiscountCode: tijaraAdminApi.deleteDiscountCode,
 };
 

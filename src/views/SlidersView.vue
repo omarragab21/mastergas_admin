@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import api from '../config/axios';
+import adminManagementService from '../application/adminManagementService';
 
 // State
 const sliders = ref([]);
@@ -17,7 +17,7 @@ const previewImage = ref(null);
 const imageFile = ref(null);
 const activeLang = ref('ar');
 
-const backendOrigin = (import.meta.env.VITE_API_BASE_URL || 'https://backend-mastergas.be-kite.com/api')
+const backendOrigin = (import.meta.env.VITE_API_BASE_URL || 'https://backend-tijara.be-kite.com/api')
     .replace(/\/api\/?$/, '');
 
 const normalizeSliderImage = (value) => {
@@ -43,19 +43,20 @@ const form = ref({
 const initialForm = { ...form.value };
 
 // Fetch Sliders
-const fetchSliders = async () => {
-    loading.value = true;
-    try {
-        const response = await api.get('/dashboard/sliders', {
-            params: { search: searchQuery.value }
-        });
-        sliders.value = response.data.data;
-    } catch (error) {
+const fetchSliders = async ({ notify = true } = {}) => {
+  loading.value = true;
+  try {
+    sliders.value = await adminManagementService.listSliders({ search: searchQuery.value });
+    return true;
+  } catch (error) {
+    if (notify) {
         console.error('Failed to fetch sliders', error);
         triggerAlert('فشل تحميل البيانات', 'error');
-    } finally {
-        loading.value = false;
     }
+    return false;
+  } finally {
+    loading.value = false;
+  }
 };
 
 onMounted(fetchSliders);
@@ -125,36 +126,32 @@ const submitForm = async () => {
     }
 
     isSubmitting.value = true;
-    const formData = new FormData();
-    formData.append('title', JSON.stringify({ ar: form.value.title_ar || '', en: form.value.title_en || '' }));
-    if (form.value.description_ar || form.value.description_en) {
-        formData.append('description', JSON.stringify({ ar: form.value.description_ar || '', en: form.value.description_en || '' }));
-    }
-    formData.append('link', form.value.link || '');
-    formData.append('status', form.value.status);
-    formData.append('order', form.value.order ?? 0);
-    if (imageFile.value) {
-        formData.append('image', imageFile.value);
-    }
-
     try {
-        if (isEditing.value) {
-            // Use POST with _method=PUT for multipart/form-data compatibility if needed
-            // but standard Laravel POST to a specific update route also works if we use PUT pattern correctly
-            // Actually usually for file upload update, we use POST with _method=PUT
-            formData.append('_method', 'PUT');
-            await api.post(`/dashboard/sliders/${currentSlider.value.id}`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-            triggerAlert('تم تحديث الشريحة بنجاح');
-        } else {
-            await api.post('/dashboard/sliders', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
-            triggerAlert('تم إضافة الشريحة بنجاح');
+        const editingId = currentSlider.value?.id;
+        const savedSlider = isEditing.value
+            ? await adminManagementService.updateSlider(editingId, form.value, imageFile.value)
+            : await adminManagementService.createSlider(form.value, imageFile.value);
+
+        // Keep the UI correct even when the backend returns 204/no body or the
+        // follow-up list request is temporarily unavailable.
+        if (isEditing.value && editingId !== undefined) {
+            const fallbackSlider = {
+                ...currentSlider.value,
+                title: form.value.title_ar,
+                title_i18n: { ar: form.value.title_ar, en: form.value.title_en },
+                description: form.value.description_ar,
+                description_i18n: { ar: form.value.description_ar, en: form.value.description_en },
+                link: form.value.link,
+                status: form.value.status,
+                order: Number(form.value.order) || 0,
+            };
+            const nextSlider = savedSlider?.id ? savedSlider : fallbackSlider;
+            sliders.value = sliders.value.map((slider) => slider.id === editingId ? { ...slider, ...nextSlider } : slider);
         }
+
         showFormModal.value = false;
-        fetchSliders();
+        await fetchSliders({ notify: false });
+        triggerAlert(isEditing.value ? 'تم تحديث الشريحة بنجاح' : 'تم إضافة الشريحة بنجاح');
     } catch (error) {
         const msg = error.response?.data?.message || 'فشل حفظ البيانات';
         triggerAlert(msg, 'error');
@@ -177,7 +174,7 @@ const executeDelete = async () => {
     const target = deleteTarget.value;
     isDeleting.value = true;
     try {
-        await api.delete(`/dashboard/sliders/${target.id}`);
+        await adminManagementService.deleteSlider(target.id);
         sliders.value = sliders.value.filter((slider) => slider.id !== target.id);
         deleteTarget.value = null;
         triggerAlert('تم حذف الشريحة بنجاح');
@@ -192,7 +189,15 @@ const executeDelete = async () => {
 const toggleStatus = async (slider) => {
     try {
         const newStatus = slider.status === 'active' ? 'inactive' : 'active';
-        await api.put(`/dashboard/sliders/${slider.id}`, { status: newStatus });
+        await adminManagementService.updateSlider(slider.id, {
+            title_ar: slider.title_i18n?.ar || slider.title || '',
+            title_en: slider.title_i18n?.en || slider.title || '',
+            description_ar: slider.description_i18n?.ar || slider.description || '',
+            description_en: slider.description_i18n?.en || slider.description || '',
+            link: slider.link,
+            status: newStatus,
+            order: slider.order,
+        });
         slider.status = newStatus;
         triggerAlert('تم تحديث الحالة');
     } catch (error) {

@@ -158,7 +158,7 @@
           <div class="right-col">
             <h3 class="view-title">تفاصيل الطلب #{{ viewOrder?.orderNumber }}</h3>
             <span class="view-time">{{ viewOrder?.date }} - {{ viewOrder?.time }}</span>
-            <span class="status-badge" :class="viewOrder?.status">{{ statusText(viewOrder?.status) }}</span>
+            <span class="status-badge" :class="viewOrder?.status">{{ trackingStatusLabel(viewOrder?.status) }}</span>
           </div>
           <div class="left-col">
             <button v-if="allowedStatuses.length" class="btn-outline" @click="openStatusModal">
@@ -174,40 +174,27 @@
         <div class="view-body-wrapper">
           <!-- Stepper -->
           <div class="order-stepper">
-            <div class="step" :class="getStepClass('pending')">
-              <div class="step-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <template v-for="(step, index) in ORDER_TRACKING_STEPS" :key="step.key">
+              <div
+                class="step"
+                :class="getTrackingStepState(step.rank)"
+                :data-tracking-step="step.key"
+              >
+                <div class="step-icon">
+                  <i
+                    :class="getTrackingStepIcon(step, getTrackingStepState(step.rank))"
+                    :aria-label="step.label"
+                  ></i>
+                </div>
+                <span>{{ step.label }}</span>
+                <small class="step-time">{{ getTrackingStepTime(step.rank) }}</small>
               </div>
-              <span>استلام الطلب</span>
-            </div>
-            <div class="step-line" :class="getLineClass('paid_confirmed')"></div>
-            <div class="step" :class="getStepClass('paid_confirmed')">
-              <div class="step-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <span>تأكيد الدفع</span>
-            </div>
-            <div class="step-line" :class="getLineClass('processing')"></div>
-            <div class="step" :class="getStepClass('processing')">
-              <div class="step-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <span>قيد التحضير</span>
-            </div>
-            <div class="step-line" :class="getLineClass('shipped')"></div>
-            <div class="step" :class="getStepClass('shipped')">
-              <div class="step-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <span>قيد الشحن</span>
-            </div>
-            <div class="step-line" :class="getLineClass('delivered')"></div>
-            <div class="step" :class="getStepClass('delivered')">
-              <div class="step-icon">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-              </div>
-              <span>تم التسليم</span>
-            </div>
+              <div
+                v-if="index < ORDER_TRACKING_STEPS.length - 1"
+                class="step-line"
+                :class="getTrackingLineClass(step.rank + 1)"
+              ></div>
+            </template>
           </div>
 
           <div class="order-layout">
@@ -356,13 +343,13 @@
 
         <form @submit.prevent="submitStatusUpdate" class="status-form">
           <div class="form-group">
-            <label class="form-label">الحالة الحالية: <span class="status-badge" :class="viewOrder?.status">{{ statusText(viewOrder?.status) }}</span></label>
+            <label class="form-label">الحالة الحالية: <span class="status-badge" :class="viewOrder?.status">{{ trackingStatusLabel(viewOrder?.status) }}</span></label>
           </div>
           <div class="form-group">
             <label class="form-label">الحالة الجديدة <span class="req">*</span></label>
             <div class="select-wrapper">
               <select v-model="statusForm.status" class="form-control" required>
-                <option v-for="status in allowedStatuses" :key="status" :value="status">{{ statusText(status) }}</option>
+                <option v-for="status in allowedStatuses" :key="status" :value="status">{{ trackingStatusLabel(status) }}</option>
               </select>
               <svg class="select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
@@ -393,11 +380,15 @@ import { ref, computed, onMounted } from 'vue';
 import adminOrderService from '../application/adminOrderService';
 import {
   ORDER_STATUSES,
-  ORDER_STEPS,
+  ORDER_TRACKING_STEPS,
   nextStatuses,
   paymentMethodLabel,
   paymentStatusLabel,
   statusLabel,
+  trackingRank,
+  trackingStepIcon,
+  trackingStepState,
+  trackingStatusLabel,
 } from '../domain/orders/adminOrder';
 
 const orders = ref([]);
@@ -477,24 +468,24 @@ const openStatusModal = () => {
   showStatusModal.value = true;
 };
 
-// Stepper Logic
-const orderSteps = ORDER_STEPS;
-const getStepClass = (step) => {
-  if (!viewOrder.value) return '';
-  const cIdx = orderSteps.indexOf(viewOrder.value.status);
-  const sIdx = orderSteps.indexOf(step);
-  if (viewOrder.value.status === 'cancelled') return 'disabled';
-  if (sIdx < cIdx) return 'completed';
-  if (sIdx === cIdx) return 'active';
-  return 'disabled';
-};
-const getLineClass = (stepTo) => {
-  if (!viewOrder.value) return '';
-  const cIdx = orderSteps.indexOf(viewOrder.value.status);
-  const sIdx = orderSteps.indexOf(stepTo);
-  if (viewOrder.value.status === 'cancelled') return 'disabled';
-  if (sIdx <= cIdx) return 'completed';
-  return 'disabled';
+// Status updates follow the API lifecycle; the visual stepper follows the
+// same six-stage timeline and rank rules as the customer website.
+const getTrackingStepState = (step) => trackingStepState(viewOrder.value, step);
+const getTrackingStepIcon = (step, state) => trackingStepIcon(step, state);
+const getTrackingLineClass = (step) => getTrackingStepState(step) === 'pending' ? '' : 'completed';
+const getTrackingStepTime = (step) => {
+  const definition = ORDER_TRACKING_STEPS.find((item) => item.rank === step);
+  if (!definition || getTrackingStepState(step) === 'pending') return 'لم تبدأ بعد';
+
+  const rawDate = viewOrder.value?.[definition.dateField]
+    || (step === 1 ? viewOrder.value?.createdAt || viewOrder.value?.date : null)
+    || (trackingRank(viewOrder.value) >= step ? viewOrder.value?.updatedAt : null);
+  if (!rawDate) return viewOrder.value?.date || '—';
+
+  const date = new Date(rawDate);
+  return Number.isNaN(date.getTime())
+    ? rawDate
+    : date.toLocaleDateString('ar-SA', { day: 'numeric', month: 'long', year: 'numeric' });
 };
 
 const submitStatusUpdate = async () => {
@@ -640,17 +631,21 @@ const confirmDelete = async (order) => {
 
 /* Stepper */
 .view-body-wrapper { padding: 2rem; }
-.order-stepper { display: flex; align-items: center; justify-content: space-between; background: #fff; padding: 1.5rem 2rem; border-radius: 12px; border: 1px solid #f3f4f6; margin-bottom: 1.5rem; }
-.step { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; z-index: 2; position: relative; }
-.step-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: #fff; border: 2px solid #e5e7eb; color: #d1d5db; font-weight: bold; transition: all 0.3s; }
-.step span { font-size: 0.8rem; font-weight: 700; color: #9ca3af; transition: color 0.3s; }
-.step-line { flex: 1; height: 2px; background: #e5e7eb; margin: 0 1rem; margin-top: -1.2rem; transition: background 0.3s; }
+.order-stepper { display: flex; align-items: flex-start; justify-content: space-between; background: #fff; padding: 1.5rem 2rem; border-radius: 12px; border: 1px solid #f3f4f6; margin-bottom: 1.5rem; min-height: 139px; }
+.step { display: flex; flex: 1; min-width: 0; flex-direction: column; align-items: center; gap: 0.5rem; z-index: 2; position: relative; text-align: center; }
+.step-icon { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: transparent; border: 2px solid #e2e8f0; color: #cbd5e1; font-weight: bold; transition: all 0.3s; }
+.step-icon i { font-size: 14px; line-height: 1; }
+.step span { font-size: 0.8rem; font-weight: 400; color: #000; line-height: 1.5; transition: color 0.3s; }
+.step-time { min-height: 18px; font-size: 0.72rem; font-weight: 400; color: #64748b; line-height: 1.5; }
+.step.pending span { color: #64748b; }
+.step-line { flex: 1; height: 2px; background: #e2e8f0; margin: 1rem 1rem 0; transition: background 0.3s; }
 /* active / completed */
-.step.completed .step-icon { background: #000000; border-color: #000000; color: #fff; }
-.step.completed span { color: #000000; }
-.step-line.completed { background: #000000; }
-.step.active .step-icon { border-color: #000000; color: #000000; box-shadow: 0 0 0 4px #f3f4f6; }
-.step.active span { color: #111827; }
+.step.completed .step-icon { background: #10b981; border-color: #10b981; color: #fff; }
+.step.completed span { color: #000; }
+.step-line.completed { background: #10b981; }
+.step.active .step-icon { width: 40px; height: 40px; margin-top: -4px; background: #f59e1f; border-color: #f59e1f; color: #fff; box-shadow: 0 0 8px rgba(255, 150, 79, 0.25); }
+.step.active .step-icon i { font-size: 16px; }
+.step.active span { color: #000; }
 
 /* Grid layout for details */
 .order-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 1.5rem; align-items: start; }

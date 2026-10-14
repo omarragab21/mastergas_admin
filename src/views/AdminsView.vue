@@ -1,6 +1,6 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import api from '../config/axios';
+import adminManagementService from '../application/adminManagementService';
 
 // State
 const admins = ref([]);
@@ -28,10 +28,7 @@ const initialForm = { ...form.value };
 const fetchAdmins = async () => {
     loading.value = true;
     try {
-        const response = await api.get('/dashboard/admins', {
-            params: { search: searchQuery.value }
-        });
-        admins.value = response.data.data;
+        admins.value = await adminManagementService.listUsers({ search: searchQuery.value });
     } catch (error) {
         console.error('Failed to fetch admins', error);
         triggerAlert('فشل تحميل قائمة المديرين', 'error');
@@ -77,33 +74,12 @@ const handleAvatarChange = (e) => {
 
 const submitForm = async () => {
     isSubmitting.value = true;
-    const formData = new FormData();
-    
-    // Fill formData
-    Object.keys(form.value).forEach(key => {
-        if (key === 'password' && !form.value[key] && isEditing.value) {
-            // Skip empty password on edit
-        } else {
-            let val = form.value[key];
-            if (typeof val === 'boolean') val = val ? 1 : 0;
-            formData.append(key, val);
-        }
-    });
-
-    if (avatarFile.value) {
-        formData.append('avatar', avatarFile.value);
-    }
-
     try {
         if (isEditing.value) {
-            await api.post(`/dashboard/admins/${currentAdmin.value.id}`, formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            await adminManagementService.updateUser(currentAdmin.value.id, form.value, avatarFile.value);
             triggerAlert('تم تحديث بيانات المدير بنجاح');
         } else {
-            await api.post('/dashboard/admins', formData, {
-                headers: { 'Content-Type': 'multipart/form-data' }
-            });
+            await adminManagementService.createUser(form.value, avatarFile.value);
             triggerAlert('تم إضافة المدير بنجاح');
         }
         showFormModal.value = false;
@@ -124,7 +100,7 @@ const submitForm = async () => {
 const confirmDelete = async (admin) => {
     if (confirm(`هل أنت متأكد من حذف المدير "${admin.name}"؟`)) {
         try {
-            await api.delete(`/dashboard/admins/${admin.id}`);
+            await adminManagementService.deleteUser(admin.id);
             triggerAlert('تم حذف المدير بنجاح');
             fetchAdmins();
         } catch (error) {
@@ -136,8 +112,12 @@ const confirmDelete = async (admin) => {
 const toggleAdminStatus = async (admin) => {
     try {
         const newStatus = !admin.is_active;
-        await api.post(`/dashboard/admins/${admin.id}`, { 
-            is_active: newStatus ? 1 : 0 
+        await adminManagementService.updateUser(admin.id, {
+            name: admin.name,
+            email: admin.email,
+            phone: admin.phone,
+            role: admin.role,
+            is_active: newStatus,
         });
         admin.is_active = newStatus;
         triggerAlert(newStatus ? 'تم تفعيل الحساب' : 'تم تعطيل الحساب');

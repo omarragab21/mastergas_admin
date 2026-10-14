@@ -21,19 +21,28 @@ const json = { headers: { 'Content-Type': 'application/json' } };
 const formHeaders = { headers: { 'Content-Type': 'multipart/form-data' } };
 
 export const tijaraAdminApi = {
+  listUsers: (params = {}) => api.get('/v1/users', { params }),
+  createUser: (payload, image) => api.post('/v1/users', multipart(payload, { image_file: image }), formHeaders),
+  updateUser: (id, payload, image) => api.put(`/v1/users/${id}`, multipart(payload, { image_file: image }), formHeaders),
+  getUser: (id) => api.get(`/v1/users/${id}`),
+  deleteUser: (id) => api.delete(`/v1/users/${id}`),
+
   listCategories: (params = {}) => api.get('/v1/categories', { params }),
   createCategory: (payload, image) => api.post('/v1/categories', multipart(payload, { image_file: image }), formHeaders),
   updateCategory: (id, payload, image) => api.put(`/v1/categories/${id}`, multipart(payload, { image_file: image }), formHeaders),
+  getCategory: (id) => api.get(`/v1/categories/${id}`),
   deleteCategory: (id) => api.delete(`/v1/categories/${id}`),
 
   listProducts: (params = {}) => api.get('/v1/products', { params }),
   createProduct: (payload, files = []) => api.post('/v1/products', multipart(payload, { images: files }), formHeaders),
   updateProduct: (id, payload, files = []) => api.put(`/v1/products/${id}`, multipart(payload, { images: files }), formHeaders),
+  getProduct: (id) => api.get(`/v1/products/${id}`),
   deleteProduct: (id) => api.delete(`/v1/products/${id}`),
 
   listAttributes: (params = {}) => api.get('/v1/attributes', { params }),
   createAttribute: (payload) => api.post('/v1/attributes', payload, json),
   updateAttribute: (id, payload) => api.put(`/v1/attributes/${id}`, payload, json),
+  getAttribute: (id) => api.get(`/v1/attributes/${id}`),
   deleteAttribute: (id) => api.delete(`/v1/attributes/${id}`),
   createAttributeOption: (attributeId, payload) => api.post(`/v1/attributes/${attributeId}/options`, payload, json),
   updateAttributeOption: (attributeId, optionId, payload) => api.put(`/v1/attributes/${attributeId}/options/${optionId}`, payload, json),
@@ -42,7 +51,14 @@ export const tijaraAdminApi = {
   listDiscountCodes: (params = {}) => api.get('/v1/discount_codes', { params }),
   createDiscountCode: (payload) => api.post('/v1/discount_codes', payload, json),
   updateDiscountCode: (id, payload) => api.put(`/v1/discount_codes/${id}`, payload, json),
+  getDiscountCode: (id) => api.get(`/v1/discount_codes/${id}`),
   deleteDiscountCode: (id) => api.delete(`/v1/discount_codes/${id}`),
+
+  listSliders: (params = {}) => api.get('/v1/sliders', { params }),
+  createSlider: (payload, image) => api.post('/v1/sliders', multipart(payload, { image_file: image }), formHeaders),
+  updateSlider: (id, payload, image) => api.put(`/v1/sliders/${id}`, multipart(payload, { image_file: image }), formHeaders),
+  getSlider: (id) => api.get(`/v1/sliders/${id}`),
+  deleteSlider: (id) => api.delete(`/v1/sliders/${id}`),
 
   listOrders: (params = {}) => api.get('/v1/orders', { params }),
   getOrder: (id) => api.get(`/v1/orders/${id}`),
