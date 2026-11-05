@@ -3,110 +3,32 @@
     <!-- Header -->
     <div class="page-header">
       <div class="header-titles">
-        <div class="title-with-icon">
-          <h2 class="page-title">أكواد الخصم</h2>
-          <div class="tag-icon-wrapper">
-             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
-             </svg>
-          </div>
+        <div class="tag-icon-wrapper">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
+          </svg>
         </div>
-        <p class="page-subtitle">إنشاء وإدارة أكواد الخصم</p>
+        <div>
+          <h2 class="page-title">{{ tx('أكواد الخصم', 'Discount Codes') }}</h2>
+          <p class="page-subtitle">{{ tx('إدارة أكواد الخصم والعروض الترويجية', 'Manage discount codes and promotions') }}</p>
+        </div>
       </div>
-      <button class="add-btn" @click="openAddModal">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <button class="add-btn" data-testid="add-code" @click="openAddModal">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
           <line x1="12" y1="5" x2="12" y2="19"/>
           <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        إنشاء كود خصم
+        {{ tx('إضافة كود جديد', 'Add new code') }}
       </button>
     </div>
 
-    <!-- Stat Cards -->
-    <div class="stats-grid">
-      <div class="stat-card">
-        <div class="stat-icon-wrapper pink">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-             <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
-          </svg>
-        </div>
-        <div class="stat-info">
-          <span class="stat-label">إجمالي أكواد الخصم</span>
-          <h3 class="stat-value">{{ offers.length }}</h3>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon-wrapper green">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M23 4v6h-6"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/>
-          </svg>
-        </div>
-        <div class="stat-info">
-          <span class="stat-label">الأكواد النشطة</span>
-          <h3 class="stat-value">{{ activeOffersCount }}</h3>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon-wrapper gray">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-        </div>
-        <div class="stat-info">
-          <span class="stat-label">المنتهية</span>
-          <h3 class="stat-value">{{ expiredOffersCount }}</h3>
-        </div>
-      </div>
-
-      <div class="stat-card">
-        <div class="stat-icon-wrapper blue">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 20V10"/><path d="M12 20V4"/><path d="M6 20V14"/>
-          </svg>
-        </div>
-        <div class="stat-info">
-          <span class="stat-label">إجمالي الاستخدام</span>
-          <h3 class="stat-value">{{ totalUsageCount }}</h3>
-        </div>
-      </div>
-    </div>
-
-    <!-- Filters Row -->
-    <div class="filters-row">
+    <!-- Search -->
+    <div class="search-card">
       <div class="search-box">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="search-icon">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" v-model="searchQuery" placeholder="البحث باسم كود الخصم أو الكود..." class="search-input" />
-      </div>
-      
-      <div class="filter-select">
-        <select v-model="typeFilter" class="form-select">
-          <option value="">كل أكواد الخصم</option>
-          <option value="percentage">نسبة مئوية</option>
-          <option value="fixed">قيمة ثابتة</option>
-        </select>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="select-icon" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-
-      <div class="filter-select">
-        <select v-model="statusFilter" class="form-select">
-          <option value="">كل الحالات</option>
-          <option value="active">نشط</option>
-          <option value="paused">متوقف</option>
-          <option value="expired">منتهي</option>
-          <option value="scheduled">مجدول</option>
-        </select>
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="select-icon" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-      </div>
-
-      <div class="date-comp">
-        <input type="date" v-model="startDateFilter" class="date-input" placeholder="من تاريخ" title="من تاريخ" />
-      </div>
-      <div class="date-comp">
-        <input type="date" v-model="endDateFilter" class="date-input" placeholder="إلى تاريخ" title="إلى تاريخ" />
+        <input type="text" v-model="searchQuery" :placeholder="tx('البحث عن كود...', 'Search for a code...')" class="search-input" data-testid="search" />
       </div>
     </div>
 
@@ -115,74 +37,53 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th class="col-name text-right">اسم كود الخصم</th>
-            <th class="col-type">النوع</th>
-            <th class="col-value">قيمة الخصم</th>
-            <th class="col-code">كود الخصم</th>
-            <th class="col-start">تاريخ البداية</th>
-            <th class="col-end">تاريخ النهاية</th>
-            <th class="col-used">استخدم</th>
-            <th class="col-status">الحالة</th>
-            <th class="col-actions">الإجراءات</th>
+            <th class="col-code">{{ tx('الكود', 'Code') }}</th>
+            <th>{{ tx('نوع الخصم', 'Discount type') }}</th>
+            <th>{{ tx('قيمة الخصم', 'Discount value') }}</th>
+            <th>{{ tx('الحد الأدنى', 'Minimum') }}</th>
+            <th>{{ tx('الاستخدام', 'Usage') }}</th>
+            <th>{{ tx('تاريخ البداية', 'Start date') }}</th>
+            <th>{{ tx('تاريخ النهاية', 'End date') }}</th>
+            <th>{{ tx('الحالة', 'Status') }}</th>
+            <th class="col-actions">{{ tx('الإجراءات', 'Actions') }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-if="loading" class="state-row"><td colspan="9">جاري التحميل...</td></tr>
-          <tr v-else-if="filteredOffers.length === 0" class="state-row"><td colspan="9">لا توجد أكواد خصم مطابقة</td></tr>
+          <tr v-if="loading" class="state-row"><td colspan="9">{{ tx('جاري التحميل...', 'Loading...') }}</td></tr>
+          <tr v-else-if="filteredOffers.length === 0" class="state-row"><td colspan="9">{{ tx('لا توجد أكواد خصم مطابقة', 'No matching discount codes found') }}</td></tr>
           <template v-else>
-            <tr v-for="offer in filteredOffers" :key="offer.id" class="data-row">
-              <td class="col-name text-right">
-                <span class="offer-name">{{ offer.name_i18n?.ar || offer.name }}</span>
-              </td>
-              <td class="col-type">
-                {{ formatType(offer.type) }}
-              </td>
-              <td class="col-value font-bold" :class="offer.type === 'percentage' ? 'text-pink' : 'text-blue'">
-                {{ formatValue(offer) }}
-              </td>
+            <tr v-for="offer in filteredOffers" :key="offer.id" class="data-row" :data-code="offer.code">
               <td class="col-code">
-                <div class="code-badge" v-if="offer.code">
-                  {{ offer.code }}
-                  <button class="copy-tiny" @click.stop="copyText(offer.code)">
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/></svg>
+                <div class="code-cell">
+                  <span class="code-badge">{{ offer.code || '-' }}</span>
+                  <button v-if="offer.code" class="copy-tiny" type="button" :title="tx('نسخ الكود', 'Copy code')" @click.stop="copyText(offer.code)">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                   </button>
                 </div>
-                <span v-else>-</span>
               </td>
-              <td class="col-start">{{ formatDate(offer.start_date) }}</td>
-              <td class="col-end">{{ formatDate(offer.end_date) }}</td>
+              <td class="muted">{{ formatType(offer.type) }}</td>
+              <td class="value-cell">{{ formatValue(offer) }}</td>
+              <td>{{ offer.minimum_amount ? formatMoney(offer.minimum_amount) : '—' }}</td>
               <td class="col-used">
-                <div class="usage-text">{{ offer.total_uses || 0 }}<template v-if="offer.max_uses"> / {{ offer.max_uses }}</template></div>
-                <div class="usage-bar-bg" v-if="offer.max_uses">
-                  <div class="usage-bar-fill" :style="{ width: offer.usage_percentage + '%' }"></div>
+                <div class="usage">
+                  <div class="usage-bar-bg" v-if="offer.max_uses">
+                    <div class="usage-bar-fill" :style="{ width: Math.min(100, Number(offer.usage_percentage) || 0) + '%' }"></div>
+                  </div>
+                  <span class="usage-text">{{ offer.total_uses || 0 }}<template v-if="offer.max_uses">/{{ offer.max_uses }}</template></span>
                 </div>
               </td>
-              <td class="col-status">
-                <div class="status-toggle-wrapper">
-                    <label class="table-switch">
-                        <input type="checkbox" :checked="offer.is_active" @change="toggleOfferStatus(offer)" hidden>
-                        <div class="ts-slider" :class="{ on: offer.is_active }">
-                            <div class="ts-knob"></div>
-                        </div>
-                    </label>
-                    <span :class="['status-badge-table', offer.status]">
-                    {{ formatStatus(offer.status) }}
-                    </span>
-                </div>
+              <td class="muted">{{ formatDate(offer.start_date) }}</td>
+              <td class="muted">{{ formatDate(offer.end_date) }}</td>
+              <td>
+                <span :class="['status-badge-table', offer.status]">{{ formatStatus(offer.status) }}</span>
               </td>
               <td class="col-actions">
                 <div class="actions-group">
-                   <button class="action-btn delete-btn" @click="confirmDelete(offer)" title="حذف">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
+                  <button class="action-btn delete-btn" type="button" data-testid="delete-code" @click="confirmDelete(offer)" :title="tx('حذف', 'Delete')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
                   </button>
-                  <button class="action-btn copy-btn-action" @click="duplicateOffer(offer)" title="تكرار">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-                  </button>
-                  <button class="action-btn view-btn" @click="openViewModal(offer)" title="عرض">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
-                  </button>
-                  <button class="action-btn edit-btn" @click="openEditModal(offer)" title="تعديل">
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+                  <button class="action-btn view-btn" type="button" data-testid="view-code" @click="openViewModal(offer)" :title="tx('عرض', 'View')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   </button>
                 </div>
               </td>
@@ -192,147 +93,107 @@
       </table>
     </div>
 
-    <!-- Pagination placeholder -->
-    <div class="pagination-footer" v-if="totalOffersCount > perPage">
-       <span class="results-text">عرض {{ (currentPage - 1) * perPage + 1 }} - {{ Math.min(currentPage * perPage, totalOffersCount) }} من {{ totalOffersCount }} كود خصم</span>
-       <div class="pagination-btns">
-         <button class="p-btn prev" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1">
-           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-         </button>
-         <button v-for="page in totalPages" :key="page" class="p-btn" :class="{ active: currentPage === page }" @click="goToPage(page)">
-           {{ page }}
-         </button>
-         <button class="p-btn next" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages">
-           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
-         </button>
-       </div>
-    </div>
-
-    <!-- Add/Edit Modal (Figma Inspired) -->
+    <!-- Add / View / Edit -->
     <div class="modal-overlay" v-if="showFormModal" @click.self="showFormModal = false">
-      <div class="modal-content form-content">
-        <button class="modal-close" @click="showFormModal = false">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <div class="modal-content form-content" role="dialog" aria-modal="true">
+        <button class="modal-close" type="button" @click="showFormModal = false" :aria-label="tx('إغلاق', 'Close')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
         <div class="form-header">
-            <div class="header-icon-main">
-               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
-            </div>
-            <h3 class="modal-title-main">{{ isView ? 'تفاصيل كود الخصم' : (isEdit ? 'تعديل كود الخصم' : 'إنشاء كود خصم جديد') }}</h3>
-            <p class="modal-subtitle-main">{{ isView ? 'عرض البيانات فقط — للتعديل استخدم زر التعديل' : 'أدخل تفاصيل كود الخصم الجديد' }}</p>
+          <h3 class="modal-title-main">{{ isView ? tx('تفاصيل كود الخصم', 'Discount code details') : (isEdit ? tx('تعديل كود الخصم', 'Edit discount code') : tx('إضافة كود خصم جديد', 'Add a new discount code')) }}</h3>
+          <p class="modal-subtitle-main">{{ isView ? tx('عرض البيانات فقط — للتعديل اضغط تعديل', 'Read-only view — press Edit to make changes') : (isEdit ? tx('عدّل تفاصيل الكود', 'Update the code details') : tx('أدخل تفاصيل الكود الجديد', 'Enter the new code details')) }}</p>
         </div>
 
         <form @submit.prevent="submitForm" class="offer-form">
           <fieldset class="form-fieldset" :disabled="isView">
-            <div class="form-section">
-                <label class="form-label">صورة كود الخصم <span class="req">*</span></label>
-                <div class="upload-wrapper" @click="fileInputRef?.click()">
-                    <input type="file" ref="fileInputRef" @change="handleImageUpload" accept="image/*" hidden />
-                    <div class="upload-box">
-                        <img v-if="imagePreview" :src="imagePreview" class="preview-image" alt="Preview" />
-                        <div v-else class="upload-placeholder">
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                            <p>انقر لرفع صورة كود الخصم</p>
-                            <span>الحد الأقصى 1 ميجابايت</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-section">
-                <div class="i18n-toggle" role="tablist" aria-label="Language">
-                  <button type="button" class="i18n-btn" :class="{ active: activeLang === 'en' }" @click="activeLang = 'en'">English</button>
-                  <button type="button" class="i18n-btn" :class="{ active: activeLang === 'ar' }" @click="activeLang = 'ar'">العربية</button>
-                </div>
-
-                <label class="form-label">اسم كود الخصم <span class="req">*</span></label>
-                <input v-show="activeLang === 'ar'" type="text" v-model="form.name_ar" class="form-control" placeholder="مثلاً: خصم الربيع الكبير" />
-                <input v-show="activeLang === 'en'" type="text" v-model="form.name_en" class="form-control" placeholder="Discount code name in English" />
-            </div>
-
-            <div class="form-section">
-                <label class="form-label">وصف كود الخصم (اختياري)</label>
-                <textarea v-show="activeLang === 'ar'" v-model="form.description_ar" class="form-control" placeholder="وصف قصير للعرض بالعربي..." rows="3"></textarea>
-                <textarea v-show="activeLang === 'en'" v-model="form.description_en" class="form-control" placeholder="Short discount code description in English..." rows="3"></textarea>
-            </div>
-
-            <div class="form-section">
-                <label class="form-label">نوع كود الخصم <span class="req">*</span></label>
-                <div class="type-cards-grid">
-                    <div class="type-card" :class="{ active: form.type === 'fixed' }" @click="form.type = 'fixed'">
-                        <div class="card-icon">💵</div>
-                        <span class="card-label">قيمة ثابتة</span>
-                        <p class="card-desc">خصم مبلغ محدد من الطلب</p>
-                    </div>
-                    <div class="type-card" :class="{ active: form.type === 'percentage' }" @click="form.type = 'percentage'">
-                        <div class="card-icon">％</div>
-                        <span class="card-label">نسبة مئوية</span>
-                        <p class="card-desc">خصم نسبة مئوية من الإجمالي</p>
-                    </div>
-                </div>
-            </div>
-
             <div class="form-grid">
-                <div class="form-group">
-                    <label class="form-label">قيمة الخصم {{ form.type === 'percentage' ? '%' : '(د.أ)' }} <span class="req">*</span></label>
-                    <input type="number" step="0.01" min="0.01" :max="form.type === 'percentage' ? 100 : undefined" v-model="form.value" class="form-control" placeholder="0.00" required />
+              <div class="form-group">
+                <label class="form-label" for="dc-code">{{ tx('الكود', 'Code') }}</label>
+                <input id="dc-code" type="text" v-model="form.code" class="form-control ltr-text code-input" autocomplete="off" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="dc-value">{{ tx('قيمة الخصم', 'Discount value') }}</label>
+                <div class="input-unit">
+                  <input id="dc-value" type="number" step="0.01" min="0.01" :max="form.type === 'percentage' ? 100 : undefined" v-model="form.value" class="form-control" required />
+                  <span class="unit">{{ form.type === 'percentage' ? '%' : cur }}</span>
                 </div>
+              </div>
 
-                <div class="form-group">
-                    <label class="form-label">كود الخصم <span class="req">*</span></label>
-                    <input type="text" v-model="form.code" class="form-control ltr-text" placeholder="SPRING20" required />
+              <div class="form-group">
+                <label class="form-label" for="dc-type">{{ tx('نوع الخصم', 'Discount type') }}</label>
+                <div class="select-wrapper">
+                  <select id="dc-type" v-model="form.type" class="form-control">
+                    <option value="percentage">{{ tx('نسبة مئوية', 'Percentage') }}</option>
+                    <option value="fixed">{{ tx('قيمة ثابتة', 'Fixed amount') }}</option>
+                  </select>
+                  <svg class="select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
-
-                <div class="form-group" v-if="form.type === 'percentage'">
-                    <label class="form-label">الحد الأقصى للخصم (د.أ)</label>
-                    <input type="number" step="0.01" min="0" v-model="form.max_discount" class="form-control" placeholder="مثلاً: 10.00" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="dc-min">{{ tx('الحد الأدنى للشراء', 'Minimum purchase') }}</label>
+                <div class="input-unit">
+                  <input id="dc-min" type="number" step="0.01" min="0" v-model="form.min_order_value" class="form-control" />
+                  <span class="unit">{{ cur }}</span>
                 </div>
+              </div>
 
-                <div class="form-group">
-                    <label class="form-label">الحد الأدنى للطلب</label>
-                    <input type="number" step="0.01" min="0" v-model="form.min_order_value" class="form-control" placeholder="0.00" />
+              <div class="form-group">
+                <label class="form-label" for="dc-maxd">{{ tx('الحد الأقصى للخصم', 'Maximum discount') }}</label>
+                <div class="input-unit">
+                  <input id="dc-maxd" type="number" step="0.01" min="0" v-model="form.max_discount" class="form-control" :disabled="form.type !== 'percentage'" :title="form.type !== 'percentage' ? tx('يُستخدم مع النسبة المئوية فقط', 'Only used with a percentage discount') : ''" />
+                  <span class="unit">{{ cur }}</span>
                 </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="dc-uses">{{ tx('الحد الأقصى للاستخدام', 'Maximum uses') }}</label>
+                <input id="dc-uses" type="number" step="1" min="1" inputmode="numeric" v-model="form.max_uses" class="form-control" />
+              </div>
 
-                <div class="form-group">
-                    <label class="form-label">الحد الأقصى للاستخدام (عدد المرات)</label>
-                    <input type="number" step="1" min="1" inputmode="numeric" v-model="form.max_uses" class="form-control" placeholder="مثلاً: 100" />
+              <div class="form-group">
+                <label class="form-label" for="dc-start">{{ tx('تاريخ البداية', 'Start date') }}</label>
+                <input id="dc-start" type="date" lang="en-GB" v-model="form.start_date" class="form-control date-control" required />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="dc-end">{{ tx('تاريخ الانتهاء', 'End date') }}</label>
+                <input id="dc-end" type="date" lang="en-GB" v-model="form.end_date" class="form-control date-control" />
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="dc-status">{{ tx('الحالة', 'Status') }}</label>
+                <div class="select-wrapper">
+                  <select id="dc-status" v-model="form.is_active" class="form-control">
+                    <option :value="true">{{ tx('نشط', 'Active') }}</option>
+                    <option :value="false">{{ tx('غير نشط', 'Inactive') }}</option>
+                  </select>
+                  <svg class="select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
-
+              </div>
             </div>
-
-            <div class="form-grid mt-1">
-                <div class="form-group">
-                    <label class="form-label">تاريخ البدء <span class="req">*</span></label>
-                    <input type="date" v-model="form.start_date" class="form-control" required />
-                </div>
-                <div class="form-group">
-                    <label class="form-label">تاريخ الانتهاء <span class="req" v-if="!form.no_end_date">*</span></label>
-                    <input type="date" v-model="form.end_date" class="form-control" :required="!form.no_end_date" :disabled="form.no_end_date" />
-                    <label class="chk-item mt-2">
-                        <input type="checkbox" v-model="form.no_end_date">
-                        <span>مفتوح (غير محدد المدة)</span>
-                    </label>
-                </div>
-            </div>
-
-            <div class="form-section-toggle">
-               <span class="toggle-lbl">تفعيل كود الخصم</span>
-               <label class="toggle-switch">
-                  <input type="checkbox" v-model="form.is_active" hidden>
-                  <div class="t-slider" :class="{ on: form.is_active }">
-                     <div class="t-knob"></div>
-                  </div>
-               </label>
-            </div>
-
           </fieldset>
-            <div class="form-footer-btns">
-                <button type="button" class="btn-cancel-form" @click="showFormModal = false">{{ isView ? 'إغلاق' : 'إلغاء' }}</button>
-                  <button v-if="isView" type="button" class="btn-submit-form" @click="openEditModal(viewedOffer)">تعديل كود الخصم</button>
-                <button v-else type="submit" class="btn-submit-form" :disabled="isSubmitting">
-                    {{ isSubmitting ? 'جاري الحفظ...' : (isEdit ? 'حفظ التعديلات' : 'إنشاء كود الخصم') }}
-                </button>
+
+          <div class="lang-row">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/></svg>
+              <div class="i18n-toggle" role="tablist" aria-label="Language" dir="ltr">
+                <button type="button" class="i18n-btn" :class="{ active: activeLang === 'en' }" @click="activeLang = 'en'">English</button>
+                <button type="button" class="i18n-btn" :class="{ active: activeLang === 'ar' }" @click="activeLang = 'ar'">العربية</button>
+              </div>
             </div>
+
+          <fieldset class="form-fieldset" :disabled="isView">
+            <div class="form-group">
+              <label class="form-label" for="dc-desc">{{ tx('وصف الكود', 'Code description') }}</label>
+              <input v-show="activeLang === 'ar'" id="dc-desc" type="text" v-model="form.description_ar" class="form-control" placeholder="مثال: خصم 25% على الطلبات فوق 100 ر.س" />
+              <input v-show="activeLang === 'en'" type="text" v-model="form.description_en" class="form-control" placeholder="e.g. 25% off on orders over 100 SAR" dir="ltr" />
+            </div>
+          </fieldset>
+
+          <div class="form-footer-btns">
+            <button type="button" class="btn-cancel-form" @click="showFormModal = false">{{ isView ? tx('إغلاق', 'Close') : tx('إلغاء', 'Cancel') }}</button>
+            <button v-if="isView" type="button" class="btn-submit-form" @click="openEditModal(viewedOffer)">{{ tx('تعديل', 'Edit') }}</button>
+            <button v-else type="submit" class="btn-submit-form" :disabled="isSubmitting">
+              {{ isSubmitting ? tx('جاري الحفظ...', 'Saving...') : (isEdit ? tx('حفظ التعديلات', 'Save changes') : tx('إضافة الكود', 'Add code')) }}
+            </button>
+          </div>
         </form>
       </div>
     </div>
@@ -340,30 +201,24 @@
     <!-- Delete Confirmation -->
     <div class="modal-overlay" v-if="deleteTarget" @click.self="cancelDelete">
       <div class="modal-content delete-modal" role="dialog" aria-modal="true" aria-labelledby="delete-offer-title">
-        <div class="delete-icon" aria-hidden="true">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.6 2.5 17a2 2 0 0 0 1.7 3h15.6a2 2 0 0 0 1.7-3L13.7 3.6a2 2 0 0 0-3.4 0Z"/>
-          </svg>
-        </div>
-        <div class="delete-copy">
-          <h2 id="delete-offer-title">تأكيد حذف كود الخصم</h2>
-          <p>هل أنت متأكد من حذف كود الخصم «{{ deleteTarget.code || deleteTarget.name_i18n?.ar || deleteTarget.name }}»؟ لا يمكن التراجع عن هذا الإجراء.</p>
-        </div>
-        <div class="modal-footer delete-footer">
-          <button class="btn-cancel-form" type="button" :disabled="isDeleting" @click="cancelDelete">إلغاء</button>
-          <button class="btn-delete-confirm" type="button" :disabled="isDeleting" @click="executeDelete">
+        <h2 id="delete-offer-title">{{ tx('تأكيد الحذف', 'Confirm deletion') }}</h2>
+        <p>{{ tx(`هل أنت متأكد من حذف كود الخصم "${deleteTarget.code}"؟ لا يمكن التراجع عن هذا الإجراء.`, `Are you sure you want to delete the discount code "${deleteTarget.code}"? This action cannot be undone.`) }}</p>
+        <div class="delete-footer">
+          <button class="btn-delete-confirm" type="button" data-testid="confirm-delete" :disabled="isDeleting" @click="executeDelete">
             <span v-if="isDeleting" class="delete-spinner" aria-hidden="true"></span>
-            {{ isDeleting ? 'جاري الحذف...' : 'حذف كود الخصم' }}
+            <svg v-else width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            {{ isDeleting ? tx('جاري الحذف...', 'Deleting...') : tx('حذف الكود', 'Delete code') }}
           </button>
+          <button class="btn-cancel-form" type="button" :disabled="isDeleting" @click="cancelDelete">{{ tx('إلغاء', 'Cancel') }}</button>
         </div>
       </div>
     </div>
 
     <!-- Alert Message -->
-    <div class="alert-toast" :class="[alertType, { show: showAlert }]">
+    <div class="alert-toast" data-testid="toast" :class="[alertType, { show: showAlert }]">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="alert-icon">
         <path v-if="alertType === 'success'" d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline v-if="alertType === 'success'" points="22 4 12 14.01 9 11.01"/>
-        <circle v-if="alertType === 'error'" cx="12" cy="12" r="10"/><line v-if="alertType === 'error'" x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+        <circle v-if="alertType === 'error'" cx="12" cy="12" r="10"/><line v-if="alertType === 'error'" x1="12" y1="8" x2="12" y2="12"/><line v-if="alertType === 'error'" x1="12" y1="16" x2="12.01" y2="16"/>
       </svg>
       {{ alertMessage }}
     </div>
@@ -371,24 +226,22 @@
 </template>
 
 <script setup>
+import { localizeMessage } from '../utils/uiMessages';
+import { useCurrencyLabel } from '../composables/useCurrencyLabel';
+import { apiErrorMessage } from '../utils/apiMessage';
 import { ref, computed, onMounted } from 'vue';
+import { useAdminText } from '../composables/useAdminText';
 import adminCatalogService from '../application/adminCatalogService';
 import { toDiscountPayload } from '../domain/catalog/adminCatalog';
+
+const { tx, locale } = useAdminText();
+const { cur } = useCurrencyLabel();
 
 // States
 const offers = ref([]);
 const loading = ref(false);
 const searchQuery = ref('');
-const typeFilter = ref('');
-const statusFilter = ref('');
-const startDateFilter = ref('');
-const endDateFilter = ref('');
 const isSubmitting = ref(false);
-
-// Pagination
-const currentPage = ref(1);
-const perPage = ref(15);
-const totalOffersCount = ref(0);
 
 // Modals
 const showFormModal = ref(false);
@@ -399,39 +252,23 @@ const currentId = ref(null);
 const deleteTarget = ref(null);
 const isDeleting = ref(false);
 
-const backendOrigin = (import.meta.env.VITE_API_BASE_URL || 'https://backend-tijara.be-kite.com/api')
-    .replace(/\/api\/?$/, '');
+// The form opens on the dashboard's language; Arabic tab sits on the right, English on the left.
 
-const normalizeOfferImage = (value) => {
-    if (!value) return value;
-    const raw = String(value);
-    if (raw.startsWith('/storage/')) return `${backendOrigin}/public${raw}`;
-    if (raw.includes('/storage/') && !raw.includes('/public/storage/')) {
-        return raw.replace('/storage/', '/public/storage/');
-    }
-    return raw;
-};
+const formLang = () => (locale.value === 'en' ? 'en' : 'ar');
 
-const activeLang = ref('ar');
+const activeLang = ref(formLang());
 
 const initialForm = {
     name_ar: '',
     name_en: '',
     description_ar: '',
     description_en: '',
-    image: null,
     type: 'percentage',
     value: '',
-    buy_x: '',
-    get_y: '',
     code: '',
     min_order_value: '',
     max_discount: '',
     max_uses: '',
-    max_per_customer: '',
-    applies_to: 'all',
-    selected_categories: [],
-    selected_products: [],
     start_date: '',
     end_date: '',
     no_end_date: false,
@@ -440,26 +277,13 @@ const initialForm = {
 };
 const form = ref({ ...initialForm });
 
-const fileInputRef = ref(null);
-const imagePreview = ref(null);
-const categoriesList = ref([]);
-const productsList = ref([]);
-const isFetchingSelection = ref(false);
-
 const showAlert = ref(false);
 const alertMessage = ref('');
 const alertType = ref('success');
 
-// Stat Computed
-const activeOffersCount = computed(() => offers.value.filter(o => o.status === 'active').length);
-const expiredOffersCount = computed(() => offers.value.filter(o => o.status === 'expired').length);
-const totalUsageCount = computed(() => offers.value.reduce((acc, o) => acc + (o.total_uses || 0), 0));
-
-// Pagination Computed
-const totalPages = computed(() => Math.ceil(totalOffersCount.value / perPage.value));
-
 // Utils
-const formatPrice = (p) => Number(p).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const formatPrice = (p) => Number(p).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
+const formatMoney = (p) => `${formatPrice(p)} ${cur.value}`;
 const formatDate = (d) => {
     if (!d) return '-';
     if (d.length <= 10) return d;
@@ -467,7 +291,7 @@ const formatDate = (d) => {
 };
 
 const triggerAlert = (msg, type = 'success') => {
-  alertMessage.value = msg;
+  alertMessage.value = localizeMessage(msg);
   alertType.value = type;
   showAlert.value = true;
   setTimeout(() => { showAlert.value = false; }, 3000);
@@ -475,30 +299,26 @@ const triggerAlert = (msg, type = 'success') => {
 
 const formatType = (t) => {
     const map = {
-        'percentage': 'نسبة مئوية',
-        'fixed': 'قيمة ثابتة',
-        'buy_x_get_y': 'اشتري X واحصل على Y',
-        'free_shipping': 'شحن مجاني'
+        'percentage': ['نسبة مئوية', 'Percentage'],
+        'fixed': ['قيمة ثابتة', 'Fixed amount']
     };
-    return map[t] || t;
+    return map[t] ? tx(...map[t]) : t;
 };
 
 const formatValue = (offer) => {
-    if (offer.type === 'percentage') return offer.value + '%';
-    if (offer.type === 'fixed') return formatPrice(offer.value) + ' د.أ';
-    if (offer.type === 'buy_x_get_y') return `اشتري ${offer.buy_x} خذ ${offer.get_y}`;
-    if (offer.type === 'free_shipping') return 'مجاني';
+    if (offer.type === 'percentage') return formatPrice(offer.value) + '%';
+    if (offer.type === 'fixed') return formatMoney(offer.value);
     return '-';
 };
 
 const formatStatus = (s) => {
     const map = {
-        'active': 'نشط',
-        'paused': 'متوقف',
-        'expired': 'منتهي',
-        'scheduled': 'مجدول'
+        'active': ['نشط', 'Active'],
+        'paused': ['متوقف', 'Paused'],
+        'expired': ['منتهي', 'Expired'],
+        'scheduled': ['مجدول', 'Scheduled']
     };
-    return map[s] || s;
+    return map[s] ? tx(...map[s]) : s;
 };
 
 const copyText = (txt) => {
@@ -506,22 +326,13 @@ const copyText = (txt) => {
   triggerAlert('تم نسخ الكود بنجاح');
 };
 
-// Pagination
-const goToPage = (page) => {
-  if (page < 1 || page > totalPages.value) return;
-  currentPage.value = page;
-  fetchOffers();
-};
-
 // Fetch Data
 const fetchOffers = async () => {
   loading.value = true;
   try {
     offers.value = await adminCatalogService.listDiscountCodes({ include_inactive: 1, show_all: 1 });
-    totalOffersCount.value = offers.value.length;
   } catch {
     offers.value = [];
-    totalOffersCount.value = 0;
     triggerAlert('فشل تحميل أكواد الخصم من الخادم', 'error');
   } finally {
     loading.value = false;
@@ -530,42 +341,15 @@ const fetchOffers = async () => {
 
 onMounted(() => {
   fetchOffers();
-  fetchSelectionData();
 });
-
-const fetchSelectionData = async () => {
-    isFetchingSelection.value = true;
-    try {
-        const [cats, pros] = await Promise.all([
-            adminCatalogService.listCategories(),
-            adminCatalogService.listProducts({ per_page: 1000 }),
-        ]);
-        categoriesList.value = cats;
-        productsList.value = pros.data || pros.items || [];
-    } catch (err) {
-        console.error('Failed to fetch selection data', err);
-    } finally {
-        isFetchingSelection.value = false;
-    }
-};
 
 // Filtering
 const filteredOffers = computed(() => {
   return offers.value.filter(o => {
-    const q = searchQuery.value.toLowerCase();
-    const nameAr = (o.name_i18n?.ar || o.name || '').toString().toLowerCase();
-    const nameEn = (o.name_i18n?.en || '').toString().toLowerCase();
-    const code = (o.code || '').toString().toLowerCase();
-    const nameMatch = nameAr.includes(q) || nameEn.includes(q) || code.includes(q);
-    const typeMatch = typeFilter.value === '' ? true : o.type === typeFilter.value;
-    const statusMatch = statusFilter.value === '' ? true : o.status === statusFilter.value;
-    
-    // Dates
-    let dateMatch = true;
-    if (startDateFilter.value) dateMatch = dateMatch && o.start_date >= startDateFilter.value;
-    if (endDateFilter.value) dateMatch = dateMatch && o.end_date <= endDateFilter.value;
-
-    return nameMatch && typeMatch && statusMatch && dateMatch;
+    const q = searchQuery.value.toLowerCase().trim();
+    if (!q) return true;
+    return [o.code, o.name_i18n?.ar, o.name_i18n?.en, o.name, o.description]
+      .some((field) => String(field ?? '').toLowerCase().includes(q));
   });
 });
 
@@ -575,36 +359,37 @@ const openAddModal = () => {
     isView.value = false;
     currentId.value = null;
     form.value = { ...initialForm };
-    imagePreview.value = null;
-    if (fileInputRef.value) fileInputRef.value.value = '';
-    activeLang.value = 'ar';
+    activeLang.value = formLang();
     showFormModal.value = true;
 };
 
-const openEditModal = (offer) => {
-    isEdit.value = true;
-    isView.value = false;
-    currentId.value = offer.id;
+// Maps a listed discount code back to the form shape the payload builder expects.
+const toForm = (offer) => {
     const nameObj = offer.name_i18n && typeof offer.name_i18n === 'object' ? offer.name_i18n : null;
     const descObj = offer.description_i18n && typeof offer.description_i18n === 'object' ? offer.description_i18n : null;
-    form.value = { 
+    return {
         ...initialForm,
         ...offer,
         name_ar: nameObj?.ar ?? offer.name ?? '',
         name_en: nameObj?.en ?? '',
         description_ar: descObj?.ar ?? offer.description ?? '',
         description_en: descObj?.en ?? '',
-        image: null,
         min_order_value: offer.minimum_amount ?? '',
+        max_discount: offer.max_discount ?? '',
         max_uses: offer.max_uses ?? '',
-        selected_products: offer.selected_products || [],
-        selected_categories: offer.selected_categories || [],
-        start_date: formatDate(offer.start_date),
+        // formatDate shows "-" for a missing date; the form needs an empty value.
+        start_date: offer.start_date ? formatDate(offer.start_date) : '',
         end_date: offer.end_date ? formatDate(offer.end_date) : '',
-        no_end_date: !offer.end_date
+        no_end_date: false,
     };
-    imagePreview.value = normalizeOfferImage(offer.image);
-    activeLang.value = 'ar';
+};
+
+const openEditModal = (offer) => {
+    isEdit.value = true;
+    isView.value = false;
+    currentId.value = offer.id;
+    form.value = toForm(offer);
+    activeLang.value = formLang();
     showFormModal.value = true;
 };
 
@@ -614,63 +399,13 @@ const openViewModal = (offer) => {
     isView.value = true;
 };
 
-const duplicateOffer = async (offer) => {
-    try {
-        const baseNameAr = offer.name_i18n?.ar || offer.name || '';
-        const baseNameEn = offer.name_i18n?.en || '';
-        const baseDescAr = offer.description_i18n?.ar || offer.description || '';
-        const baseDescEn = offer.description_i18n?.en || '';
-
-        const dup = {
-            ...offer,
-            name: JSON.stringify({ ar: `${baseNameAr} (نسخة)`, en: baseNameEn ? `${baseNameEn} (Copy)` : '' }),
-            description: JSON.stringify({ ar: baseDescAr, en: baseDescEn }),
-            code: offer.code ? offer.code + '2' : null,
-        };
-        delete dup.id;
-        delete dup.status;
-        delete dup.usage_percentage;
-        delete dup.total_uses;
-        delete dup.name_i18n;
-        delete dup.description_i18n;
-        
-        await adminCatalogService.createDiscountCode(toDiscountPayload({
-            ...offer,
-            name_ar: `${baseNameAr} (نسخة)`,
-            name_en: baseNameEn ? `${baseNameEn} (Copy)` : '',
-            description_ar: baseDescAr,
-            description_en: baseDescEn,
-            start_date: formatDate(offer.start_date),
-            end_date: offer.end_date ? formatDate(offer.end_date) : '',
-            no_end_date: !offer.end_date,
-            code: offer.code ? `${offer.code}-COPY` : '',
-        }));
-        triggerAlert('تم تكرار كود الخصم بنجاح');
-        fetchOffers();
-    } catch {
-        triggerAlert('فشل تكرار كود الخصم', 'error');
-    }
-};
-
-const handleImageUpload = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 1 * 1024 * 1024) {
-    triggerAlert('حجم الصورة يجب أن لا يتجاوز 1 ميجابايت', 'error');
-    e.target.value = '';
-    return;
-  }
-  form.value.image = file;
-  imagePreview.value = URL.createObjectURL(file);
-};
-
 const validateOfferForm = (f) => {
     const value = Number(f.value);
     if (!String(f.code || '').trim()) return 'كود الخصم مطلوب';
     if (!Number.isFinite(value) || value <= 0) return 'قيمة الخصم يجب أن تكون أكبر من صفر';
     if (f.type === 'percentage' && value > 100) return 'نسبة الخصم لا يمكن أن تتجاوز 100%';
     if (!f.start_date) return 'تاريخ البدء مطلوب';
-    if (!f.no_end_date && f.end_date && f.start_date && f.end_date < f.start_date) return 'تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء';
+    if (f.end_date && f.start_date && f.end_date < f.start_date) return 'تاريخ الانتهاء يجب أن يكون بعد تاريخ البدء';
     for (const [field, label] of [['min_order_value', 'الحد الأدنى للطلب'], ['max_discount', 'الحد الأقصى للخصم']]) {
         if (f[field] !== '' && f[field] != null && Number(f[field]) < 0) return `${label} لا يمكن أن يكون سالباً`;
     }
@@ -681,18 +416,6 @@ const validateOfferForm = (f) => {
 };
 
 const submitForm = async () => {
-    // Validate bilingual fields
-    if (!String(form.value.name_ar || '').trim()) {
-        activeLang.value = 'ar';
-        triggerAlert('اسم كود الخصم بالعربي مطلوب', 'error');
-        return;
-    }
-    if (!String(form.value.name_en || '').trim()) {
-        activeLang.value = 'en';
-        triggerAlert('اسم كود الخصم بالإنجليزية مطلوب', 'error');
-        return;
-    }
-
     const validationError = validateOfferForm(form.value);
     if (validationError) {
         triggerAlert(validationError, 'error');
@@ -701,7 +424,9 @@ const submitForm = async () => {
 
     isSubmitting.value = true;
     try {
-        const payload = toDiscountPayload(form.value);
+        // The design has no name field; a code without a name is listed under its code.
+        const code = String(form.value.code || '').trim();
+        const payload = toDiscountPayload({ ...form.value, name_ar: form.value.name_ar || code, name_en: form.value.name_en || code });
         if (isEdit.value) {
             await adminCatalogService.updateDiscountCode(currentId.value, payload);
             triggerAlert('تم تحديث كود الخصم بنجاح');
@@ -725,19 +450,6 @@ const submitForm = async () => {
     }
 };
 
-const toggleOfferStatus = async (offer) => {
-    try {
-        const newStatus = !offer.is_active;
-        await adminCatalogService.updateDiscountCode(offer.id, { is_active: newStatus });
-        offer.is_active = newStatus;
-        // Re-fetch or manually update status for badges (logic is in model, so re-fetching is safer or we can mimic)
-        fetchOffers(); 
-        triggerAlert(newStatus ? 'تم تفعيل كود الخصم' : 'تم تعطيل كود الخصم');
-    } catch {
-        triggerAlert('فشل تحديث الحالة', 'error');
-    }
-};
-
 const confirmDelete = (offer) => {
     deleteTarget.value = offer;
 };
@@ -754,11 +466,10 @@ const executeDelete = async () => {
     try {
         await adminCatalogService.deleteDiscountCode(target.id);
         offers.value = offers.value.filter((offer) => offer.id !== target.id);
-        totalOffersCount.value = Math.max(0, totalOffersCount.value - 1);
         deleteTarget.value = null;
         triggerAlert('تم حذف كود الخصم بنجاح');
     } catch (err) {
-        const message = err.response?.data?.message || 'فشل حذف كود الخصم. حاول مرة أخرى.';
+        const message = apiErrorMessage(err, 'فشل حذف كود الخصم. حاول مرة أخرى.');
         triggerAlert(message, 'error');
     } finally {
         isDeleting.value = false;
@@ -767,230 +478,120 @@ const executeDelete = async () => {
 </script>
 
 <style scoped>
-.discounts-page {
-  display: flex; flex-direction: column; gap: 1.5rem; direction: rtl; font-family: 'IBM Plex Sans Arabic', sans-serif; padding-bottom: 3rem;
-}
+.discounts-page { display: flex; flex-direction: column; gap: 1.25rem; direction: inherit; font-family: 'IBM Plex Sans Arabic', sans-serif; padding-bottom: 3rem; }
 
-/* Page Header */
-.page-header { display: flex; align-items: center; justify-content: space-between; }
-.title-with-icon { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.2rem; }
-.page-title { font-size: 1.4rem; font-weight: 800; color: #111827; margin: 0; }
-.tag-icon-wrapper { background: #f3f4f6; color: #000000; width: 34px; height: 34px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
-.page-subtitle { font-size: 0.85rem; color: #6b7280; margin: 0; }
+/* Header */
+.page-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+.header-titles { display: flex; align-items: center; gap: 0.9rem; }
+.tag-icon-wrapper { background: #f6e9ef; color: #660033; width: 48px; height: 48px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.page-title { font-size: 1.4rem; font-weight: 800; color: #111827; margin: 0; line-height: 1.3; }
+.page-subtitle { font-size: 0.82rem; color: #6b7280; margin: 0.1rem 0 0; }
+.add-btn { display: inline-flex; align-items: center; gap: 0.5rem; background: #660033; color: #fff; border: none; padding: 0.65rem 1.1rem; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: background 0.2s; white-space: nowrap; }
+.add-btn:hover { background: #4d0026; }
 
-.add-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: #000000;
-  color: #fff;
-  border: none;
-  padding: 0.65rem 1.1rem;
-  border-radius: 8px;
-  font-family: 'IBM Plex Sans Arabic', sans-serif;
-  font-weight: 600;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-.add-btn:hover { background: #262626; }
-
-/* Stats Cards */
-.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
-.stat-card {
-  background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1.25rem; display: flex; align-items: center; gap: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.02);
-}
-.stat-icon-wrapper {
-  width: 48px; height: 48px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
-}
-.stat-icon-wrapper.pink { background: #f3f4f6; color: #000000; }
-.stat-icon-wrapper.green { background: #ecfdf5; color: #10b981; }
-.stat-icon-wrapper.gray { background: #f9fafb; color: #6b7280; }
-.stat-icon-wrapper.blue { background: #eff6ff; color: #2563eb; }
-
-.stat-info { display: flex; flex-direction: column; gap: 0.2rem; }
-.stat-label { font-size: 0.75rem; font-weight: 600; color: #6b7280; }
-.stat-value { font-size: 1.4rem; font-weight: 800; color: #111827; margin: 0; }
-
-/* Filters */
-.filters-row { display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; }
-.search-box { flex: 1; min-width: 250px; position: relative; display: flex; align-items: center; }
-.search-icon { position: absolute; right: 1rem; color: #9ca3af; }
-.search-input { width: 100%; padding: 0.75rem 2.8rem 0.75rem 1rem; border: 1px solid #e5e7eb; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; outline: none; background: #fff; }
-.search-input:focus { border-color: #000000; }
-
-.filter-select { position: relative; display: flex; align-items: center; min-width: 150px; }
-.form-select { width: 100%; padding: 0.75rem 0.75rem 0.75rem 2.2rem; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; color: #374151; appearance: none; outline: none; }
-.filter-select .select-icon { position: absolute; left: 0.75rem; color: #9ca3af; pointer-events: none; }
-
-.date-input { border: 1px solid #e5e7eb; border-radius: 8px; padding: 0.65rem 0.75rem; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; color: #374151; outline: none; }
+/* Search */
+.search-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 1rem; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+.search-box { position: relative; display: flex; align-items: center; }
+.search-icon { position: absolute; right: 1rem; color: #6b7280; pointer-events: none; }
+.search-input { width: 100%; box-sizing: border-box; padding: 0.7rem 2.9rem 0.7rem 1rem; border: 1px solid #d1d5db; border-radius: 6px; font-family: inherit; font-size: 0.85rem; outline: none; background: #fff; }
+.search-input:focus { border-color: #660033; }
 
 /* Table */
-.table-container { background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; overflow-x: auto; margin-top: 0.5rem; }
+.table-container { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; overflow-x: auto; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
 .data-table { width: 100%; border-collapse: collapse; }
-.data-table th, .data-table td { padding: 1.1rem 0.75rem; border-bottom: 1px solid #f3f4f6; vertical-align: middle; text-align: center; }
-.data-table th { background: #f9fafb; font-size: 0.75rem; font-weight: 700; color: #6b7280; white-space: nowrap; }
-.data-table td { font-size: 0.82rem; color: #374151; }
-.data-row:hover td { background: #f3f4f6; }
+.data-table th, .data-table td { padding: 1.05rem 0.9rem; border-bottom: 1px solid #e5e7eb; vertical-align: middle; text-align: right; white-space: nowrap; }
+.data-table th { font-size: 0.75rem; font-weight: 700; color: #6b7280; background: #fff; }
+.data-table td { font-size: 0.82rem; color: #1f2937; }
+.data-table tbody tr:last-child td { border-bottom: 0; }
+.data-row:hover td { background: #fafafa; }
+.state-row td { text-align: center; color: #6b7280; padding: 2.5rem; }
+.col-code { padding-right: 1.25rem !important; }
+.col-actions { width: 1%; }
+.muted { color: #6b7280 !important; }
 
-.text-right { text-align: right !important; }
-.font-bold { font-weight: 700; }
-.text-pink { color: #000000; }
-.text-blue { color: #2563eb; }
-.ltr-text { direction: ltr; }
+.code-cell { display: flex; align-items: center; gap: 0.6rem; }
+.code-badge { background: #f3f4f6; padding: 0.25rem 0.6rem; border-radius: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.78rem; font-weight: 600; color: #111827; direction: ltr; }
+.copy-tiny { background: none; border: none; color: #6b7280; cursor: pointer; padding: 0.35rem; border-radius: 6px; display: flex; align-items: center; transition: 0.15s; }
+.copy-tiny:hover, .copy-tiny:focus-visible { background: #660033; color: #fff; outline: none; }
+.value-cell { font-weight: 700; color: #660033 !important; }
 
-.offer-name { font-weight: 700; color: #111827; }
+.usage { display: flex; align-items: center; gap: 0.6rem; justify-content: flex-start; }
+.usage-bar-bg { width: 64px; height: 6px; background: #e5e7eb; border-radius: 10px; overflow: hidden; direction: ltr; }
+.usage-bar-fill { height: 100%; background: #660033; border-radius: 10px; }
+.usage-text { font-size: 0.8rem; color: #374151; direction: ltr; }
 
-.code-badge { background: #f9fafb; border: 1px dashed #e5e7eb; padding: 0.25rem 0.5rem; border-radius: 6px; font-size: 0.75rem; font-weight: 700; color: #4b5563; display: inline-flex; align-items: center; gap: 0.4rem; direction: ltr; }
-.copy-tiny { background: none; border: none; color: #9ca3af; cursor: pointer; padding: 0; display: flex; align-items: center; }
-.copy-tiny:hover { color: #000000; }
-
-/* Usage Bar */
-.usage-text { font-size: 0.65rem; color: #6b7280; font-weight: 600; margin-bottom: 4px; }
-.usage-bar-bg { width: 80px; height: 6px; background: #f3f4f6; border-radius: 10px; margin: 0 auto; overflow: hidden; }
-.usage-bar-fill { height: 100%; background: #000000; border-radius: 10px; }
-
-/* Status Badges */
-.status-badge-table { display: inline-block; padding: 0.25rem 0.75rem; border-radius: 6px; font-size: 0.7rem; font-weight: 700; }
+.status-badge-table { display: inline-block; padding: 0.2rem 0.7rem; border-radius: 999px; font-size: 0.7rem; font-weight: 700; }
 .status-badge-table.active { background: #ecfdf5; color: #059669; }
-.status-badge-table.paused { background: #eff6ff; color: #2563eb; }
+.status-badge-table.paused { background: #f3f4f6; color: #4b5563; }
 .status-badge-table.expired { background: #fef2f2; color: #dc2626; }
-.status-badge-table.scheduled { background: #fff7ed; color: #ea580c; }
+.status-badge-table.scheduled { background: #eff6ff; color: #2563eb; }
 
-/* Table Toggle Switch */
-.status-toggle-wrapper { display: flex; align-items: center; gap: 0.75rem; justify-content: center; }
-.table-switch { cursor: pointer; display: flex; align-items: center; }
-.ts-slider { width: 34px; height: 18px; background: #e5e7eb; border-radius: 100px; position: relative; transition: 0.3s; }
-.ts-knob { width: 14px; height: 14px; background: #fff; border-radius: 50%; position: absolute; top: 2px; right: 2px; transition: 0.3s; }
-.ts-slider.on { background: #10b981; }
-.ts-slider.on .ts-knob { transform: translateX(-16px); }
+.actions-group { display: flex; align-items: center; gap: 0.5rem; }
+.action-btn { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: none; background: transparent; cursor: pointer; transition: 0.15s; }
+.view-btn { color: #660033; }
+.delete-btn { color: #dc2626; }
+.action-btn:hover { background: #f3f4f6; }
+.delete-btn:hover { background: #fef2f2; }
 
-/* Actions */
-.actions-group { display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
-.action-btn { width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 6px; border: none; cursor: pointer; transition: 0.2s; }
-.view-btn { background: #f3f4f6; color: #000000; }
-.edit-btn { background: #eff6ff; color: #2563eb; }
-.delete-btn { background: #fef2f2; color: #dc2626; }
-.delete-modal { max-width: 460px; padding: 28px; text-align: center; }
-.delete-icon { width: 58px; height: 58px; margin: 0 auto 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #dc2626; background: #fef2f2; }
-.delete-copy h2 { margin: 0 0 8px; color: #111827; font-size: 1.2rem; }
-.delete-copy p { margin: 0; color: #6b7280; line-height: 1.7; font-size: 0.92rem; }
-.delete-footer { padding: 24px 0 0; background: transparent; border-top: 0; }
-.delete-footer button { min-height: 44px; }
-.btn-delete-confirm { background: #dc2626; color: white; border: none; padding: 12px 20px; border-radius: 10px; font-weight: 700; cursor: pointer; flex: 1; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
-.btn-delete-confirm:hover { background: #b91c1c; }
+/* Modal */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; }
+.modal-content { background: #fff; border-radius: 12px; width: 100%; position: relative; box-shadow: 0 20px 60px rgba(0,0,0,0.25); }
+.modal-close { position: absolute; top: 1.4rem; left: 1.4rem; background: transparent; color: #6b7280; border: none; width: 28px; height: 28px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.modal-close:hover { background: #f3f4f6; }
+.form-content { max-width: 600px; max-height: 95vh; overflow-y: auto; }
+.form-header { padding: 1.5rem 1.5rem 1rem; text-align: right; }
+.modal-title-main { font-size: 1.15rem; font-weight: 800; color: #111827; margin: 0; }
+.modal-subtitle-main { font-size: 0.82rem; color: #6b7280; margin: 0.25rem 0 0; }
+.offer-form { padding: 0.5rem 1.5rem 1.5rem; }
+.form-fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.1rem; }
+.form-group { display: flex; flex-direction: column; min-width: 0; }
+.form-label { font-size: 0.8rem; font-weight: 600; color: #374151; margin-bottom: 0.4rem; text-align: right; }
+.form-control { width: 100%; box-sizing: border-box; height: 44px; padding: 0 0.9rem; border: 1px solid #e5e7eb; border-radius: 8px; font-family: inherit; font-size: 0.85rem; color: #111827; background: #f9fafb; outline: none; transition: border-color 0.15s, background 0.15s; }
+.form-control:focus { background: #fff; border-color: #660033; box-shadow: 0 0 0 3px rgba(102, 0, 51, 0.12); }
+.form-control:disabled { color: #9ca3af; background: #f3f4f6; cursor: not-allowed; }
+.form-fieldset:disabled .form-control { color: #111827; background: #f9fafb; cursor: default; }
+.ltr-text { direction: ltr; text-align: left; }
+.code-input { text-transform: uppercase; letter-spacing: 0.04em; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.date-control { direction: ltr; text-align: right; }
+
+.input-unit { position: relative; }
+.input-unit .form-control { padding-left: 3.2rem; }
+.input-unit .unit { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: #6b7280; pointer-events: none; }
+.select-wrapper { position: relative; }
+.select-wrapper select { appearance: none; padding-left: 2.2rem; cursor: pointer; }
+.select-icon { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: #6b7280; pointer-events: none; }
+
+.lang-row { display: flex; align-items: center; gap: 0.6rem; margin: 1.25rem 0 0.9rem; color: #6b7280; }
+.i18n-toggle { display: inline-flex; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; background: #fff; }
+.i18n-btn { border: none; background: transparent; padding: 0.35rem 0.85rem; font-weight: 700; font-size: 0.78rem; cursor: pointer; color: #6b7280; font-family: inherit; }
+.i18n-btn.active { background: #660033; color: #fff; }
+
+.form-footer-btns { margin-top: 1.5rem; display: flex; gap: 0.6rem; justify-content: flex-end; }
+.btn-cancel-form { padding: 0.65rem 1.1rem; border-radius: 8px; border: 1px solid #e5e7eb; background: #fff; color: #374151; font-family: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; }
+.btn-cancel-form:hover { background: #f9fafb; }
+.btn-submit-form { padding: 0.65rem 1.4rem; border-radius: 8px; border: none; background: #660033; color: #fff; font-family: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; transition: 0.2s; }
+.btn-submit-form:hover:not(:disabled) { background: #4d0026; }
+.btn-submit-form:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* Delete */
+.delete-modal { max-width: 500px; padding: 1.5rem; text-align: right; }
+.delete-modal h2 { margin: 0 0 0.5rem; color: #111827; font-size: 1.1rem; font-weight: 800; }
+.delete-modal p { margin: 0; color: #6b7280; line-height: 1.7; font-size: 0.88rem; }
+.delete-footer { display: flex; gap: 0.6rem; margin-top: 1.25rem; justify-content: flex-start; }
+.btn-delete-confirm { background: #ef4444; color: #fff; border: none; padding: 0.65rem 1.1rem; border-radius: 8px; font-family: inherit; font-weight: 700; font-size: 0.85rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.5rem; }
+.btn-delete-confirm:hover { background: #dc2626; }
 .btn-delete-confirm:disabled, .btn-cancel-form:disabled { opacity: 0.6; cursor: not-allowed; }
-.delete-spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.45); border-top-color: white; border-radius: 50%; animation: delete-spin 0.7s linear infinite; }
+.delete-spinner { width: 15px; height: 15px; border: 2px solid rgba(255,255,255,0.45); border-top-color: #fff; border-radius: 50%; animation: delete-spin 0.7s linear infinite; }
 @keyframes delete-spin { to { transform: rotate(360deg); } }
-.copy-btn-action { background: #f9fafb; color: #6b7280; }
-.action-btn:hover { opacity: 0.8; transform: translateY(-1px); }
-
-/* Pagination */
-.pagination-footer { display: flex; align-items: center; justify-content: space-between; padding: 1rem 0; }
-.results-text { font-size: 0.75rem; color: #6b7280; }
-.pagination-btns { display: flex; align-items: center; gap: 0.5rem; }
-.p-btn { width: 32px; height: 32px; border: 1px solid #e5e7eb; background: #fff; border-radius: 6px; display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 0.8rem; font-weight: 600; color: #374151; }
-.p-btn.active { background: #000000; color: #fff; border-color: #000000; }
-.p-btn:disabled, .p-btn.disabled { opacity: 0.5; cursor: not-allowed; }
-
-/* FORM MODAL */
-.form-content { max-width: 650px; padding: 0; max-height: 95vh; overflow-y: auto; }
-.form-header { text-align: center; padding: 2rem 2rem 1.5rem 2rem; position: relative; }
-.header-icon-main { width: 50px; height: 50px; background: #f3f4f6; color: #000000; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
-.modal-title-main { font-size: 1.3rem; font-weight: 800; color: #111827; margin: 0; }
-.modal-subtitle-main { font-size: 0.85rem; color: #9ca3af; margin-top: 0.4rem; }
-
-.offer-form { padding: 0 2.5rem 2.5rem 2.5rem; }
-.i18n-toggle { display: inline-flex; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; margin: 0 auto 1.1rem; }
-.i18n-btn { border: none; background: transparent; padding: 0.4rem 0.9rem; font-weight: 800; font-size: 0.85rem; cursor: pointer; color: #6b7280; min-width: 96px; font-family: 'IBM Plex Sans Arabic', sans-serif; }
-.i18n-btn.active { background: #000000; color: #fff; }
-.form-section { margin-bottom: 1.5rem; }
-.form-label { display: block; font-size: 0.85rem; font-weight: 700; color: #374151; margin-bottom: 0.75rem; text-align: right; }
-.form-control { width: 100%; padding: 0.8rem 1rem; border: 1px solid #e5e7eb; border-radius: 10px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; transition: 0.2s; outline: none; background: #f9fafb; }
-.form-control:focus { background: #fff; border-color: #000000; box-shadow: 0 0 0 4px rgba(0,0,0, 0.08); }
-
-/* Type Cards */
-.upload-wrapper { width: 100%; border: 2px dashed #e5e7eb; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; transition: 0.2s; background: #f9fafb; margin-bottom: 1rem; }
-.upload-wrapper:hover { border-color: #000000; background: #fff; }
-.upload-box { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 120px; }
-.preview-image { max-width: 100%; max-height: 200px; border-radius: 8px; object-fit: contain; }
-.upload-placeholder { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; color: #6b7280; }
-.upload-placeholder svg { color: #9ca3af; margin-bottom: 0.25rem; }
-.upload-placeholder p { font-size: 0.9rem; font-weight: 700; margin: 0; color: #374151; }
-.upload-placeholder span { font-size: 0.75rem; color: #9ca3af; }
-
-.type-cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
-.type-card {
-  padding: 1rem 0.5rem; border: 1px solid #e5e7eb; border-radius: 12px; text-align: center; cursor: pointer; transition: all 0.2s; background: #fff;
-}
-.type-card:hover { border-color: #000000; background: #f3f4f6; }
-.type-card.active { border-color: #000000; background: #f3f4f6; box-shadow: 0 0 0 2px #000000 inset; }
-.card-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
-.card-label { display: block; font-size: 0.75rem; font-weight: 800; color: #111827; margin-bottom: 0.25rem; }
-.card-desc { font-size: 0.6rem; color: #9ca3af; margin: 0; line-height: 1.3; }
-
-/* Applies Cards */
-.applies-cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.apply-card {
-  display: flex; align-items: center; gap: 0.75rem; padding: 0.85rem 1rem; border: 1px solid #e5e7eb; border-radius: 10px; cursor: pointer; transition: 0.2s; background: #fff;
-}
-.apply-card span { font-size: 0.8rem; font-weight: 700; color: #374151; }
-.apply-icon { color: #9ca3af; }
-.apply-card:hover { border-color: #000000; background: #f3f4f6; }
-.apply-card.active { border-color: #000000; background: #f3f4f6; }
-.apply-card.active .apply-icon { color: #000000; }
-.apply-card.active span { color: #000000; }
-
-.selection-box-area { margin-top: 1rem; border: 1px solid #e5e7eb; border-radius: 12px; padding: 1rem; background: #fff; }
-.checkbox-list { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; max-height: 200px; overflow-y: auto; padding: 0.5rem; border: 1px solid #f3f4f6; border-radius: 8px; }
-.chk-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8rem; color: #374151; cursor: pointer; padding: 0.25rem 0; border-bottom: 1px solid #f9fafb; }
-.chk-item:hover { background: #f3f4f6; }
-.chk-item input { width: 16px; height: 16px; accent-color: #000000; }
-
-/* Form Grid */
-.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
-.mt-1 { margin-top: 1.5rem; }
-
-/* Toggle */
-.form-section-toggle { display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: #f9fafb; border-radius: 12px; margin-top: 1.5rem; }
-.toggle-lbl { font-size: 0.9rem; font-weight: 700; color: #111827; }
-.toggle-switch { cursor: pointer; }
-.t-slider { width: 50px; height: 26px; background: #e5e7eb; border-radius: 100px; position: relative; transition: 0.4s; }
-.t-knob { width: 20px; height: 20px; background: #fff; border-radius: 50%; position: absolute; top: 3px; right: 3px; transition: 0.4s; }
-.t-slider.on { background: #10b981; }
-.t-slider.on .t-knob { transform: translateX(-24px); }
-
-/* Footer Btns */
-.form-footer-btns { margin-top: 2rem; display: flex; gap: 1rem; }
-.btn-cancel-form { flex: 1; padding: 0.85rem; border-radius: 10px; border: 1px solid #e5e7eb; background: #fff; color: #6b7280; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; cursor: pointer; }
-.btn-submit-form { flex: 2; padding: 0.85rem; border-radius: 10px; border: none; background: #000000; color: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; cursor: pointer; transition: 0.2s; }
-.btn-submit-form:hover:not(:disabled) { background: #262626; }
-.btn-submit-form:disabled { opacity: 0.6; }
-
-/* Modals Shared */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1rem; backdrop-filter: blur(4px);
-}
-.modal-content {
-  background: #fff; border-radius: 20px; width: 100%; position: relative; box-shadow: 0 25px 70px rgba(0,0,0,0.25);
-}
-.modal-close { position: absolute; top: 1.5rem; left: 1.5rem; background: #f3f4f6; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
 
 /* Alerts */
-.alert-toast { position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 12px; background: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.75rem; transform: translateY(150%); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 2000; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 600; font-size: 0.9rem; }
-.alert-toast.show { transform: translateY(0); }
-.alert-toast.success { border-right: 4px solid #059669; color: #065f46; }
-.alert-toast.error { border-right: 4px solid #dc2626; color: #991b1b; }
 
-@media (max-width: 1024px) {
-  .stats-grid { grid-template-columns: repeat(2, 1fr); }
-}
 @media (max-width: 768px) {
-  .stats-grid { grid-template-columns: 1fr; }
-  .type-cards-grid { grid-template-columns: repeat(2, 1fr); }
-  .applies-cards-grid { grid-template-columns: 1fr; }
+  .page-header { flex-wrap: wrap; }
   .form-grid { grid-template-columns: 1fr; }
+  .form-footer-btns { justify-content: stretch; }
+  .form-footer-btns button { flex: 1; }
 }
-.form-fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
-.form-fieldset:disabled .form-control { background: #f9fafb; cursor: default; }
 </style>

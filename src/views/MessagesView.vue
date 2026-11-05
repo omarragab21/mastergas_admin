@@ -1,9 +1,18 @@
 <script setup>
+import { localizeMessage } from '../utils/uiMessages';
 import { ref, onMounted, computed } from 'vue';
-import api from '../config/axios';
+import { adminManagementService } from '../application/adminManagementService';
+import { useAdminText } from '../composables/useAdminText';
+import { sanitizeSpreadsheetCell } from '../utils/adminSecurity';
+import { contactTypeLabel, filterContacts, sortContacts } from '../domain/contacts/contactMessage';
+
+const { tx, locale } = useAdminText();
 
 // State
-const messages = ref([]);
+// Every message from the API; the table shows them through the search and status filter.
+const allMessages = ref([]);
+// Ids with a "mark as read" request in flight, so a double click sends one request.
+const markingIds = ref(new Set());
 const loading = ref(false);
 const searchQuery = ref('');
 const statusFilter = ref('');
@@ -11,16 +20,11 @@ const showViewModal = ref(false);
 const currentMessage = ref(null);
 
 // Fetch Messages
+// The API ignores search and seen filters, so the whole list is loaded once and filtered here.
 const fetchMessages = async () => {
     loading.value = true;
     try {
-        const response = await api.get('/dashboard/contact-messages', {
-            params: {
-                search: searchQuery.value,
-                status: statusFilter.value
-            }
-        });
-        messages.value = response.data.data;
+        allMessages.value = sortContacts(await adminManagementService.listContacts());
     } catch (error) {
         console.error('Failed to fetch messages', error);
         triggerAlert('فشل تحميل الرسائل', 'error');
@@ -31,27 +35,50 @@ const fetchMessages = async () => {
 
 onMounted(fetchMessages);
 
+const messages = computed(() => filterContacts(allMessages.value, { search: searchQuery.value, status: statusFilter.value }));
+
 // Actions
-const openViewModal = async (message) => {
-    currentMessage.value = message;
-    showViewModal.value = true;
-    
-    // Auto mark as read if it was unread
-    if (message.status === 'unread') {
-        try {
-            await api.patch(`/dashboard/contact-messages/${message.id}/read`);
-            message.status = 'read';
-            // Optional: update local list state or just keep the object update
-        } catch (error) {
-            console.error('Failed to mark as read', error);
+// PATCH /v1/contacts/{id}/seen. The row turns read only after the API confirms it.
+const markAsRead = async (message, { silent = false } = {}) => {
+    if (message.status === 'read' || markingIds.value.has(message.id)) return;
+    markingIds.value = new Set([...markingIds.value, message.id]);
+    try {
+        const saved = await adminManagementService.markContactSeen(message.id);
+        if (saved?.status !== 'read') throw new Error('The API did not mark the message as read');
+        message.status = 'read';
+        if (saved.updated_at) message.updated_at = saved.updated_at;
+        if (!silent) triggerAlert('تم تعيين الرسالة كمقروءة');
+    } catch (error) {
+        // A request cut off on our side may still have been saved: ask the API before reporting a failure.
+        if (!error.response) {
+            const current = await adminManagementService.getContact(message.id).catch(() => null);
+            if (current?.status === 'read') {
+                message.status = 'read';
+                if (!silent) triggerAlert('تم تعيين الرسالة كمقروءة');
+                return;
+            }
         }
+        triggerAlert(error.response?.status === 404
+            ? tx('الرسالة لم تعد موجودة', 'This message no longer exists')
+            : tx('تعذّر تعيين الرسالة كمقروءة، حاول مرة أخرى', 'Could not mark the message as read, please try again'), 'error');
+        if (error.response?.status === 404) fetchMessages();
+    } finally {
+        const next = new Set(markingIds.value);
+        next.delete(message.id);
+        markingIds.value = next;
     }
 };
 
+const openViewModal = (message) => {
+    currentMessage.value = message;
+    showViewModal.value = true;
+    markAsRead(message, { silent: true });
+};
+
 const confirmDelete = async (message) => {
-    if (confirm(`هل أنت متأكد من حذف رسالة "${message.name}"؟`)) {
+    if (confirm(tx(`هل أنت متأكد من حذف رسالة "${message.name}"؟`, `Are you sure you want to delete the message from "${message.name}"?`))) {
         try {
-            await api.delete(`/dashboard/contact-messages/${message.id}`);
+            await adminManagementService.deleteContact(message.id);
             triggerAlert('تم حذف الرسالة بنجاح');
             fetchMessages();
         } catch (error) {
@@ -60,27 +87,47 @@ const confirmDelete = async (message) => {
     }
 };
 
-const toggleReadStatus = async (message) => {
-    try {
-        const newStatus = message.status === 'read' ? 'unread' : 'read';
-        const endpoint = newStatus === 'read' ? 'read' : 'unread';
-        await api.patch(`/dashboard/contact-messages/${message.id}/${endpoint}`);
-        message.status = newStatus;
-        triggerAlert(newStatus === 'read' ? 'تم تعيين الرسالة كمقروءة' : 'تم تعيين الرسالة كغير مقروءة');
-    } catch (error) {
-        triggerAlert('فشل تحديث الحالة', 'error');
-    }
-};
 
-// Export to Excel (Mock)
+const escapeExcelCell = (value) => sanitizeSpreadsheetCell(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+
+// Excel-compatible workbook without adding a runtime dependency to the dashboard.
 const exportToExcel = () => {
-    triggerAlert('جاري تحضير ملف Excel...', 'success');
+    const headers = [tx('رقم الرسالة', 'Message ID'), tx('الاسم', 'Name'), tx('رقم الجوال', 'Phone'), tx('البريد الإلكتروني', 'Email'), tx('نوع الدعم', 'Support Type'), tx('الرسالة', 'Message'), tx('الحالة', 'Status'), tx('التاريخ', 'Date')];
+    const rows = messages.value.map((message) => [
+        message.id,
+        message.name,
+        message.phone,
+        message.email,
+        subjectLabel(message.subject),
+        message.message,
+        formatStatus(message.status),
+        message.created_at,
+    ]);
+    const table = [headers, ...rows].map((row) => (
+        `<tr>${row.map((cell) => `<td>${escapeExcelCell(cell)}</td>`).join('')}</tr>`
+    )).join('');
+    const workbook = `<html><head><meta charset="UTF-8"></head><body><table>${table}</table></body></html>`;
+    const blob = new Blob([`\ufeff${workbook}`], { type: 'application/vnd.ms-excel;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `customer-messages-${new Date().toISOString().slice(0, 10)}.xls`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    triggerAlert('تم تصدير رسائل العملاء إلى ملف Excel');
 };
 
 // Helpers
-const totalMessages = computed(() => messages.value.length);
-const unreadCount = computed(() => messages.value.filter(m => m.status === 'unread').length);
-const readCount = computed(() => messages.value.filter(m => m.status === 'read').length);
+const totalMessages = computed(() => allMessages.value.length);
+const unreadCount = computed(() => allMessages.value.filter(m => m.status === 'unread').length);
+const readCount = computed(() => allMessages.value.filter(m => m.status === 'read').length);
+const subjectLabel = (type) => contactTypeLabel(type, locale.value);
 
 const formatDate = (dateString) => {
     if (!dateString) return '-';
@@ -95,7 +142,7 @@ const formatDate = (dateString) => {
 };
 
 const formatStatus = (status) => {
-    return status === 'read' ? 'مقروءة' : 'غير مقروءة';
+    return status === 'read' ? tx('مقروءة', 'Read') : tx('غير مقروءة', 'Unread');
 };
 
 // Alert State
@@ -104,7 +151,7 @@ const alertMessage = ref('');
 const alertType = ref('success');
 
 const triggerAlert = (message, type = 'success') => {
-    alertMessage.value = message;
+    alertMessage.value = localizeMessage(message);
     alertType.value = type;
     showAlert.value = true;
     setTimeout(() => showAlert.value = false, 3000);
@@ -121,8 +168,8 @@ const triggerAlert = (message, type = 'success') => {
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
              </div>
              <div>
-                <h1>رسائل العملاء</h1>
-                <p>إدارة رسائل العملاء من نموذج الاتصال في الموقع</p>
+                <h1>{{ tx('رسائل العملاء', 'Customer Messages') }}</h1>
+                <p>{{ tx('إدارة رسائل العملاء من نموذج الاتصال في الموقع', 'Manage customer messages submitted through the website contact form') }}</p>
              </div>
           </div>
        </div>
@@ -130,7 +177,7 @@ const triggerAlert = (message, type = 'success') => {
        <div class="left-actions">
            <button class="export-btn" @click="exportToExcel">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-              تصدير Excel
+              {{ tx('تصدير Excel', 'Export Excel') }}
            </button>
        </div>
     </div>
@@ -141,21 +188,21 @@ const triggerAlert = (message, type = 'success') => {
           <div class="stat-icon total"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
           <div class="stat-info">
              <span class="stat-val">{{ totalMessages }}</span>
-             <span class="stat-label">إجمالي الرسائل</span>
+             <span class="stat-label">{{ tx('إجمالي الرسائل', 'Total Messages') }}</span>
           </div>
        </div>
        <div class="stat-card">
           <div class="stat-icon unread"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg></div>
           <div class="stat-info">
              <span class="stat-val">{{ unreadCount }}</span>
-             <span class="stat-label">غير مقروءة</span>
+             <span class="stat-label">{{ tx('غير مقروءة', 'Unread') }}</span>
           </div>
        </div>
        <div class="stat-card">
           <div class="stat-icon read"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div>
           <div class="stat-info">
              <span class="stat-val">{{ readCount }}</span>
-             <span class="stat-label">مقروءة</span>
+             <span class="stat-label">{{ tx('مقروءة', 'Read') }}</span>
           </div>
        </div>
     </div>
@@ -166,14 +213,14 @@ const triggerAlert = (message, type = 'success') => {
            <div class="search-group flex-1">
               <div class="search-input-wrapper">
                  <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                 <input type="text" v-model="searchQuery" @input="fetchMessages" placeholder="البحث في الرسائل..." class="search-input" />
+                 <input type="text" v-model="searchQuery" data-testid="messages-search" :placeholder="tx('البحث في الرسائل...', 'Search messages...')" class="search-input" />
               </div>
            </div>
           <div class="filter-group">
-             <select v-model="statusFilter" @change="fetchMessages" class="filter-select">
-                <option value="">جميع الرسائل</option>
-                <option value="unread">غير مقروءة</option>
-                <option value="read">مقروءة</option>
+             <select v-model="statusFilter" class="filter-select" data-testid="messages-filter">
+                <option value="">{{ tx('جميع الرسائل', 'All Messages') }}</option>
+                <option value="unread">{{ tx('غير مقروءة', 'Unread') }}</option>
+                <option value="read">{{ tx('مقروءة', 'Read') }}</option>
              </select>
           </div>
        </div>
@@ -184,19 +231,19 @@ const triggerAlert = (message, type = 'success') => {
        <table class="data-table">
           <thead>
              <tr>
-                <th class="col-name text-right">الاسم</th>
-                <th class="col-phone">رقم الجوال</th>
-                <th class="col-email">البريد الإلكتروني</th>
-                <th class="col-subject">الموضوع</th>
-                <th class="col-status">الحالة</th>
-                <th class="col-actions">الإجراءات</th>
+                <th class="col-name text-right">{{ tx('الاسم', 'Name') }}</th>
+                <th class="col-phone">{{ tx('رقم الجوال', 'Phone') }}</th>
+                <th class="col-email">{{ tx('البريد الإلكتروني', 'Email') }}</th>
+                <th class="col-subject">{{ tx('الموضوع', 'Subject') }}</th>
+                <th class="col-status">{{ tx('الحالة', 'Status') }}</th>
+                <th class="col-actions">{{ tx('الإجراءات', 'Actions') }}</th>
              </tr>
           </thead>
           <tbody>
-             <tr v-if="loading" class="state-row"><td colspan="6">جاري التحميل...</td></tr>
-             <tr v-else-if="messages.length === 0" class="state-row"><td colspan="6">لا توجد رسائل حالياً</td></tr>
+             <tr v-if="loading" class="state-row"><td colspan="6">{{ tx('جاري التحميل...', 'Loading...') }}</td></tr>
+             <tr v-else-if="messages.length === 0" class="state-row"><td colspan="6">{{ allMessages.length ? tx('لا توجد رسائل مطابقة للبحث', 'No messages match your search') : tx('لا توجد رسائل حالياً', 'No messages yet') }}</td></tr>
              <template v-else>
-                <tr v-for="msg in messages" :key="msg.id" class="data-row" :class="{ 'is-unread': msg.status === 'unread' }">
+                <tr v-for="msg in messages" :key="msg.id" class="data-row" :class="{ 'is-unread': msg.status === 'unread' }" :data-id="msg.id" :data-status="msg.status">
                    <td class="col-name text-right">
                       <div class="name-cell">
                          <span class="unread-dot" v-if="msg.status === 'unread'"></span>
@@ -205,18 +252,25 @@ const triggerAlert = (message, type = 'success') => {
                    </td>
                    <td class="col-phone ltr-text">{{ msg.phone || '-' }}</td>
                    <td class="col-email ltr-text">{{ msg.email || '-' }}</td>
-                   <td class="col-subject">{{ msg.subject || '-' }}</td>
+                   <td class="col-subject">{{ subjectLabel(msg.subject) || '-' }}</td>
                    <td class="col-status">
-                      <span :class="['status-badge-table', msg.status]" @click="toggleReadStatus(msg)" style="cursor: pointer;">
-                         {{ formatStatus(msg.status) }}
-                      </span>
+                      <button
+                         v-if="msg.status === 'unread'"
+                         type="button"
+                         class="status-badge-table unread is-action"
+                         :disabled="markingIds.has(msg.id)"
+                         :title="tx('اضغط لتعيينها كمقروءة', 'Click to mark as read')"
+                         data-testid="mark-read"
+                         @click="markAsRead(msg)"
+                      >{{ markingIds.has(msg.id) ? tx('جاري الحفظ...', 'Saving...') : formatStatus(msg.status) }}</button>
+                      <span v-else class="status-badge-table read" data-testid="status-read">{{ formatStatus(msg.status) }}</span>
                    </td>
                    <td class="col-actions">
                       <div class="actions-group">
-                         <button class="action-btn view" title="عرض التفاصيل" @click="openViewModal(msg)">
+                         <button class="action-btn view" :title="tx('عرض التفاصيل', 'View Details')" @click="openViewModal(msg)">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                          </button>
-                         <button class="action-btn delete" title="حذف" @click="confirmDelete(msg)">
+                         <button class="action-btn delete" :title="tx('حذف', 'Delete')" @click="confirmDelete(msg)">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
                          </button>
                       </div>
@@ -232,60 +286,60 @@ const triggerAlert = (message, type = 'success') => {
        <div class="modal-content info-modal fade-in">
           <div class="modal-header">
              <button class="close-modal-btn" @click="showViewModal = false">×</button>
-             <h2>تفاصيل الرسالة</h2>
-             <p>معلومات مرسلة من نموذج الاتصال</p>
+             <h2>{{ tx('تفاصيل الرسالة', 'Message Details') }}</h2>
+             <p>{{ tx('معلومات مرسلة من نموذج الاتصال', 'Information submitted through the contact form') }}</p>
           </div>
           
           <div class="modal-body">
              <div class="msg-detail-grid">
                 <div class="detail-item">
-                   <label>الاسم:</label>
+                   <label>{{ tx('الاسم', 'Name') }}:</label>
                    <span>{{ currentMessage.name }}</span>
                 </div>
                 <div class="detail-item">
-                   <label>رقم الجوال:</label>
+                   <label>{{ tx('رقم الجوال', 'Phone') }}:</label>
                    <span class="ltr-text" style="text-align: right !important;">{{ currentMessage.phone || '-' }}</span>
                 </div>
                 <div class="detail-item">
-                   <label>البريد الإلكتروني:</label>
+                   <label>{{ tx('البريد الإلكتروني', 'Email') }}:</label>
                    <span>{{ currentMessage.email || '-' }}</span>
                 </div>
                 <div class="detail-item">
-                   <label>التاريخ والوقت:</label>
+                   <label>{{ tx('التاريخ والوقت', 'Date and Time') }}:</label>
                    <span>{{ formatDate(currentMessage.created_at) }}</span>
                 </div>
                 <div class="detail-item full-width mt-4">
-                   <label>الموضوع:</label>
-                   <span class="subject-text">{{ currentMessage.subject || '-' }}</span>
+                   <label>{{ tx('الموضوع', 'Subject') }}:</label>
+                   <span class="subject-text">{{ subjectLabel(currentMessage.subject) || '-' }}</span>
                 </div>
                 <div class="detail-item full-width">
-                   <label>الرسالة:</label>
+                   <label>{{ tx('الرسالة', 'Message') }}:</label>
                    <div class="message-content-box">
                       {{ currentMessage.message }}
                    </div>
                 </div>
                 <div class="detail-item mt-4">
-                   <label>الحالة:</label>
-                   <span :class="['status-badge-table', currentMessage.status]">{{ formatStatus(currentMessage.status) }}</span>
+                   <label>{{ tx('الحالة', 'Status') }}:</label>
+                   <span :class="['status-badge-table', currentMessage.status]" data-testid="modal-status">{{ markingIds.has(currentMessage.id) ? tx('جاري الحفظ...', 'Saving...') : formatStatus(currentMessage.status) }}</span>
                 </div>
              </div>
           </div>
           
           <div class="modal-footer">
-             <button class="btn-close-alt" @click="showViewModal = false">إغلاق</button>
+             <button class="btn-close-alt" @click="showViewModal = false">{{ tx('إغلاق', 'Close') }}</button>
           </div>
        </div>
     </div>
 
     <!-- Alert Toast -->
-    <div v-if="showAlert" :class="['alert-toast', alertType]">
+    <div v-if="showAlert" :class="['alert-toast', alertType, 'show']" role="status" data-testid="toast">
        {{ alertMessage }}
     </div>
   </div>
 </template>
 
 <style scoped>
-.messages-page { font-family: 'IBM Plex Sans Arabic', sans-serif; direction: rtl; }
+.messages-page { font-family: 'IBM Plex Sans Arabic', sans-serif; direction: inherit; }
 
 /* Header Section */
 .header-section { display: flex; justify-content: space-between; align-items: center; }
@@ -295,7 +349,7 @@ const triggerAlert = (message, type = 'success') => {
 .page-title-area h1 { font-size: 1.5rem; font-weight: 800; color: #1f2937; margin: 0; }
 .page-title-area p { color: #6b7280; font-size: 0.875rem; margin: 0; }
 .title-with-icon { display: flex; align-items: center; gap: 12px; }
-.icon-box { background: #f3f4f6; color: #000000; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+.icon-box { background: #f3f4f6; color: #660033; width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 
 /* Stats Bar */
 .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
@@ -314,7 +368,7 @@ const triggerAlert = (message, type = 'success') => {
 .search-input-wrapper { position: relative; width: 100%; }
 .search-icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: #9ca3af; }
 .search-input { width: 100%; padding: 10px 44px 10px 12px; border: 1px solid #e5e7eb; border-radius: 8px; outline: none; transition: 0.3s; font-family: inherit; font-size: 0.875rem; background: #fff; }
-.search-input:focus { border-color: #000000; box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
+.search-input:focus { border-color: #660033; box-shadow: 0 0 0 3px rgba(102, 0, 51, 0.1); }
 .flex-1 { flex: 1; }
 
 /* Table Section */
@@ -328,25 +382,27 @@ const triggerAlert = (message, type = 'success') => {
 .data-row.is-unread { background: #f3f4f6; }
 
 .name-cell { display: flex; align-items: center; gap: 8px; justify-content: flex-start; }
-.unread-dot { width: 8px; height: 8px; border-radius: 50%; background: #000000; flex-shrink: 0; }
+.unread-dot { width: 8px; height: 8px; border-radius: 50%; background: #660033; flex-shrink: 0; }
 .sender-name { font-weight: 700; color: #111827; }
 
 .ltr-text { direction: ltr; text-align: left; }
 
 .status-badge-table { padding: 4px 12px; border-radius: 100px; font-size: 0.75rem; font-weight: 700; display: inline-block; transition: 0.2s; }
-.status-badge-table.unread { background: #f3f4f6; color: #000000; border: 1px solid rgba(0,0,0, 0.2); }
+.status-badge-table.unread { background: #f3f4f6; color: #660033; border: 1px solid rgba(0, 0, 0, 0.2); }
 .status-badge-table.read { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
-.status-badge-table:hover { opacity: 0.8; }
+.status-badge-table.is-action { cursor: pointer; font-family: inherit; }
+.status-badge-table.is-action:hover:not(:disabled) { opacity: 0.8; }
+.status-badge-table.is-action:disabled { cursor: progress; opacity: 0.6; }
 
 .actions-group { display: flex; gap: 8px; justify-content: center; }
 .action-btn { width: 32px; height: 32px; border-radius: 6px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-.action-btn.view { background: #f3f4f6; color: #000000; }
+.action-btn.view { background: #f3f4f6; color: #660033; }
 .action-btn.view:hover { background: #e5e7eb; }
 .action-btn.delete { background: #fef2f2; color: #ef4444; }
 .action-btn.delete:hover { background: #fee2e2; }
 
 /* Modal */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
 .modal-content { background: white; border-radius: 20px; overflow: hidden; width: 100%; max-width: 550px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); }
 .fade-in { animation: fadeIn 0.3s ease-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -370,10 +426,6 @@ const triggerAlert = (message, type = 'success') => {
 .btn-close-alt:hover { background: #111827; }
 
 /* Alert */
-.alert-toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 10px; color: white; font-weight: 700; z-index: 2000; box-shadow: 0 10px 15px rgba(0,0,0,0.1); animation: toastIn 0.3s ease-out; }
-@keyframes toastIn { from { top: -50px; opacity: 0; } to { top: 24px; opacity: 1; } }
-.alert-toast.success { background: #10b981; }
-.alert-toast.error { background: #ef4444; }
 
 /* Utils */
 .mb-6 { margin-bottom: 24px !important; }

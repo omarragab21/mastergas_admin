@@ -1,3 +1,6 @@
+import { sanitizeAssetUrl } from '../utils/adminSecurity.js';
+import { sanitizeUrl } from '../utils/sanitize.js';
+
 const firstText = (...values) => values.find((value) => value !== undefined && value !== null && String(value).trim() !== '') ?? '';
 
 const localized = (translations, field, fallback = '') => ({
@@ -7,7 +10,7 @@ const localized = (translations, field, fallback = '') => ({
 
 const imageUrl = (value) => {
   if (!value) return '';
-  if (typeof value === 'string') return value.replace(/^(https?:\/\/[^/]+)\/storage\//i, '$1/public/storage/');
+  if (typeof value === 'string') return sanitizeAssetUrl(value, '');
   return imageUrl(value.image_url || value.url || value.image || value.path);
 };
 
@@ -30,22 +33,17 @@ export const toAdminUser = (raw = {}) => {
   };
 };
 
+// Same fields the API validates on POST/PUT /v1/users (name, phone_number, email, role, status, password).
 export const toAdminUserPayload = (form = {}) => ({
-  name_en: String(form.name_en || form.name || '').trim(),
-  name_ar: String(form.name_ar || form.name || '').trim(),
+  name: String(form.name || form.name_en || form.name_ar || '').trim(),
   email: String(form.email || '').trim(),
-  role: form.role || 'admin',
+  phone_number: String(form.phone ?? form.phone_number ?? '').trim(),
+  role: form.role || 'super_admin',
   status: form.is_active === false ? 0 : 1,
   ...(form.password ? { password: form.password } : {}),
 });
 
-export const toAdminUserUpdatePayload = (form = {}) => ({
-  name: String(form.name || '').trim(),
-  email: String(form.email || '').trim(),
-  role: form.role || 'admin',
-  ...(form.password ? { password: form.password } : {}),
-  ...(form.is_active !== undefined ? { status: form.is_active === false ? 0 : 1 } : {}),
-});
+export const toAdminUserUpdatePayload = toAdminUserPayload;
 
 export const toAdminSlider = (raw = {}) => {
   raw = raw || {};
@@ -61,7 +59,7 @@ export const toAdminSlider = (raw = {}) => {
     title: firstText(raw.title, titleI18n.ar, titleI18n.en),
     description: firstText(raw.description, descriptionI18n.ar, descriptionI18n.en),
     image: imageUrl(raw.image_url || raw.image),
-    link: raw.link || '',
+    link: raw.link ? sanitizeUrl(raw.link, '') : '',
     status,
     order: Number(raw.order ?? raw.sort_order ?? 0),
   };
@@ -72,7 +70,7 @@ export const toAdminSliderPayload = (form = {}) => ({
   title_ar: String(form.title_ar || '').trim(),
   description_en: String(form.description_en || '').trim(),
   description_ar: String(form.description_ar || '').trim(),
-  link: String(form.link || '').trim(),
+  link: form.link ? sanitizeUrl(String(form.link).trim(), '') : '',
   status: form.status === 'active' || form.status === true ? 1 : 0,
   order: Number(form.order) || 0,
 });

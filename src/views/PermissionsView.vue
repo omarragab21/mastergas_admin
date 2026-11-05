@@ -1,11 +1,18 @@
 <script setup>
+import { localizeMessage } from '../utils/uiMessages';
+import { apiErrorMessage } from '../utils/apiMessage';
 import { ref, onMounted, computed } from 'vue';
 import api from '../config/axios';
+import adminManagementService from '../application/adminManagementService';
+import { useAdminText } from '../composables/useAdminText';
+
+const { tx } = useAdminText();
 
 // State
 const permissions = ref([]);
 const admins = ref([]); // For assigning users
 const loading = ref(false);
+const loadError = ref(false);
 const searchQuery = ref('');
 const showFormModal = ref(false);
 const isEditing = ref(false);
@@ -22,15 +29,18 @@ const form = ref({
 // Fetch Data
 const fetchData = async () => {
     loading.value = true;
+    loadError.value = false;
     try {
-        const [permRes, adminRes] = await Promise.all([
+        // Admins come from the Tijara users API; the permissions list is not on the API yet and shows its own error.
+        const [permRes, adminList] = await Promise.all([
             api.get('/dashboard/permissions', { params: { search: searchQuery.value } }),
-            api.get('/dashboard/admins')
+            adminManagementService.listAdmins()
         ]);
         permissions.value = permRes.data.data;
-        admins.value = adminRes.data.data;
-    } catch (error) {
-        triggerAlert('فشل تحميل بيانات الصلاحيات', 'error');
+        admins.value = adminList;
+    } catch {
+        permissions.value = [];
+        loadError.value = true;
     } finally {
         loading.value = false;
     }
@@ -75,7 +85,7 @@ const submitForm = async () => {
         showFormModal.value = false;
         fetchData();
     } catch (error) {
-        const msg = error.response?.data?.message || 'فشل حفظ البيانات';
+        const msg = apiErrorMessage(error, 'فشل حفظ البيانات');
         triggerAlert(msg, 'error');
     } finally {
         isSubmitting.value = false;
@@ -126,7 +136,7 @@ const alertMessage = ref('');
 const alertType = ref('success');
 
 const triggerAlert = (message, type = 'success') => {
-    alertMessage.value = message;
+    alertMessage.value = localizeMessage(message);
     alertType.value = type;
     showAlert.value = true;
     setTimeout(() => showAlert.value = false, 3000);
@@ -137,9 +147,9 @@ const triggerAlert = (message, type = 'success') => {
   <div class="permissions-page p-6">
     <!-- Breadcrumbs -->
     <div class="breadcrumb mb-4">
-       <span>لوحة التحكم الرئيسية</span>
+       <span>{{ tx('لوحة التحكم الرئيسية', 'Dashboard') }}</span>
        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-       <span class="active">إدارة الصلاحيات</span>
+       <span class="active">{{ tx('إدارة الصلاحيات', 'Permissions') }}</span>
     </div>
 
     <!-- Header -->
@@ -150,15 +160,15 @@ const triggerAlert = (message, type = 'success') => {
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                 </div>
                 <div>
-                    <h1>إدارة الصلاحيات</h1>
-                    <p>إنشاء وإدارة صلاحيات النظام وتعيينها للمستخدمين</p>
+                    <h1>{{ tx('إدارة الصلاحيات', 'Permissions') }}</h1>
+                    <p>{{ tx('إنشاء وإدارة صلاحيات النظام وتعيينها للمستخدمين', 'Create and manage system permissions assigned to users') }}</p>
                 </div>
             </div>
         </div>
         <div class="left-actions">
             <button class="add-btn" @click="openAddModal">
                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-               إنشاء صلاحية جديدة
+               {{ tx('إنشاء صلاحية جديدة', 'Create Permission') }}
             </button>
         </div>
     </div>
@@ -167,19 +177,19 @@ const triggerAlert = (message, type = 'success') => {
     <div class="stats-row mb-6">
        <div class="stat-card">
           <span class="stat-val">{{ totalPermissions }}</span>
-          <span class="stat-label">إجمالي الصلاحيات</span>
+          <span class="stat-label">{{ tx('إجمالي الصلاحيات', 'Total Permissions') }}</span>
        </div>
        <div class="stat-card">
           <span class="stat-val">{{ activeCount }}</span>
-          <span class="stat-label">مفعلة</span>
+          <span class="stat-label">{{ tx('مفعلة', 'Active') }}</span>
        </div>
        <div class="stat-card">
           <span class="stat-val">{{ inactiveCount }}</span>
-          <span class="stat-label">غير مفعلة</span>
+          <span class="stat-label">{{ tx('غير مفعلة', 'Inactive') }}</span>
        </div>
        <div class="stat-card">
           <span class="stat-val">{{ totalAssignedUsers }}</span>
-          <span class="stat-label">إجمالي المستخدمين</span>
+          <span class="stat-label">{{ tx('إجمالي المستخدمين', 'Total Users') }}</span>
        </div>
     </div>
 
@@ -188,11 +198,11 @@ const triggerAlert = (message, type = 'success') => {
        <div class="flex-row gap-4">
           <div class="search-wrapper flex-1">
              <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-             <input type="text" v-model="searchQuery" @input="fetchData" placeholder="البحث باسم الصلاحية أو المستخدم..." class="search-input" />
+             <input type="text" v-model="searchQuery" @input="fetchData" :placeholder="tx('البحث باسم الصلاحية أو المستخدم...', 'Search permission or user...')" class="search-input" />
           </div>
           <div class="select-wrapper">
              <select class="form-select">
-                <option>جميع المستخدمين</option>
+                <option>{{ tx('جميع المستخدمين', 'All Users') }}</option>
              </select>
           </div>
        </div>
@@ -203,23 +213,24 @@ const triggerAlert = (message, type = 'success') => {
       <table class="data-table">
         <thead>
           <tr>
-            <th class="col-id">رقم الصلاحية</th>
-            <th class="col-name text-right">اسم الصلاحية</th>
-            <th class="col-desc">الوصف</th>
-            <th class="col-users">المستخدمون المخصص لهم</th>
-            <th class="col-status">الحالة</th>
-            <th class="col-actions">الإجراءات</th>
+            <th class="col-id">{{ tx('رقم الصلاحية', 'Permission ID') }}</th>
+            <th class="col-name text-right">{{ tx('اسم الصلاحية', 'Permission Name') }}</th>
+            <th class="col-desc">{{ tx('الوصف', 'Description') }}</th>
+            <th class="col-users">{{ tx('المستخدمون المخصص لهم', 'Assigned Users') }}</th>
+            <th class="col-status">{{ tx('الحالة', 'Status') }}</th>
+            <th class="col-actions">{{ tx('الإجراءات', 'Actions') }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-if="loading" class="state-row"><td colspan="6">جاري التحميل...</td></tr>
-          <tr v-else-if="permissions.length === 0" class="state-row"><td colspan="6">لا توجد صلاحيات حالياً</td></tr>
+          <tr v-if="loading" class="state-row"><td colspan="6">{{ tx('جاري التحميل...', 'Loading...') }}</td></tr>
+          <tr v-else-if="loadError" class="state-row" data-testid="permissions-error"><td colspan="6">{{ tx('تعذّر تحميل الصلاحيات، الخدمة غير متاحة على الخادم حالياً.', 'Could not load permissions. The service is not available on the server right now.') }} <button type="button" class="retry-link" @click="fetchData">{{ tx('إعادة المحاولة', 'Retry') }}</button></td></tr>
+          <tr v-else-if="permissions.length === 0" class="state-row"><td colspan="6">{{ tx('لا توجد صلاحيات حالياً', 'No permissions yet') }}</td></tr>
           <template v-else>
             <tr v-for="permission in permissions" :key="permission.id" class="data-row">
               <td class="col-id">#{{ permission.id }}</td>
               <td class="col-name text-right">
                 <div class="flex-center gap-2">
-                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#660033" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
                    <span class="perm-name-text">{{ permission.name }}</span>
                 </div>
               </td>
@@ -233,18 +244,18 @@ const triggerAlert = (message, type = 'success') => {
                        <div class="avatar-placeholder-inline" v-else :title="admin.name">{{ admin.name.charAt(0) }}</div>
                     </div>
                     <span class="user-count-badge" v-if="permission.admins_count > 0">({{ permission.admins_count }})</span>
-                    <span class="user-count-badge" v-else>لا يوجد</span>
+                    <span class="user-count-badge" v-else>{{ tx('لا يوجد', 'None') }}</span>
                  </div>
               </td>
               <td class="col-status">
-                 <span class="status-badge-new active">مفعلة</span>
+                 <span class="status-badge-new active">{{ tx('مفعلة', 'Active') }}</span>
               </td>
               <td class="col-actions">
                 <div class="actions-group">
-                  <button class="action-btn edit" title="تعديل" @click="openEditModal(permission)">
+                  <button class="action-btn edit" :title="tx('تعديل', 'Edit')" @click="openEditModal(permission)">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   </button>
-                  <button class="action-btn delete" title="حذف" @click="confirmDelete(permission)">
+                  <button class="action-btn delete" :title="tx('حذف', 'Delete')" @click="confirmDelete(permission)">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
                   </button>
                 </div>
@@ -261,27 +272,27 @@ const triggerAlert = (message, type = 'success') => {
           <button class="close-btn-x" @click="showFormModal = false">×</button>
           
           <div class="modal-header-perm">
-             <h2>إنشاء صلاحية جديدة</h2>
-             <p>أدخل بيانات الصلاحية من للمستخدمين التي سيتم منحهم إياها</p>
+             <h2>{{ isEditing ? tx('تعديل الصلاحية', 'Edit Permission') : tx('إنشاء صلاحية جديدة', 'Create Permission') }}</h2>
+             <p>{{ tx('أدخل بيانات الصلاحية من للمستخدمين التي سيتم منحهم إياها', 'Enter the permission details and assign users') }}</p>
           </div>
 
           <form @submit.prevent="submitForm">
              <div class="modal-body-perm">
                 <div class="form-group-perm mb-4">
-                   <label>اسم الصلاحية <span class="req">*</span></label>
-                   <input type="text" v-model="form.name" required placeholder="مثال: إدارة المنتجات" />
+                   <label>{{ tx('اسم الصلاحية', 'Permission Name') }} <span class="req">*</span></label>
+                   <input type="text" v-model="form.name" required :placeholder="tx('مثال: إدارة المنتجات', 'e.g. Product Management')" />
                 </div>
                 <div class="form-group-perm mb-4">
-                   <label>الوصف</label>
-                   <textarea v-model="form.description" rows="3" placeholder="وصف موجز للصلاحية..."></textarea>
+                   <label>{{ tx('الوصف', 'Description') }}</label>
+                   <textarea v-model="form.description" rows="3" :placeholder="tx('وصف موجز للصلاحية...', 'Brief permission description...')"></textarea>
                 </div>
 
                 <!-- Admin Selection Search -->
                 <div class="admin-selector">
-                   <label class="mb-2 block font-bold">المستخدمين المخصص لهم</label>
+                   <label class="mb-2 block font-bold">{{ tx('المستخدمين المخصص لهم', 'Assigned Users') }}</label>
                    <div class="search-admins-box mb-3">
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                      <input type="text" v-model="adminSearch" placeholder="البحث عن اسم مستخدم..." />
+                      <input type="text" v-model="adminSearch" :placeholder="tx('البحث عن اسم مستخدم...', 'Search user name...')" />
                    </div>
                    
                    <div class="admins-list-box">
@@ -301,9 +312,9 @@ const triggerAlert = (message, type = 'success') => {
              </div>
 
              <div class="modal-footer-perm">
-                <button type="button" class="btn-cancel-new" @click="showFormModal = false">إلغاء</button>
+                <button type="button" class="btn-cancel-new" @click="showFormModal = false">{{ tx('إلغاء', 'Cancel') }}</button>
                 <button type="submit" class="btn-submit-new" :disabled="isSubmitting">
-                   {{ isSubmitting ? 'جاري الحفظ...' : 'إنشاء الصلاحية' }}
+                   {{ isSubmitting ? tx('جاري الحفظ...', 'Saving...') : tx('إنشاء الصلاحية', 'Create Permission') }}
                 </button>
              </div>
           </form>
@@ -311,32 +322,32 @@ const triggerAlert = (message, type = 'success') => {
     </div>
 
     <!-- Alert -->
-    <div v-if="showAlert" :class="['alert-toast', alertType]">
+    <div v-if="showAlert" :class="['alert-toast', alertType, 'show']">
        {{ alertMessage }}
     </div>
   </div>
 </template>
 
 <style scoped>
-.permissions-page { font-family: 'IBM Plex Sans Arabic', sans-serif; direction: rtl; }
+.permissions-page { font-family: 'IBM Plex Sans Arabic', sans-serif; direction: inherit; }
 
 /* Breadcrumbs */
 .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #9ca3af; }
 .breadcrumb svg { transform: rotate(180deg); color: #d1d5db; }
-.breadcrumb .active { color: #000000; font-weight: 700; }
+.breadcrumb .active { color: #660033; font-weight: 700; }
 
 /* Header */
 .header-section { display: flex; justify-content: space-between; align-items: center; }
 .page-title-area h1 { font-size: 1.4rem; font-weight: 800; color: #1f2937; margin: 0; }
 .page-title-area p { color: #6b7280; font-size: 0.85rem; margin: 0; }
 .title-with-icon { display: flex; align-items: center; gap: 12px; }
-.icon-box { background: #f3f4f6; color: #000000; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.icon-box { background: #f3f4f6; color: #660033; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
 
 .add-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #000000;
+  background: #660033;
   color: #fff;
   border: none;
   padding: 0.65rem 1.1rem;
@@ -347,7 +358,7 @@ const triggerAlert = (message, type = 'success') => {
   cursor: pointer;
   transition: all 0.2s;
 }
-.add-btn:hover { background: #262626; }
+.add-btn:hover { background: #4d0026; }
 
 /* Stats */
 .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
@@ -377,8 +388,8 @@ const triggerAlert = (message, type = 'success') => {
 .users-avatars { display: flex; align-items: center; justify-content: center; position: relative; }
 .avatar-item-wrapper { width: 30px; height: 30px; border-radius: 50%; border: 2px solid white; overflow: hidden; margin-left: -12px; position: relative; z-index: 1; }
 .avatar-item-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-.avatar-placeholder-inline { width: 100%; height: 100%; background: #000000; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
-.avatar-placeholder-sm { width: 32px; height: 32px; border-radius: 50%; background: #f3f4f6; color: #000000; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; }
+.avatar-placeholder-inline { width: 100%; height: 100%; background: #660033; color: white; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700; }
+.avatar-placeholder-sm { width: 32px; height: 32px; border-radius: 50%; background: #f3f4f6; color: #660033; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; }
 .user-count-badge { font-size: 0.75rem; color: #9ca3af; margin-right: 15px; }
 
 .status-badge-new { padding: 4px 12px; border-radius: 8px; font-size: 0.75rem; font-weight: 700; }
@@ -386,11 +397,11 @@ const triggerAlert = (message, type = 'success') => {
 
 .actions-group { display: flex; gap: 8px; justify-content: center; }
 .action-btn { width: 30px; height: 30px; border-radius: 6px; border: none; display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; }
-.action-btn.edit { background: #f3f4f6; color: #000000; }
+.action-btn.edit { background: #f3f4f6; color: #660033; }
 .action-btn.delete { background: #fef2f2; color: #ef4444; }
 
 /* MODAL - Premium Form */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 20px; }
 .form-modal-perm { background: white; border-radius: 24px; width: 100%; max-width: 500px; padding: 35px; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
 .close-btn-x { position: absolute; top: 20px; right: 20px; border: none; background: #f3f4f6; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #9ca3af; cursor: pointer; font-size: 1.2rem; }
 
@@ -400,7 +411,7 @@ const triggerAlert = (message, type = 'success') => {
 
 .form-group-perm label { display: block; font-weight: 800; font-size: 0.85rem; color: #374151; margin-bottom: 8px; text-align: right; }
 .form-group-perm input, .form-group-perm textarea { width: 100%; padding: 12px 15px; border: 1px solid #e5e7eb; border-radius: 10px; outline: none; transition: 0.3s; font-family: inherit; font-size: 0.9rem; }
-.form-group-perm input:focus, .form-group-perm textarea:focus { border-color: #000000; box-shadow: 0 0 0 3px rgba(0,0,0, 0.1); }
+.form-group-perm input:focus, .form-group-perm textarea:focus { border-color: #660033; box-shadow: 0 0 0 3px rgba(102, 0, 51, 0.1); }
 .req { color: #dc2626; }
 
 /* Admin List in Modal */
@@ -420,13 +431,10 @@ const triggerAlert = (message, type = 'success') => {
 
 .modal-footer-perm { display: flex; gap: 12px; margin-top: 30px; }
 .btn-cancel-new { flex: 1; padding: 12px; border: 1px solid #e5e7eb; border-radius: 10px; background: white; font-weight: 700; cursor: pointer; color: #4b5563; }
-.btn-submit-new { flex: 2; padding: 12px; border: none; border-radius: 10px; background: #000000; color: white; font-weight: 700; cursor: pointer; }
+.btn-submit-new { flex: 2; padding: 12px; border: none; border-radius: 10px; background: #660033; color: white; font-weight: 700; cursor: pointer; }
 
 /* Alert */
-.alert-toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 10px; color: white; font-weight: 700; z-index: 2000; box-shadow: 0 10px 15px rgba(0,0,0,0.1); animation: toastIn 0.3s ease-out; }
-@keyframes toastIn { from { top: -50px; opacity: 0; } to { top: 24px; opacity: 1; } }
-.alert-toast.success { background: #10b981; }
-.alert-toast.error { background: #ef4444; }
+.retry-link { background: none; border: none; color: #660033; font-weight: 700; text-decoration: underline; cursor: pointer; font-family: inherit; }
 
 .flex-center { display: flex; align-items: center; align-content: center; }
 .desc-truncate { text-align: right; margin-right: 0; }

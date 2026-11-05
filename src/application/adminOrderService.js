@@ -19,8 +19,8 @@ export const adminOrderService = {
   },
   countOrders: (params = {}) => tijaraAdminApi.listOrders(params).then((response) => Number(response.data?.meta?.total) || 0),
   getOrder: (id) => tijaraAdminApi.getOrder(id).then((response) => toOrder(dataFromResponse(response.data))),
-  updateStatus: async (order, status) => {
-    const payload = toStatusPayload(order.status, status);
+  updateStatus: async (order, status, reason = '') => {
+    const payload = toStatusPayload(order.status, status, reason, order.rawNotes ?? '');
     const response = await tijaraAdminApi.updateOrder(order.id, payload);
     return toOrder(dataFromResponse(response.data));
   },

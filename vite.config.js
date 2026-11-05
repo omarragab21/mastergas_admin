@@ -7,6 +7,12 @@ const projectRoot = path.dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   plugins: [vue()],
+  define: {
+    // vue-i18n compiles messages with new Function() by default, which the
+    // admin's CSP (script-src 'self', no 'unsafe-eval') blocks. JIT mode
+    // interprets the message AST instead, so no eval is needed.
+    __INTLIFY_JIT_COMPILATION__: true,
+  },
   server: {
     port: 5174,
     cors: true,
@@ -14,6 +20,8 @@ export default defineConfig({
     proxy: {
       '/api': { target: 'https://backend-tijara.be-kite.com', changeOrigin: true, secure: false },
       '/storage': { target: 'https://backend-tijara.be-kite.com', changeOrigin: true, secure: false },
+      // Same-origin backend images so the crop modal can export them from a canvas.
+      '/public/storage': { target: 'https://backend-tijara.be-kite.com', changeOrigin: true, secure: false },
     },
   },
   build: {

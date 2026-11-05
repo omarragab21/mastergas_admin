@@ -15,35 +15,41 @@
         <div class="orbit-item paypal">P</div>
       </div>
 
-      <h1 class="title">بوابات الدفع</h1>
-      <p class="subtitle">نعمل حالياً على تجهيز أنظمة دفع آمنة ومتطورة لتجربة تسوق متكاملة</p>
+      <h1 class="title">{{ tx('بوابات الدفع', 'Payment Gateways') }}</h1>
+      <p class="subtitle">{{ tx('نعمل حالياً على تجهيز أنظمة دفع آمنة ومتطورة لتجربة تسوق متكاملة', 'We are preparing secure and advanced payment systems for a complete shopping experience') }}</p>
       
       <div class="status-badge">
         <span class="pulse-dot"></span>
-        قيد التطوير
+        {{ tx('قيد التطوير', 'Under development') }}
       </div>
 
       <div class="features-preview">
         <div class="feature-item">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          بطاقات الائتمان (Visa / MasterCard)
+          {{ tx('بطاقات الائتمان (Visa / MasterCard)', 'Credit cards (Visa / MasterCard)') }}
         </div>
         <div class="feature-item">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          الدفع عند الاستلام (Cash on Delivery)
+          {{ tx('الدفع عند الاستلام (Cash on Delivery)', 'Cash on delivery') }}
         </div>
         <div class="feature-item">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-          محافظ إلكترونية محليه
+          {{ tx('محافظ إلكترونية محليه', 'Local digital wallets') }}
         </div>
       </div>
 
       <div class="footer-note">
-        ستكون الخدمة متاحة قريباً جداً...
+        {{ tx('ستكون الخدمة متاحة قريباً جداً...', 'This service will be available very soon...') }}
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+import { useAdminText } from '../composables/useAdminText';
+
+const { tx } = useAdminText();
+</script>
 
 <style scoped>
 .coming-soon-container {
@@ -52,14 +58,14 @@
   align-items: center;
   justify-content: center;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
-  direction: rtl;
+  direction: inherit;
   padding: 2rem;
 }
 
 .glass-card {
   background: rgba(255, 255, 255, 0.7);
   backdrop-filter: blur(10px);
-  border: 1px solid rgba(0,0,0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 30px;
   padding: 4rem 3rem;
   text-align: center;
@@ -91,7 +97,7 @@
 }
 
 .main-icon {
-  background: #000000;
+  background: #660033;
   color: white;
   width: 100px;
   height: 100px;
@@ -99,7 +105,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 10px 25px rgba(0,0,0, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
   z-index: 2;
   animation: float 3s ease-in-out infinite;
 }
@@ -120,8 +126,8 @@
   justify-content: center;
   font-weight: 800;
   font-size: 0.75rem;
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-  color: #000000;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  color: #660033;
   border: 1px solid #f3f4f6;
 }
 
@@ -153,7 +159,7 @@
   align-items: center;
   gap: 0.6rem;
   background: #f3f4f6;
-  color: #000000;
+  color: #660033;
   padding: 0.5rem 1.25rem;
   border-radius: 100px;
   font-weight: 700;
@@ -164,13 +170,13 @@
 .pulse-dot {
   width: 8px;
   height: 8px;
-  background: #000000;
+  background: #660033;
   border-radius: 50%;
   animation: pulse 1.5s infinite;
 }
 
 @keyframes pulse {
-  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0,0,0, 0.7); }
+  0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.7); }
   70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(0,0,0, 0); }
   100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(0,0,0, 0); }
 }

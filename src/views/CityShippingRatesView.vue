@@ -1,21 +1,21 @@
 <template>
   <div class="shipping-rates-view">
     <div class="page-header">
-      <h1 class="page-title">أسعار الشحن حسب المدينة</h1>
+      <h1 class="page-title">{{ tx('أسعار الشحن حسب المدينة', 'City Shipping Rates') }}</h1>
       <div class="header-actions">
         <button class="btn-secondary" @click="openBulkUpdate">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
           </svg>
-          تعديل جماعي
+          {{ tx('تعديل جماعي', 'Bulk Update') }}
         </button>
       </div>
     </div>
 
     <div class="filters">
       <select v-model="selectedCountry" @change="fetchRates">
-        <option value="">كل الدول</option>
+        <option value="">{{ tx('كل الدول', 'All Countries') }}</option>
         <option v-for="country in countries" :key="country.id" :value="country.id">
           {{ country.name }}
         </option>
@@ -26,31 +26,31 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th>المدينة</th>
-            <th>الدولة</th>
-            <th>سعر الشحن</th>
-            <th>الحالة</th>
-            <th>الإجراءات</th>
+            <th>{{ tx('المدينة', 'City') }}</th>
+            <th>{{ tx('الدولة', 'Country') }}</th>
+            <th>{{ tx('سعر الشحن', 'Shipping Cost') }}</th>
+            <th>{{ tx('الحالة', 'Status') }}</th>
+            <th>{{ tx('الإجراءات', 'Actions') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="rate in rates" :key="rate.id">
-            <td>{{ rate.city?.name }}</td>
-            <td>{{ rate.city?.country?.name }}</td>
+            <td>{{ localizedName(rate.city) }}</td>
+            <td>{{ localizedName(rate.city?.country) }}</td>
             <td>{{ rate.shipping_cost + ' ' + currency }}</td>
             <td>
               <span class="status-badge" :class="rate.is_active ? 'active' : 'inactive'">
-                {{ rate.is_active ? 'نشط' : 'غير نشط' }}
+                {{ rate.is_active ? tx('نشط', 'Active') : tx('غير نشط', 'Inactive') }}
               </span>
             </td>
             <td class="actions">
-              <button class="btn-icon" @click="editRate(rate)" title="تعديل">
+              <button class="btn-icon" @click="editRate(rate)" :title="tx('تعديل', 'Edit')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                 </svg>
               </button>
-              <button class="btn-icon delete" @click="deleteRate(rate.id)" title="حذف">
+              <button class="btn-icon delete" @click="deleteRate(rate.id)" :title="tx('حذف', 'Delete')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="3 6 5 6 21 6"></polyline>
                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -65,25 +65,25 @@
     <!-- Edit Modal -->
     <div v-if="showEditModal" class="modal-overlay" @click.self="showEditModal = false">
       <div class="modal-content">
-        <h2>تعديل سعر الشحن</h2>
+        <h2>{{ tx('تعديل سعر الشحن', 'Edit Shipping Rate') }}</h2>
         <form @submit.prevent="handleEditSubmit">
           <div class="form-group">
-            <label>المدينة</label>
+            <label>{{ tx('المدينة', 'City') }}</label>
             <input :value="editingRate?.city?.name" disabled />
           </div>
           <div class="form-group">
-            <label>سعر الشحن *</label>
+            <label>{{ tx('سعر الشحن', 'Shipping Cost') }} *</label>
             <input v-model="editForm.shipping_cost" type="number" step="0.01" required />
           </div>
           <div class="form-group checkbox">
             <label>
               <input v-model="editForm.is_active" type="checkbox" />
-              نشط
+              {{ tx('نشط', 'Active') }}
             </label>
           </div>
           <div class="modal-actions">
-            <button type="button" class="btn-secondary" @click="showEditModal = false">إلغاء</button>
-            <button type="submit" class="btn-primary">حفظ</button>
+            <button type="button" class="btn-secondary" @click="showEditModal = false">{{ tx('إلغاء', 'Cancel') }}</button>
+            <button type="submit" class="btn-primary">{{ tx('حفظ', 'Save') }}</button>
           </div>
         </form>
       </div>
@@ -92,21 +92,21 @@
     <!-- Bulk Update Modal -->
     <div v-if="showBulkModal" class="modal-overlay" @click.self="showBulkModal = false">
       <div class="modal-content bulk-modal">
-        <h2>تعديل جماعي للأسعار</h2>
+        <h2>{{ tx('تعديل جماعي للأسعار', 'Bulk Update Shipping Rates') }}</h2>
         <div class="bulk-options">
           <div class="option-card" @click="bulkOption = 'all'">
             <input type="radio" v-model="bulkOption" value="all" />
-            <label>سعر ثابت لكل المدن</label>
+            <label>{{ tx('سعر ثابت لكل المدن', 'One fixed rate for all cities') }}</label>
           </div>
           <div class="option-card" @click="bulkOption = 'individual'">
             <input type="radio" v-model="bulkOption" value="individual" />
-            <label>أسعار خاصة لكل مدينة</label>
+            <label>{{ tx('أسعار خاصة لكل مدينة', 'Custom rates per city') }}</label>
           </div>
         </div>
         
         <div v-if="bulkOption === 'all'" class="bulk-form">
           <div class="form-group">
-            <label>السعر الموحد *</label>
+            <label>{{ tx('السعر الموحد', 'Uniform Rate') }} *</label>
             <input v-model="bulkForm.uniform_rate" type="number" step="0.01" />
           </div>
         </div>
@@ -124,8 +124,8 @@
         </div>
 
         <div class="modal-actions">
-          <button type="button" class="btn-secondary" @click="showBulkModal = false">إلغاء</button>
-          <button class="btn-primary" @click="handleBulkSubmit">حفظ التغييرات</button>
+          <button type="button" class="btn-secondary" @click="showBulkModal = false">{{ tx('إلغاء', 'Cancel') }}</button>
+          <button class="btn-primary" @click="handleBulkSubmit">{{ tx('حفظ التغييرات', 'Save Changes') }}</button>
         </div>
       </div>
     </div>
@@ -135,6 +135,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '../config/axios';
+import { useAdminText } from '../composables/useAdminText';
+
+const { tx, locale } = useAdminText();
+const localizedName = (item) => item?.name_i18n?.[locale.value] || (locale.value === 'en' ? item?.name_en || item?.name : item?.name || item?.name_en);
 
 const rates = ref([]);
 const cities = ref([]);
@@ -143,7 +147,7 @@ const selectedCountry = ref('');
 const showEditModal = ref(false);
 const showBulkModal = ref(false);
 const bulkOption = ref('all');
-const currency = ref('JOD');
+const currency = ref('SAR');
 const editingRate = ref(null);
 const editForm = ref({
   shipping_cost: 0,
@@ -255,7 +259,7 @@ onMounted(() => {
 
 <style scoped>
 .shipping-rates-view {
-  padding: 2rem;
+  padding: 0;
 }
 
 .page-header {
@@ -277,7 +281,7 @@ onMounted(() => {
 }
 
 .btn-primary {
-  background: #000000;
+  background: #660033;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -385,7 +389,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -462,7 +466,7 @@ onMounted(() => {
 }
 
 .option-card:hover {
-  border-color: #000000;
+  border-color: #660033;
 }
 
 .option-card label {

@@ -1,7 +1,8 @@
 <script setup>
-import { ref } from 'vue';
+import { useAdminText } from '../composables/useAdminText';
 
 const developerName = "Antigravity Dev Team";
+const { tx } = useAdminText();
 </script>
 
 <template>
@@ -10,16 +11,16 @@ const developerName = "Antigravity Dev Team";
        <!-- Icon Container -->
        <div class="illustration-box">
           <div class="gear-wrapper">
-             <svg class="gear gear-1" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+             <svg class="gear gear-1" width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#660033" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
              <svg class="gear gear-2" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#d1d5db" stroke-width="2"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
           </div>
        </div>
 
        <!-- Text -->
        <div class="content">
-          <h1>التقارير المالية</h1>
-          <div class="status-badge">قيد التطوير</div>
-          <p>هذا القسم يخضع حالياً لعمليات تحسين تقنية لضمان أفضل تجربة لإدارة الحسابات والبيانات المالية. سنكون جاهزين قريباً!</p>
+          <h1>{{ tx('التقارير المالية', 'Financial Reports') }}</h1>
+          <div class="status-badge">{{ tx('قيد التطوير', 'Under development') }}</div>
+          <p>{{ tx('هذا القسم يخضع حالياً لعمليات تحسين تقنية لضمان أفضل تجربة لإدارة الحسابات والبيانات المالية. سنكون جاهزين قريباً!', 'This section is being improved to provide a better experience for managing accounts and financial data. We will be ready soon!') }}</p>
        </div>
 
        <!-- Progress Bar -->
@@ -27,14 +28,14 @@ const developerName = "Antigravity Dev Team";
           <div class="progress-bar">
              <div class="progress-fill"></div>
           </div>
-          <div class="progress-text">جاري العمل... 75%</div>
+          <div class="progress-text">{{ tx('جاري العمل... 75%', 'In progress... 75%') }}</div>
        </div>
 
        <!-- Features Hint -->
        <div class="features-list">
-          <div class="f-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> تقارير الأرباح</div>
-          <div class="f-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> سجل السحوبات</div>
-          <div class="f-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> الرسوم البيانية</div>
+          <div class="f-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> {{ tx('تقارير الأرباح', 'Profit reports') }}</div>
+          <div class="f-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> {{ tx('سجل السحوبات', 'Withdrawal history') }}</div>
+          <div class="f-item"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg> {{ tx('الرسوم البيانية', 'Charts') }}</div>
        </div>
     </div>
   </div>
@@ -47,7 +48,7 @@ const developerName = "Antigravity Dev Team";
   align-items: center;
   justify-content: center;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
-  direction: rtl;
+  direction: inherit;
   padding: 20px;
 }
 
@@ -108,7 +109,7 @@ const developerName = "Antigravity Dev Team";
 .status-badge {
   display: inline-block;
   background: #f3f4f6;
-  color: #000000;
+  color: #660033;
   padding: 6px 20px;
   border-radius: 50px;
   font-weight: 700;
@@ -137,7 +138,7 @@ const developerName = "Antigravity Dev Team";
 }
 
 .progress-fill {
-  background: linear-gradient(90deg, #000000, #404040);
+  background: linear-gradient(90deg, #660033, #404040);
   height: 100%;
   width: 75%;
   border-radius: 10px;

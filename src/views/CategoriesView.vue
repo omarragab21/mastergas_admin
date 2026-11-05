@@ -4,15 +4,15 @@
     <!-- Header -->
     <div class="page-header">
       <div class="header-titles">
-        <h2 class="page-title">أقسام المنتجات</h2>
-        <p class="page-subtitle">إدارة الأقسام الرئيسية والفرعية للمنتجات</p>
+        <h2 class="page-title">{{ tx('أقسام المنتجات', 'Product Categories') }}</h2>
+        <p class="page-subtitle">{{ tx('إدارة الأقسام الرئيسية والفرعية للمنتجات', 'Manage main and sub-product categories') }}</p>
       </div>
       <button class="add-btn" @click="openAddModal">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="12" y1="5" x2="12" y2="19"/>
           <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        إضافة قسم رئيسي
+        {{ tx('إضافة قسم رئيسي', 'Add Main Category') }}
       </button>
     </div>
 
@@ -26,7 +26,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">الأقسام النشطة</span>
+          <span class="stat-label">{{ tx('الأقسام النشطة', 'Active Categories') }}</span>
           <span class="stat-value">{{ activeCategoriesCount }}</span>
         </div>
       </div>
@@ -40,7 +40,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">إجمالي المنتجات</span>
+          <span class="stat-label">{{ tx('إجمالي المنتجات', 'Total Products') }}</span>
           <span class="stat-value">{{ totalProductsCount }}</span>
         </div>
       </div>
@@ -52,7 +52,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">الأقسام الفرعية</span>
+          <span class="stat-label">{{ tx('الأقسام الفرعية', 'Subcategories') }}</span>
           <span class="stat-value">{{ subCategoriesCount }}</span>
         </div>
       </div>
@@ -63,7 +63,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">الأقسام الرئيسية</span>
+          <span class="stat-label">{{ tx('الأقسام الرئيسية', 'Main Categories') }}</span>
           <span class="stat-value">{{ mainCategoriesCount }}</span>
         </div>
       </div>
@@ -76,13 +76,13 @@
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" v-model="searchQuery" placeholder="البحث عن اسم..." class="search-input" />
+        <input type="text" v-model="searchQuery" :placeholder="tx('البحث عن اسم...', 'Search by name...')" class="search-input" />
       </div>
       <div class="filter-select">
         <select v-model="statusFilter" class="form-select">
-          <option value="">جميع الحالات</option>
-          <option value="1">نشط</option>
-          <option value="0">غير نشط</option>
+          <option value="">{{ tx('جميع الحالات', 'All statuses') }}</option>
+          <option value="1">{{ tx('نشط', 'Active') }}</option>
+          <option value="0">{{ tx('غير نشط', 'Inactive') }}</option>
         </select>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="select-icon">
           <polyline points="6 9 12 15 18 9"/>
@@ -95,71 +95,78 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th class="col-name">القسم</th>
-            <th class="col-products">المنتجات</th>
-            <th class="col-parent">القسم الرئيسي</th>
-            <th class="col-status">الحالة</th>
-            <th class="col-actions">الإجراءات</th>
+            <th class="col-name">{{ tx('القسم', 'Category') }}</th>
+            <th class="col-products">{{ tx('المنتجات', 'Products') }}</th>
+            <th class="col-parent">{{ tx('الأقسام الفرعية', 'Sub-categories') }}</th>
+            <th class="col-status">{{ tx('الحالة', 'Status') }}</th>
+            <th class="col-actions">{{ tx('الإجراءات', 'Actions') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="loading" class="state-row">
-            <td colspan="5">جاري التحميل...</td>
+            <td colspan="5">{{ tx('جاري التحميل...', 'Loading...') }}</td>
           </tr>
-          <tr v-else-if="filteredCategories.length === 0" class="state-row">
-            <td colspan="5">لا توجد أقسام مطابقة للبحث</td>
+          <tr v-else-if="visibleRows.length === 0" class="state-row">
+            <td colspan="5">{{ tx('لا توجد أقسام مطابقة للبحث', 'No matching categories found') }}</td>
           </tr>
           <template v-else>
-            <tr v-for="cat in filteredCategories" :key="cat.id" class="data-row">
+            <tr v-for="cat in visibleRows" :key="cat.id" class="data-row" :class="{ 'is-sub': isSubRow(cat) }">
               <td class="col-name">
                 <div class="cat-name-cell">
-                  <div class="cat-image" v-if="cat.image">
-                    <img :src="cat.image" :alt="cat.name_i18n?.ar || cat.name" />
+                  <!-- Fixed slot at the start: the arrow of a main category with sub-categories, or the "child of" mark. -->
+                  <span class="name-lead">
+                    <svg v-if="cat.parent_id" class="sub-indicator" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
+                      <polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/>
+                    </svg>
+                    <button v-else-if="childCount(cat)" type="button" class="expand-btn" :class="{ open: isExpanded(cat) }" data-testid="category-toggle"
+                      :aria-expanded="isExpanded(cat)" :aria-label="isExpanded(cat) ? tx('إخفاء الأقسام الفرعية', 'Hide sub-categories') : tx('عرض الأقسام الفرعية', 'Show sub-categories')"
+                      @click.stop="toggleExpanded(cat)">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+                    </button>
+                  </span>
+                  <div class="cat-image" v-if="hasImage(cat.image)">
+                    <img :src="cat.image" :alt="cat.name_i18n?.ar || cat.name" @error="markImageBroken(cat.image)" />
                   </div>
                   <div class="cat-icon-placeholder" v-else>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                       <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
                     </svg>
                   </div>
-                  <span>{{ cat.name_i18n?.ar || cat.name }}</span>
-                  <svg class="sub-indicator" v-if="cat.parent_id" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
-                    <polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/>
-                  </svg>
-                  <svg class="main-indicator" v-else width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2">
-                    <polyline points="18 15 12 9 6 15"/>
-                  </svg>
+                  <span>{{ localizedName(cat.name_i18n, cat.name) }}</span>
                 </div>
               </td>
               <td class="col-products">
                 <span class="products-count">{{ categoryProductCount(cat) }} <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1.73 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span>
               </td>
               <td class="col-parent">
-                <span v-if="cat.parent" class="parent-badge">{{ cat.parent.name_i18n?.ar || cat.parent.name }}</span>
+                <button v-if="!cat.parent_id && childCount(cat)" type="button" class="children-badge" :class="{ open: isExpanded(cat) }" @click.stop="toggleExpanded(cat)">{{ childCountLabel(childCount(cat)) }}</button>
+                <!-- A sub-category listed on its own (its main category is filtered out) still names its parent. -->
+                <span v-else-if="cat.parent_id && !isSubRow(cat) && parentOf(cat)" class="parent-badge">{{ localizedName(parentOf(cat).name_i18n, parentOf(cat).name) }}</span>
                 <span v-else class="dash-mark">—</span>
               </td>
               <td class="col-status">
                 <span class="status-badge" :class="cat.is_active ? 'active' : 'inactive'">
-                  {{ cat.is_active ? 'نشط' : 'غير نشط' }}
+                  {{ cat.is_active ? tx('نشط', 'Active') : tx('غير نشط', 'Inactive') }}
                 </span>
               </td>
               <td class="col-actions">
                 <div class="actions-group">
-                  <button class="action-btn delete-btn" @click="confirmDelete(cat)" title="حذف">
+                  <button class="action-btn delete-btn" @click="confirmDelete(cat)" :title="tx('حذف', 'Delete')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                       <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
                     </svg>
                   </button>
-                  <button class="action-btn edit-btn" @click="openEditModal(cat)" title="تعديل">
+                  <button class="action-btn edit-btn" @click="openEditModal(cat)" :title="tx('تعديل', 'Edit')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                     </svg>
                   </button>
-                  <button class="action-btn view-btn" @click="openViewModal(cat)" title="عرض">
+                  <button class="action-btn view-btn" @click="openViewModal(cat)" :title="tx('عرض', 'View')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                       <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
                     </svg>
                   </button>
-                  <button class="action-btn add-sub-btn" v-if="!cat.parent_id" @click="openAddSubModal(cat)" title="إضافة قسم فرعي">
+                  <button class="action-btn add-sub-btn" v-if="!cat.parent_id" @click="openAddSubModal(cat)" :title="tx('إضافة قسم فرعي', 'Add subcategory')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                       <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
                     </svg>
@@ -172,129 +179,188 @@
       </table>
     </div>
 
-    <!-- Modals -->
-    <!-- Form Modal (Add/Edit) -->
-    <div class="modal-overlay" v-if="showFormModal" @click.self="closeModal">
-      <div class="modal-content form-modal">
-        <button class="modal-close" @click="closeModal">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <div class="form-header"><div class="header-icon-main"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><h3 class="modal-title-main">{{ isEdit ? 'تعديل قسم' : (form.parent_id ? 'إضافة قسم فرعي جديد' : 'إضافة قسم رئيسي جديد') }}</h3><p class="modal-subtitle-main">أدخل معلومات القسم لإتمام العملية</p></div>
+    <!-- Add / edit dialog (main category, sub-category, edit) -->
+    <div class="cm-overlay" v-if="showFormModal" @click.self="closeModal" @keydown.esc="closeModal">
+      <div class="cm-dialog" role="dialog" aria-modal="true" aria-labelledby="cm-form-title" data-testid="category-form-dialog">
+        <header class="cm-header">
+          <div class="cm-heading">
+            <div class="cm-heading-row"><span v-if="!isEdit" class="cm-header-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span><span v-else class="cm-header-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg></span><h3 id="cm-form-title" class="cm-title">{{ formTitle }}</h3></div>
+            <p class="cm-subtitle">{{ formSubtitle }}</p>
+          </div>
+          <button type="button" class="cm-close" @click="closeModal" :aria-label="tx('إغلاق', 'Close')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
 
-        <div class="i18n-toggle" role="tablist" aria-label="Language">
-          <button type="button" class="i18n-btn" :class="{ active: activeLang === 'en' }" @click="activeLang = 'en'">English</button>
-          <button type="button" class="i18n-btn" :class="{ active: activeLang === 'ar' }" @click="activeLang = 'ar'">العربية</button>
-        </div>
-        
-        <form @submit.prevent="submitForm" class="cat-form">
-          <!-- Image Upload -->
-          <div class="form-group" style="text-align: center;">
-            <label class="form-label" style="text-align: right; width: 100%;">صورة القسم <span class="req">*</span></label>
-            <div class="image-upload-box" @click="triggerFileInput">
-              <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" class="hidden-input" />
-              <div v-if="imagePreview" class="preview-area">
-                <img :src="imagePreview" class="preview-img" />
-              </div>
-              <div v-else class="upload-placeholder">
-                <div class="upload-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
-                  </svg>
-                </div>
-                <p>إسحب وأفلت صورة القسم هنا</p>
-                <span>أو انقر للاختيار من جهازك - الحد الأقصى 1 ميجابايت</span>
-              </div>
+        <form @submit.prevent="submitForm()" class="cm-form" novalidate>
+          <div class="cm-parent" v-if="form.parent_id" data-testid="category-parent">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="16" y="16" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="9" y="2" width="6" height="6" rx="1"/><path d="M5 16v-3a1 1 0 0 1 1-1h12a1 1 0 0 1 1 1v3"/><path d="M12 12V8"/></svg>
+            <span>{{ tx('القسم الرئيسي:', 'Main category:') }} {{ formParentName }}</span>
+          </div>
+
+          <!-- Language -->
+          <div class="cm-lang" role="tablist" :aria-label="tx('اللغة', 'Language')">
+            <div class="cm-lang-switch" dir="ltr">
+              <button type="button" role="tab" class="cm-lang-btn" :class="{ active: activeLang === 'en', missing: !nameFilled('en') }" :aria-selected="activeLang === 'en'" @click="activeLang = 'en'">English</button>
+              <button type="button" role="tab" class="cm-lang-btn" :class="{ active: activeLang === 'ar', missing: !nameFilled('ar') }" :aria-selected="activeLang === 'ar'" @click="activeLang = 'ar'">العربية</button>
             </div>
           </div>
 
+          <!-- Image -->
+          <div class="cm-field">
+            <label class="cm-label">{{ isSubForm ? tx('صورة القسم الفرعي', 'Sub-category image') : tx('صورة القسم', 'Category image') }} <span class="cm-req">*</span></label>
+            <div class="cm-upload" :class="{ filled: hasImage(imagePreview) }" role="button" tabindex="0" @click="triggerFileInput" @keydown.enter.prevent="triggerFileInput" @keydown.space.prevent="triggerFileInput" data-testid="category-image-box">
+              <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" class="cm-file" data-testid="category-image-input" />
+              <ImageCropModal v-bind="cropModal" @close="closeCrop" @cropped="finishCrop" />
+              <template v-if="hasImage(imagePreview)">
+                <img :src="imagePreview" class="cm-preview" alt="" @error="markImageBroken(imagePreview)" />
+                <div class="cm-preview-actions">
+                  <span class="cm-change">{{ tx('تغيير الصورة', 'Change image') }}</span>
+                  <ImageCropButton @crop="recropCurrentImage" />
+                </div>
+              </template>
+              <template v-else>
+                <span class="cm-upload-icon">
+                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M16 5h6"/><path d="M19 2v6"/><path d="M21 11.5V19a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h7.5"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/><circle cx="9" cy="9" r="2"/></svg>
+                </span>
+                <span class="cm-upload-text">{{ isSubForm ? tx('اضغط لرفع صورة القسم الفرعي', 'Click to upload the sub-category image') : tx('اضغط لرفع صورة القسم', 'Click to upload the category image') }}</span>
+                <span class="cm-upload-hint">PNG, JPG, WEBP ({{ tx('حد أقصى 25MB', 'max 25MB') }})</span>
+              </template>
+            </div>
+          </div>
+
+          <p class="cm-image-error" v-if="imageError" role="alert" data-testid="category-image-error">{{ imageError }}</p>
+
+
           <!-- Name -->
-          <div class="form-group" v-show="activeLang === 'ar'">
-            <label class="form-label">الاسم (عربي) <span class="req">*</span></label>
-            <input type="text" v-model="form.name_ar" class="form-control" placeholder="اسم القسم بالعربي" />
+          <div class="cm-field" v-show="activeLang === 'ar'">
+            <label class="cm-label" for="cm-name-ar">{{ isSubForm ? tx('اسم القسم الفرعي', 'Sub-category name') : tx('اسم القسم', 'Category name') }} <span class="cm-req">*</span></label>
+            <input id="cm-name-ar" type="text" v-model="form.name_ar" class="cm-input" :placeholder="isSubForm ? 'مثال: هواتف ذكية' : 'مثال: إلكترونيات'" data-testid="category-name-ar" />
           </div>
-
-          <div class="form-group" v-show="activeLang === 'en'">
-            <label class="form-label">الاسم (English) <span class="req">*</span></label>
-            <input type="text" v-model="form.name_en" class="form-control" placeholder="Category name in English" />
+          <div class="cm-field" v-show="activeLang === 'en'">
+            <label class="cm-label" for="cm-name-en">{{ isSubForm ? tx('اسم القسم الفرعي', 'Sub-category name') : tx('اسم القسم', 'Category name') }} (English) <span class="cm-req">*</span></label>
+            <input id="cm-name-en" type="text" v-model="form.name_en" class="cm-input" dir="ltr" :placeholder="isSubForm ? 'e.g. Smartphones' : 'e.g. Electronics'" data-testid="category-name-en" />
           </div>
-
-
 
           <!-- Description -->
-          <div class="form-group" v-show="activeLang === 'ar'">
-            <label class="form-label">الوصف (عربي)</label>
-            <textarea v-model="form.description_ar" class="form-control textarea" placeholder="وصف القسم بالعربي (اختياري)" rows="3"></textarea>
+          <div class="cm-field" v-show="activeLang === 'ar'">
+            <label class="cm-label" for="cm-desc-ar">{{ tx('الوصف', 'Description') }}</label>
+            <textarea id="cm-desc-ar" v-model="form.description_ar" class="cm-textarea" placeholder="وصف القسم (اختياري)" rows="3"></textarea>
           </div>
-
-          <div class="form-group" v-show="activeLang === 'en'">
-            <label class="form-label">الوصف (English)</label>
-            <textarea v-model="form.description_en" class="form-control textarea" placeholder="Category description in English (optional)" rows="3"></textarea>
+          <div class="cm-field" v-show="activeLang === 'en'">
+            <label class="cm-label" for="cm-desc-en">{{ tx('الوصف', 'Description') }} (English)</label>
+            <textarea id="cm-desc-en" v-model="form.description_en" class="cm-textarea" dir="ltr" placeholder="Category description (optional)" rows="3"></textarea>
           </div>
 
           <!-- Status -->
-          <div class="form-group">
-            <label class="form-label">الحالة</label>
-            <div class="select-wrapper">
-              <select v-model="form.is_active" class="form-control">
-                <option :value="true">نشط</option>
-                <option :value="false">غير نشط</option>
+          <div class="cm-field">
+            <label class="cm-label" for="cm-status">{{ tx('الحالة', 'Status') }}</label>
+            <div class="cm-select">
+              <select id="cm-status" v-model="form.is_active" class="cm-input">
+                <option :value="true">{{ tx('نشط', 'Active') }}</option>
+                <option :value="false">{{ tx('غير نشط', 'Inactive') }}</option>
               </select>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="select-icon"><polyline points="6 9 12 15 18 9"/></svg>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
           </div>
 
-          <!-- Sort Order -->
-          <div class="form-group">
-            <label class="form-label">الترتيب</label>
-            <input type="number" v-model="form.sort_order" class="form-control" placeholder="1" min="1" />
-          </div>
+          <p class="cm-missing" v-if="missingFields.length" data-testid="category-missing">{{ tx('مطلوب:', 'Required:') }} {{ missingFields.join('، ') }}</p>
 
-          <div class="form-actions">
-            <button type="button" class="btn-cancel" @click="closeModal">إلغاء</button>
-            <button type="submit" class="btn-submit" :disabled="isSubmitting">
-              {{ isSubmitting ? 'جاري الحفظ...' : (isEdit ? 'حفظ التعديلات' : 'إضافة القسم') }}
+          <footer class="cm-footer" :class="{ 'is-edit': isEdit }">
+            <button type="button" class="cm-btn cm-btn-cancel" @click="closeModal">{{ tx('إلغاء', 'Cancel') }}</button>
+            <button type="submit" class="cm-btn cm-btn-primary" :disabled="isSubmitting || !canSubmit" data-testid="category-submit">
+              {{ isSubmitting ? tx('جاري الحفظ...', 'Saving...') : submitLabel }}
             </button>
-          </div>
+          </footer>
         </form>
       </div>
     </div>
 
-    <!-- View Modal -->
-    <div class="modal-overlay" v-if="showViewModal" @click.self="viewCategory = null; showViewModal = false;">
-      <div class="modal-content view-content">
-        <button class="modal-close" @click="viewCategory = null; showViewModal = false;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-        </button>
-        <h3 class="modal-title" style="text-align: center;">تفاصيل القسم</h3>
-        <p class="modal-subtitle" style="text-align: center; margin-bottom: 2rem;">معلومات شاملة عن القسم</p>
-        
-        <div class="view-header" v-if="viewCategory">
-          <div class="view-img-large">
-            <img v-if="viewCategory.image" :src="viewCategory.image" :alt="viewCategory.name" />
-            <svg v-else width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
-            </svg>
+    <!-- View dialog -->
+    <div class="cm-overlay" v-if="showViewModal && viewCategory" @click.self="closeView" @keydown.esc="closeView">
+      <div class="cm-dialog" role="dialog" aria-modal="true" aria-labelledby="cm-view-title" data-testid="category-view-dialog">
+        <header class="cm-header">
+          <div class="cm-heading">
+            <div class="cm-heading-row"><span class="cm-header-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 20a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/></svg></span><h3 id="cm-view-title" class="cm-title">{{ tx('تفاصيل القسم', 'Category details') }}</h3></div>
+            <p class="cm-subtitle">{{ tx('معلومات كاملة عن القسم', 'Complete category information') }}</p>
           </div>
-          <h4 class="view-name">{{ viewCategory.name_i18n?.ar || viewCategory.name }}</h4>
-          <span class="status-badge" :class="viewCategory.is_active ? 'active' : 'inactive'" style="margin: 0.5rem auto;">
-            {{ viewCategory.is_active ? 'نشط' : 'غير نشط' }}
-          </span>
-        </div>
+          <button type="button" class="cm-close" @click="closeView" :aria-label="tx('إغلاق', 'Close')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </header>
 
-        <div class="view-details" v-if="viewCategory">
-          <div class="detail-row">
-            <span class="detail-label">القسم الرئيسي:</span>
-            <span class="detail-value">{{ viewCategory.parent ? (viewCategory.parent.name_i18n?.ar || viewCategory.parent.name) : 'لا يوجد (قسم رئيسي)' }}</span>
+        <div class="cm-view">
+          <div class="cm-view-hero">
+            <div class="cm-view-img">
+              <img v-if="hasImage(viewCategory.image)" :src="viewCategory.image" :alt="viewCategory.name" @error="markImageBroken(viewCategory.image)" />
+              <svg v-else width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            </div>
+            <h4 class="cm-view-name">{{ localizedName(viewCategory.name_i18n, viewCategory.name) }}</h4>
           </div>
-          <div class="detail-row">
-            <span class="detail-label">الوصف:</span>
-            <span class="detail-value">{{ viewCategory.description || 'لا يوجد وصف' }}</span>
+
+          <div class="cm-view-block" v-if="parentOf(viewCategory)">
+            <span class="cm-view-label">{{ tx('القسم الرئيسي', 'Main category') }}</span>
+            <span class="cm-view-value">{{ localizedName(parentOf(viewCategory).name_i18n, parentOf(viewCategory).name) }}</span>
           </div>
-          <div class="detail-row">
-            <span class="detail-label">عدد المنتجات:</span>
-            <span class="detail-value">{{ categoryProductCount(viewCategory) }} منتج</span>
+          <div class="cm-view-block">
+            <span class="cm-view-label">{{ tx('الوصف', 'Description') }}</span>
+            <span class="cm-view-value">{{ viewCategory.description || tx('لا يوجد وصف', 'No description') }}</span>
           </div>
+          <div class="cm-view-pair">
+            <div class="cm-view-block">
+              <span class="cm-view-label">{{ tx('عدد المنتجات', 'Products') }}</span>
+              <span class="cm-view-value">{{ categoryProductCount(viewCategory) }} {{ tx('منتج', 'products') }}</span>
+            </div>
+            <div class="cm-view-block">
+              <span class="cm-view-label">{{ tx('الحالة', 'Status') }}</span>
+              <span class="status-badge" :class="viewCategory.is_active ? 'active' : 'inactive'">{{ viewCategory.is_active ? tx('نشط', 'Active') : tx('غير نشط', 'Inactive') }}</span>
+            </div>
+          </div>
+
+          <div class="cm-view-block" v-if="viewChildren.length">
+            <span class="cm-view-label">{{ tx('الأقسام الفرعية', 'Sub-categories') }}</span>
+            <ul class="cm-children">
+              <li v-for="child in viewChildren" :key="child.id" class="cm-child">
+                <div class="cm-child-img">
+                  <img v-if="hasImage(child.image)" :src="child.image" alt="" @error="markImageBroken(child.image)" />
+                  <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                </div>
+                <div class="cm-child-text">
+                  <span class="cm-child-name">{{ localizedName(child.name_i18n, child.name) }}</span>
+                  <span class="cm-child-count">{{ categoryProductCount(child) }} {{ tx('منتج', 'products') }}</span>
+                </div>
+                <span class="status-badge" :class="child.is_active ? 'active' : 'inactive'">{{ child.is_active ? tx('نشط', 'Active') : tx('غير نشط', 'Inactive') }}</span>
+              </li>
+            </ul>
+          </div>
+
+          <footer class="cm-footer is-edit">
+            <button type="button" class="cm-btn cm-btn-primary" @click="closeView">{{ tx('إغلاق', 'Close') }}</button>
+          </footer>
         </div>
+      </div>
+    </div>
+
+    <!-- Delete confirmation -->
+    <div class="cm-overlay" v-if="deleteTarget" @click.self="closeDelete" @keydown.esc="closeDelete">
+      <div class="cm-dialog cm-dialog-sm" role="alertdialog" aria-modal="true" aria-labelledby="cm-delete-title" data-testid="category-delete-dialog">
+        <header class="cm-header">
+          <div class="cm-heading">
+            <div class="cm-heading-row"><span class="cm-header-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg></span><h3 id="cm-delete-title" class="cm-title">{{ tx('تأكيد الحذف', 'Confirm deletion') }}</h3></div>
+          </div>
+        </header>
+        <div class="cm-delete-body">
+          <p>{{ tx('هل أنت متأكد من حذف القسم', 'Are you sure you want to delete the category') }} "{{ localizedName(deleteTarget.name_i18n, deleteTarget.name) }}"؟</p>
+          <p class="cm-delete-warning" v-if="deleteChildrenCount">{{ tx(`تحذير: هذا القسم يحتوي على ${deleteChildrenCount} قسم فرعي، وستتحول إلى أقسام رئيسية بعد حذفه.`, `Warning: this category has ${deleteChildrenCount} sub-categories; they become main categories once it is deleted.`) }}</p>
+          <p>{{ tx('لا يمكن التراجع عن هذا الإجراء.', 'This action cannot be undone.') }}</p>
+        </div>
+        <footer class="cm-footer is-edit">
+          <button type="button" class="cm-btn cm-btn-cancel" @click="closeDelete">{{ tx('إلغاء', 'Cancel') }}</button>
+          <button type="button" class="cm-btn cm-btn-danger" :disabled="isDeleting" @click="runDelete" data-testid="category-delete-confirm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            {{ isDeleting ? tx('جاري الحذف...', 'Deleting...') : tx('حذف القسم', 'Delete category') }}
+          </button>
+        </footer>
       </div>
     </div>
 
@@ -310,9 +376,23 @@
 </template>
 
 <script setup>
+import { localizeMessage } from '../utils/uiMessages';
+import { apiErrorMessage } from '../utils/apiMessage';
 import { ref, computed, onMounted } from 'vue';
+import { useAdminText } from '../composables/useAdminText';
 import adminCatalogService from '../application/adminCatalogService';
-import { toCategoryPayload } from '../domain/catalog/adminCatalog';
+import { categoryMatchesSearch, toCategoryPayload } from '../domain/catalog/adminCatalog';
+import { visibleCategories, visibleProducts } from '../utils/catalogVisibility';
+import { safeObjectUrl } from '../utils/adminSecurity';
+import ImageCropModal from '../components/ImageCropModal.vue';
+import ImageCropButton from '../components/ImageCropButton.vue';
+import { useImageCrop } from '../composables/useImageCrop';
+
+const { locale, tx } = useAdminText();
+const { cropModal, closeCrop, finishCrop, prepareImage, recropImage } = useImageCrop();
+const localizedName = (i18nValue, fallback = '') => locale.value === 'en'
+  ? (i18nValue?.en || i18nValue?.ar || fallback)
+  : (i18nValue?.ar || i18nValue?.en || fallback);
 
 // State
 const categories = ref([]);
@@ -342,21 +422,56 @@ const categoryProductCount = (category) => {
 };
 const totalProductsCount = computed(() => allProducts.value.length || categories.value.reduce((sum, c) => sum + Number(c.products_count || 0), 0));
 
-// Filtered categories
+// The API returns a flat list; resolve each sub-category's parent from it.
+const parentOf = (category) => {
+  if (category.parent) return category.parent;
+  if (!category.parent_id) return null;
+  return categories.value.find(item => Number(item.id) === Number(category.parent_id)) || null;
+};
+
+// Filtered categories: every main category is followed by its own sub-categories.
 const filteredCategories = computed(() => {
-  return categories.value.filter(cat => {
-    const matchSearch = (cat.name_i18n?.ar || cat.name).includes(searchQuery.value);
+  const matches = categories.value.filter(cat => {
+    const matchSearch = categoryMatchesSearch(cat, searchQuery.value);
     const matchStatus = statusFilter.value === '' ? true : (cat.is_active.toString() === statusFilter.value);
     return matchSearch && matchStatus;
-  }).sort((a, b) => {
-    // Show main category first, then its children
-    if (a.parent_id === b.parent_id) return (a.sort_order || 0) - (b.sort_order || 0);
-    if (a.parent_id === b.id) return 1;
-    if (b.parent_id === a.id) return -1;
-    return (a.parent_id || a.id) - (b.parent_id || b.id);
   });
+  const bySort = (a, b) => (a.sort_order || 0) - (b.sort_order || 0) || Number(a.id) - Number(b.id);
+  const parentIds = new Set(categories.value.filter(cat => !cat.parent_id).map(cat => Number(cat.id)));
+  const isSub = (cat) => cat.parent_id && parentIds.has(Number(cat.parent_id));
+  const mains = matches.filter(cat => !isSub(cat)).sort(bySort);
+  const subs = matches.filter(isSub);
+  return mains.flatMap(main => [
+    main,
+    ...subs.filter(sub => Number(sub.parent_id) === Number(main.id)).sort(bySort),
+  ]).concat(
+    // A sub-category whose main category was filtered out is still listed.
+    subs.filter(sub => !mains.some(main => Number(main.id) === Number(sub.parent_id))).sort(bySort),
+  );
 });
 
+
+// A main category with sub-categories opens and closes them from its arrow. While a search or a status
+// filter is active every match is listed, so a hidden sub-category never swallows a result.
+const expandedIds = ref({});
+const isFiltering = computed(() => Boolean(String(searchQuery.value).trim()) || statusFilter.value !== '');
+const childCount = (category) => categories.value.filter(child => Number(child.parent_id) === Number(category.id)).length;
+const isExpanded = (category) => isFiltering.value || Boolean(expandedIds.value[category.id]);
+const toggleExpanded = (category) => {
+  expandedIds.value = { ...expandedIds.value, [category.id]: !expandedIds.value[category.id] };
+};
+const childCountLabel = (count) => {
+  if (locale.value === 'en') return `${count} ${count === 1 ? 'sub-category' : 'sub-categories'}`;
+  if (count === 1) return 'قسم واحد';
+  if (count === 2) return 'قسمان';
+  return `${count} ${count <= 10 ? 'أقسام' : 'قسمًا'}`;
+};
+// A row is a sub-row when its main category is in the table too (it is then indented under it).
+const mainIds = computed(() => new Set(categories.value.filter(cat => !cat.parent_id).map(cat => Number(cat.id))));
+const isSubRow = (category) => Boolean(category.parent_id) && mainIds.value.has(Number(category.parent_id));
+const visibleRows = computed(() => filteredCategories.value.filter(
+  cat => !isSubRow(cat) || isFiltering.value || Boolean(expandedIds.value[cat.parent_id]),
+));
 
 // Modals
 const showFormModal = ref(false);
@@ -366,7 +481,14 @@ const editingId = ref(null);
 const viewCategory = ref(null);
 const fileInput = ref(null);
 const isSubmitting = ref(false);
-const activeLang = ref('ar');
+// The form opens on the dashboard's language; Arabic tab sits on the right, English on the left.
+const formLang = () => (locale.value === 'en' ? 'en' : 'ar');
+const activeLang = ref(formLang());
+const editingName = ref('');
+const CATEGORY_HAS_PRODUCTS = 'لا يمكن حذف هذا القسم لأنه مرتبط بمنتجات. انقل المنتجات إلى قسم آخر أو احذفها أولًا.';
+const deleteTarget = ref(null);
+const isDeleting = ref(false);
+const imageError = ref('');
 
 const form = ref({
   name_ar: '',
@@ -379,6 +501,14 @@ const form = ref({
   image: null
 });
 const imagePreview = ref(null);
+
+// Some categories point to image files that no longer exist on the server
+// (404). Show the placeholder for those instead of a broken image.
+const brokenImages = ref({});
+const hasImage = (url) => Boolean(url) && !brokenImages.value[url];
+const markImageBroken = (url) => {
+  if (url) brokenImages.value = { ...brokenImages.value, [url]: true };
+};
 
 const getBaseForm = () => ({
   name_ar: '',
@@ -397,7 +527,7 @@ const alertMessage = ref('');
 const alertType = ref('success');
 
 const triggerAlert = (msg, type = 'success') => {
-  alertMessage.value = msg;
+  alertMessage.value = localizeMessage(msg);
   alertType.value = type;
   showAlert.value = true;
   setTimeout(() => { showAlert.value = false; }, 3000);
@@ -411,8 +541,8 @@ const fetchCategories = async () => {
       adminCatalogService.listCategories({ include_inactive: 1, show_all: 1 }),
       adminCatalogService.listAllProducts({ include_inactive: 1, show_all: 1 }),
     ]);
-    categories.value = categoryList;
-    allProducts.value = productList;
+    categories.value = visibleCategories(categoryList);
+    allProducts.value = visibleProducts(productList);
   } catch {
     triggerAlert('فشل جلب الأقسام', 'error');
   } finally {
@@ -421,17 +551,47 @@ const fetchCategories = async () => {
 };
 
 onMounted(() => {
-  // Force Arabic language for dashboard
-  localStorage.setItem('lang', 'ar');
   fetchCategories();
 });
 
+// Dialog texts and state: the same form serves a main category, a sub-category and an edit.
+const isSubForm = computed(() => Boolean(form.value.parent_id));
+const formParent = computed(() => categories.value.find(item => Number(item.id) === Number(form.value.parent_id)) || null);
+const formParentName = computed(() => formParent.value ? localizedName(formParent.value.name_i18n, formParent.value.name) : '');
+const formTitle = computed(() => {
+  if (isEdit.value) return tx('تعديل القسم', 'Edit category');
+  return isSubForm.value ? tx('إضافة قسم فرعي', 'Add sub-category') : tx('إضافة قسم رئيسي جديد', 'Add new main category');
+});
+const formSubtitle = computed(() => {
+  if (isEdit.value) return tx(`تعديل معلومات القسم "${editingName.value}"`, `Edit the information of "${editingName.value}"`);
+  return isSubForm.value
+    ? tx(`إضافة قسم فرعي ضمن "${formParentName.value}"`, `Add a sub-category under "${formParentName.value}"`)
+    : tx('أدخل معلومات القسم الرئيسي الجديد', 'Enter the new main category information');
+});
+const submitLabel = computed(() => {
+  if (isEdit.value) return tx('حفظ التغييرات', 'Save changes');
+  return isSubForm.value ? tx('إضافة القسم الفرعي', 'Add sub-category') : tx('إضافة القسم', 'Add category');
+});
+const nameFilled = (lang) => Boolean(String(lang === 'ar' ? form.value.name_ar : form.value.name_en).trim());
+const missingFields = computed(() => {
+  const missing = [];
+  if (!isEdit.value && !hasImage(imagePreview.value)) missing.push(isSubForm.value ? tx('صورة القسم الفرعي', 'sub-category image') : tx('صورة القسم', 'category image'));
+  if (!nameFilled('ar')) missing.push(tx('الاسم بالعربية', 'Arabic name'));
+  if (!nameFilled('en')) missing.push(tx('الاسم بالإنجليزية', 'English name'));
+  return missing;
+});
+const canSubmit = computed(() => missingFields.value.length === 0);
+const viewChildren = computed(() => (viewCategory.value
+  ? categories.value.filter(child => Number(child.parent_id) === Number(viewCategory.value.id))
+  : []));
+
 const openAddModal = () => {
+  imageError.value = '';
   isEdit.value = false;
   editingId.value = null;
   form.value = getBaseForm();
   imagePreview.value = null;
-  activeLang.value = 'ar';
+  activeLang.value = formLang();
   showFormModal.value = true;
 };
 
@@ -441,8 +601,10 @@ const openAddSubModal = (parentCat) => {
 };
 
 const openEditModal = (cat) => {
+  imageError.value = '';
   isEdit.value = true;
   editingId.value = cat.id;
+  editingName.value = localizedName(cat.name_i18n, cat.name);
   const nameObj = cat.name_i18n && typeof cat.name_i18n === 'object' ? cat.name_i18n : null;
   const descObj = cat.description_i18n && typeof cat.description_i18n === 'object' ? cat.description_i18n : null;
   form.value = {
@@ -452,11 +614,11 @@ const openEditModal = (cat) => {
     description_en: descObj?.en ?? '',
     parent_id: cat.parent_id || '',
     is_active: cat.is_active,
-    sort_order: cat.sort_order || 0,
+    sort_order: cat.sort_order ?? 0,
     image: null
   };
   imagePreview.value = cat.image || null;
-  activeLang.value = 'ar';
+  activeLang.value = formLang();
   showFormModal.value = true;
 };
 
@@ -465,11 +627,17 @@ const openViewModal = (cat) => {
   showViewModal.value = true;
 };
 
+const closeView = () => {
+  showViewModal.value = false;
+  viewCategory.value = null;
+};
+
 const closeModal = () => {
   showFormModal.value = false;
+  imageError.value = '';
   form.value = getBaseForm();
   imagePreview.value = null;
-  activeLang.value = 'ar';
+  activeLang.value = formLang();
 };
 
 // Image Upload
@@ -477,20 +645,36 @@ const triggerFileInput = () => {
   fileInput.value.click();
 };
 
-const handleFileChange = (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  if (file.size > 1 * 1024 * 1024) {
-    triggerAlert('حجم الصورة يجب أن لا يتجاوز 1 ميجابايت', 'error');
-    e.target.value = '';
+const cropOptions = () => ({ maxSizeMB: 1, defaultRatio: '2:3', fileName: 'category', outputType: 'image/jpeg', title: tx('قص وضبط أبعاد صورة القسم (Crop & Resize)', 'Crop & resize category image') });
+
+// Every picked image goes through the crop modal before it is staged for upload.
+const handleFileChange = async (e) => {
+  const picked = e.target.files?.[0];
+  e.target.value = '';
+  if (!picked) return;
+  const { file, error } = await prepareImage(picked, cropOptions());
+  if (error) {
+    imageError.value = error;
+    triggerAlert(error, 'error');
     return;
   }
+  imageError.value = '';
   form.value.image = file;
-  imagePreview.value = URL.createObjectURL(file);
+  imagePreview.value = safeObjectUrl(file, imagePreview.value);
+};
+
+const recropCurrentImage = async () => {
+  const { file, error } = await recropImage(form.value.image || imagePreview.value, cropOptions());
+  if (error) { imageError.value = error; triggerAlert(error, 'error'); }
+  if (!file) return;
+  imageError.value = '';
+  form.value.image = file;
+  imagePreview.value = safeObjectUrl(file, imagePreview.value);
 };
 
 // Submit form
 const submitForm = async () => {
+  if (isSubmitting.value) return;
   if (!String(form.value.name_ar || '').trim()) {
     activeLang.value = 'ar';
     triggerAlert('اسم القسم بالعربي مطلوب', 'error');
@@ -513,10 +697,18 @@ const submitForm = async () => {
       await adminCatalogService.createCategory(payload, form.value.image);
       triggerAlert('تم إضافة القسم بنجاح');
     }
+    if (form.value.parent_id) expandedIds.value = { ...expandedIds.value, [form.value.parent_id]: true };
     closeModal();
     fetchCategories();
   } catch (error) {
-    const msg = error.response?.data?.message || 'حدث خطأ أثناء الحفظ';
+    if (error.response?.status === 404) {
+      // The row on screen is stale: the category (or the main category of a new sub-category) was deleted meanwhile.
+      closeModal();
+      fetchCategories();
+      triggerAlert('هذا القسم (أو قسمه الرئيسي) لم يعد موجودًا، ربما تم حذفه. تم تحديث القائمة.', 'error');
+      return;
+    }
+    const msg = apiErrorMessage(error, 'حدث خطأ أثناء الحفظ');
     triggerAlert(msg, 'error');
   } finally {
     isSubmitting.value = false;
@@ -524,16 +716,41 @@ const submitForm = async () => {
 };
 
 // Delete
-const confirmDelete = async (cat) => {
-  if (confirm(`هل أنت متأكد من حذف القسم "${cat.name_i18n?.ar || cat.name}"؟`)) {
-    try {
-      await adminCatalogService.deleteCategory(cat.id);
-      triggerAlert('تم الحذف بنجاح');
+const deleteChildrenCount = computed(() => (deleteTarget.value
+  ? categories.value.filter(child => Number(child.parent_id) === Number(deleteTarget.value.id)).length
+  : 0));
+const confirmDelete = (cat) => { deleteTarget.value = cat; };
+const closeDelete = () => { if (!isDeleting.value) deleteTarget.value = null; };
+const runDelete = async () => {
+  if (!deleteTarget.value || isDeleting.value) return;
+  // A category that still has products cannot be deleted: say so before calling the API,
+  // so the message always matches what really happened (nothing was deleted).
+  const linkedProducts = allProducts.value.length ? (productCounts.value[Number(deleteTarget.value.id)] || 0) : 0;
+  if (linkedProducts > 0) {
+    deleteTarget.value = null;
+    triggerAlert(CATEGORY_HAS_PRODUCTS, 'error');
+    return;
+  }
+  isDeleting.value = true;
+  try {
+    await adminCatalogService.deleteCategory(deleteTarget.value.id);
+    deleteTarget.value = null;
+    triggerAlert('تم الحذف بنجاح');
+    fetchCategories();
+  } catch (error) {
+    deleteTarget.value = null;
+    if (error.response?.status === 404) {
       fetchCategories();
-    } catch (error) {
-      const msg = error.response?.data?.message || 'لا يمكن حذف القسم';
-      triggerAlert(msg, 'error');
+      triggerAlert('هذا القسم لم يعد موجودًا، تم تحديث القائمة.', 'error');
+      return;
     }
+    const rawMessage = String(error.response?.data?.message || '');
+    // The backend reports a category that still owns products with a technical (English / PHP) message.
+    const linked = /product/i.test(rawMessage) && !/[\u0600-\u06FF]/.test(rawMessage);
+    triggerAlert(linked ? CATEGORY_HAS_PRODUCTS : apiErrorMessage(error, 'تعذر حذف القسم. حاول مرة أخرى.'), 'error');
+    fetchCategories();
+  } finally {
+    isDeleting.value = false;
   }
 };
 </script>
@@ -543,7 +760,7 @@ const confirmDelete = async (cat) => {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  direction: rtl;
+  direction: inherit;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
   padding-bottom: 2rem;
 }
@@ -555,30 +772,6 @@ const confirmDelete = async (cat) => {
   justify-content: space-between;
 }
 
-.i18n-toggle {
-  display: inline-flex;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  overflow: hidden;
-  background: #fff;
-  margin: 0.75rem auto 1.25rem;
-}
-
-.i18n-btn {
-  border: none;
-  background: transparent;
-  padding: 0.4rem 0.9rem;
-  font-weight: 700;
-  font-size: 0.85rem;
-  cursor: pointer;
-  color: #6b7280;
-  min-width: 96px;
-}
-
-.i18n-btn.active {
-  background: #000000;
-  color: #fff;
-}
 .page-title {
   font-size: 1.4rem;
   font-weight: 800;
@@ -593,7 +786,7 @@ const confirmDelete = async (cat) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #000000;
+  background: #660033;
   color: #fff;
   border: none;
   padding: 0.65rem 1.1rem;
@@ -604,7 +797,7 @@ const confirmDelete = async (cat) => {
   cursor: pointer;
   transition: all 0.2s;
 }
-.add-btn:hover { background: #262626; }
+.add-btn:hover { background: #4d0026; }
 
 /* Stats Cards */
 .stats-cards {
@@ -647,7 +840,7 @@ const confirmDelete = async (cat) => {
   display: flex; align-items: center; justify-content: center;
   flex-shrink: 0;
 }
-.active-icon { background: #f3f4f6; color: #000000; }
+.active-icon { background: #f3f4f6; color: #660033; }
 .total-icon { background: #ecfdf5; color: #059669; }
 .sub-icon { background: #f3f4f6; color: #4b5563; }
 .main-icon { background: #fefce8; color: #ca8a04; }
@@ -680,7 +873,7 @@ const confirmDelete = async (cat) => {
   background: #fff;
   transition: border-color 0.2s;
 }
-.search-input:focus { border-color: #000000; }
+.search-input:focus { border-color: #660033; }
 
 .filter-select {
   position: relative;
@@ -781,8 +974,27 @@ const confirmDelete = async (cat) => {
 .status-badge.active { background: #ecfdf5; color: #059669; }
 .status-badge.inactive { background: #f3f4f6; color: #4b5563; }
 
+.expand-btn {
+  display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
+  width: 24px; height: 24px; padding: 0; border: none; border-radius: 6px;
+  background: transparent; color: #6b7280; cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+.expand-btn:hover { background: #e5e7eb; color: #111827; }
+.expand-btn svg { transition: transform 0.2s; }
+.expand-btn.open svg { transform: rotate(180deg); }
+.expand-btn:focus-visible, .children-badge:focus-visible { outline: 2px solid #660033; outline-offset: 2px; }
+.children-badge {
+  padding: 0.2rem 0.7rem; border: none; border-radius: 20px;
+  background: #fdf3f8; color: #660033; font-family: inherit; font-size: 0.7rem; font-weight: 700; cursor: pointer;
+}
+.children-badge:hover, .children-badge.open { background: #f7e1ec; }
+.name-lead { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; width: 24px; }
+.data-row.is-sub .cat-name-cell { padding-inline-start: 1.5rem; font-weight: 500; }
+.data-row.is-sub td { background: #fcfcfd; }
+
 .parent-badge {
-  background: #f3f4f6; color: #000000;
+  background: #f3f4f6; color: #660033;
   padding: 0.2rem 0.6rem; border-radius: 4px; font-size: 0.7rem; font-weight: 600;
 }
 .dash-mark { color: #9ca3af; }
@@ -815,113 +1027,169 @@ const confirmDelete = async (cat) => {
 .delete-btn:hover { color: #dc2626; background: #fef2f2; }
 .edit-btn:hover { color: #2563eb; background: #eff6ff; }
 .view-btn:hover { color: #059669; background: #ecfdf5; }
-.add-sub-btn:hover { color: #000000; background: #f3f4f6; }
-
-/* Modal */
-.modal-overlay {
-  position: fixed; inset: 0; background: rgba(0,0,0,0.5);
-  display: flex; align-items: center; justify-content: center;
-  z-index: 100;
-  padding: 1rem;
-}
-.modal-content {
-  background: #fff; border-radius: 12px; width: 100%; max-width: 500px;
-  padding: 2rem; position: relative; max-height: 90vh; overflow-y: auto;
-}
-.modal-close {
-  position: absolute; top: 1.2rem; left: 1.2rem;
-  background: none; border: none; color: #9ca3af; cursor: pointer;
-  transition: color 0.2s;
-}
-.modal-close:hover { color: #111827; }
-.modal-title { font-size: 1.2rem; font-weight: 800; color: #111827; text-align: center; margin-bottom: 0.2rem; }
-.modal-subtitle { font-size: 0.8rem; color: #6b7280; text-align: center; margin-bottom: 1.5rem; }
-
-.form-group { margin-bottom: 1.2rem; }
-.form-label { display: block; font-size: 0.8rem; font-weight: 700; color: #374151; margin-bottom: 0.4rem; text-align: right; }
-.req { color: #dc2626; }
-.form-control {
-  width: 100%; padding: 0.65rem 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px;
-  font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; color: #1f2937; outline: none; transition: border-color 0.2s; text-align: right;
-}
-.form-control:focus { border-color: #000000; }
-.textarea { resize: vertical; min-height: 80px; }
-
-.select-wrapper { position: relative; display: flex; align-items: center; }
-.select-wrapper .form-control { appearance: none; padding-left: 2rem; cursor: pointer; }
-.select-wrapper .select-icon { position: absolute; left: 0.8rem; color: #9ca3af; pointer-events: none; }
-
-.image-upload-box {
-  border: 1.5px dashed #d1d5db; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer;
-  transition: border-color 0.2s, background 0.2s; background: #fafafa;
-}
-.image-upload-box:hover { border-color: #000000; background: #f3f4f6; }
-.hidden-input { display: none; }
-.upload-icon { color: #9ca3af; margin-bottom: 0.5rem; display: inline-flex; }
-.upload-placeholder p { font-size: 0.85rem; font-weight: 600; color: #374151; margin: 0 0 0.2rem; }
-.upload-placeholder span { font-size: 0.75rem; color: #9ca3af; }
-.preview-area { display: flex; justify-content: center; }
-.preview-img { max-height: 120px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-
-.form-actions { margin-top: 1.5rem; display: flex; justify-content: center; }
-.btn-submit {
-  background: #000000; color: #fff; border: none; padding: 0.7rem 2rem; border-radius: 8px;
-  font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: background 0.2s;
-  width: 100%;
-}
-.btn-submit:hover:not(:disabled) { background: #262626; }
-.btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
-
-/* View Modal */
-.view-content { max-width: 400px; }
-.view-header { display: flex; flex-direction: column; align-items: center; margin-bottom: 1.5rem; }
-.view-img-large {
-  width: 80px; height: 80px; border-radius: 12px; overflow: hidden; background: #f3f4f6;
-  display: flex; align-items: center; justify-content: center; margin-bottom: 1rem; border: 1px solid #e5e7eb;
-}
-.view-img-large img { width: 100%; height: 100%; object-fit: cover; }
-.view-name { font-size: 1.25rem; font-weight: 800; color: #111827; }
-
-.view-details { background: #f9fafb; border-radius: 10px; padding: 1.2rem; display: flex; flex-direction: column; gap: 0.8rem; }
-.detail-row { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
-.detail-label { font-size: 0.8rem; font-weight: 700; color: #6b7280; flex-shrink: 0; }
-.detail-value { font-size: 0.85rem; font-weight: 600; color: #1f2937; text-align: left; }
+.add-sub-btn:hover { color: #660033; background: #f3f4f6; }
 
 /* Alert */
-.alert-toast {
-  position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px);
-  padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600;
-  display: flex; align-items: center; gap: 0.5rem; opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-  z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-family: 'IBM Plex Sans Arabic', sans-serif;
-}
-.alert-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-.alert-toast.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-.alert-toast.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 .alert-icon { flex-shrink: 0; }
 
-/* ===== Unified form-modal design (matches "إنشاء عرض جديد") ===== */
-.modal-overlay:has(.form-modal) { z-index: 1000; backdrop-filter: blur(4px); }
-.modal-content.form-modal { max-width: 650px; padding: 0; border-radius: 20px; box-shadow: 0 25px 70px rgba(0,0,0,0.25); max-height: 95vh; overflow-y: auto; }
-.modal-content.form-modal.form-content { max-width: 700px; }
-.form-modal .modal-close { top: 1.5rem; left: 1.5rem; background: #f3f4f6; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; color: #9ca3af; font-size: 1.2rem; line-height: 1; }
-.form-modal .form-header { text-align: center; padding: 2rem 2rem 1.5rem 2rem; position: relative; }
-.form-modal .header-icon-main { width: 50px; height: 50px; background: #f3f4f6; color: #000000; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
-.form-modal .modal-title-main { font-size: 1.3rem; font-weight: 800; color: #111827; margin: 0; }
-.form-modal .modal-subtitle-main { font-size: 0.85rem; color: #9ca3af; margin-top: 0.4rem; }
-.form-modal .cat-form, .form-modal .prod-form, .form-modal .value-form { padding: 0 2.5rem 2.5rem 2.5rem; }
-.form-modal .i18n-toggle { display: flex; width: fit-content; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; margin: 0 auto 1.1rem; }
-.form-modal .i18n-btn { padding: 0.4rem 0.9rem; font-weight: 800; font-size: 0.85rem; min-width: 96px; font-family: 'IBM Plex Sans Arabic', sans-serif; }
-.form-modal .modal-tabs { margin: 0 2.5rem 1.5rem; }
-.form-modal .form-group { margin-bottom: 1.5rem; }
-.form-modal .form-label { font-size: 0.85rem; font-weight: 700; color: #374151; margin-bottom: 0.75rem; }
-.form-modal .form-control { padding: 0.8rem 1rem; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; transition: 0.2s; }
-.form-modal .form-control:focus { background: #fff; border-color: #000000; box-shadow: 0 0 0 4px rgba(0,0,0,0.08); }
-.form-modal .image-upload-box, .form-modal .upload-box { border: 2px dashed #e5e7eb; border-radius: 12px; background: #f9fafb; }
-.form-modal .image-upload-box:hover, .form-modal .upload-box:hover { border-color: #000000; background: #fff; }
-.form-modal .form-actions { margin-top: 2rem; display: flex; gap: 1rem; justify-content: stretch; align-items: stretch; }
-.form-modal .btn-cancel { flex: 1; width: auto; padding: 0.85rem; border-radius: 10px; border: 1px solid #e5e7eb; background: #fff; color: #6b7280; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
-.form-modal .btn-submit { flex: 2; width: auto; min-width: 0; padding: 0.85rem; border-radius: 10px; border: none; background: #000000; color: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
-.form-modal .btn-submit:hover:not(:disabled) { background: #262626; }
-.form-modal .btn-submit:disabled { opacity: 0.6; }
-@media (max-width: 600px) { .form-modal .cat-form, .form-modal .prod-form, .form-modal .value-form { padding: 0 1.25rem 1.5rem; } .form-modal .modal-tabs { margin: 0 1.25rem 1.5rem; } }
+/* ===== Dialogs (Figma: أقسام المنتجات) ===== */
+.cm-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  display: flex; align-items: center; justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(4px);
+  direction: inherit;
+}
+.cm-dialog {
+  box-sizing: border-box;
+  display: flex; flex-direction: column; gap: 0;
+  position: relative; overflow-y: auto;
+  width: 100%; max-width: 700px; max-height: 95vh;
+  padding: 0;
+  background: #fff;
+  border: none;
+  border-radius: 20px;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.25);
+  color: rgba(47, 43, 61, 0.9);
+  font-family: 'IBM Plex Sans Arabic', sans-serif;
+  text-align: right;
+}
+.cm-dialog-sm { max-width: 460px; }
+.cm-dialog-sm .cm-delete-body { padding: 0 2rem; }
+.cm-dialog-sm .cm-footer { padding: 1.5rem 2rem 2rem; margin-top: 0; }
+.cm-header { position: relative; display: flex; flex-direction: column; align-items: center; text-align: center; padding: 2rem 2rem 1.5rem; flex-shrink: 0; }
+.cm-heading-row { display: flex; align-items: center; justify-content: center; gap: 0.65rem; }
+.cm-header-icon { width: 38px; height: 38px; flex: 0 0 auto; display: flex; align-items: center; justify-content: center; border-radius: 10px; background: #f3f4f6; color: #660033; }
+.cm-heading { min-width: 0; }
+.cm-title { margin: 0; font-size: 1.3rem; line-height: 1.5; font-weight: 800; color: #111827; }
+.cm-subtitle { margin: 0.4rem 0 0; font-size: 0.85rem; color: #9ca3af; }
+.cm-close {
+  flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center;
+  position: absolute; top: 1.5rem; left: 1.5rem; z-index: 10;
+  width: 34px; height: 34px; padding: 0; border: none; border-radius: 50%;
+  background: #f3f4f6; color: #9ca3af; cursor: pointer;
+}
+.cm-close:hover { background: #e5e7eb; color: #111827; }
+
+.cm-form, .cm-view { display: flex; flex-direction: column; gap: 1.5rem; padding: 0 2.5rem 2.5rem; }
+.cm-field { display: flex; flex-direction: column; gap: 0.75rem; }
+.cm-label { font-size: 0.85rem; font-weight: 700; color: #374151; }
+.cm-req { color: #dc2626; margin-inline-start: 2px; }
+
+.cm-input, .cm-textarea {
+  box-sizing: border-box; width: 100%;
+  background: #f9fafb; color: #1f2937;
+  border: 1px solid #e5e7eb; border-radius: 10px;
+  font-family: inherit; font-size: 14px; outline: none; text-align: start;
+  transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+}
+.cm-input { height: 48px; padding: 0.8rem 1rem; }
+.cm-textarea { min-height: 96px; padding: 0.8rem 1rem; resize: vertical; }
+.cm-input::placeholder, .cm-textarea::placeholder { color: rgba(47, 43, 61, 0.45); }
+.cm-input:focus, .cm-textarea:focus { background: #fff; border-color: #660033; box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.08); }
+.cm-select { position: relative; display: flex; align-items: center; }
+.cm-select .cm-input { appearance: none; padding-inline-end: 12px; padding-inline-start: 34px; cursor: pointer; }
+.cm-select svg { position: absolute; inset-inline-start: 12px; color: rgba(47, 43, 61, 0.55); pointer-events: none; }
+
+.cm-parent {
+  display: flex; align-items: center; gap: 8px;
+  padding: 12px 14px; border: 1px solid #f0cfe0; border-radius: 6px;
+  background: #fdf3f8; color: #660033; font-size: 14px; font-weight: 500;
+}
+.cm-parent svg { flex-shrink: 0; }
+
+.cm-upload {
+  position: relative; box-sizing: border-box; overflow: hidden;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;
+  height: 160px; padding: 16px;
+  border: 2px dashed #e5e7eb; border-radius: 12px;
+  background: #f9fafb; cursor: pointer; text-align: center;
+  transition: border-color 0.15s, background 0.15s;
+}
+.cm-upload:hover, .cm-upload:focus-visible { border-color: #660033; background: #fff; outline: none; }
+.cm-upload.filled { padding: 0; border-style: solid; border-color: rgba(47, 43, 61, 0.22); background: #f8f7fa; }
+.cm-file { display: none; }
+.cm-upload-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 48px; height: 48px; border-radius: 50%;
+  background: rgba(47, 43, 61, 0.08); color: rgba(47, 43, 61, 0.75);
+}
+.cm-upload-text { font-size: 14px; font-weight: 500; color: rgba(47, 43, 61, 0.9); }
+.cm-upload-hint { font-size: 12px; color: rgba(47, 43, 61, 0.55); }
+.cm-preview { width: 100%; height: 100%; object-fit: contain; }
+.cm-preview-actions {
+  position: absolute; inset-inline: 0; bottom: 0;
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  padding: 8px 10px; background: linear-gradient(to top, rgba(15, 12, 24, 0.55), transparent);
+}
+.cm-change { padding: 4px 10px; border-radius: 6px; background: rgba(255, 255, 255, 0.92); font-size: 12px; font-weight: 600; color: rgba(47, 43, 61, 0.9); }
+
+.cm-lang { display: flex; align-items: center; justify-content: center; }
+.cm-lang-icon { color: rgba(47, 43, 61, 0.55); }
+.cm-lang-switch { display: inline-flex; overflow: hidden; border: 1px solid #e5e7eb; border-radius: 12px; background: #fff; }
+.cm-lang-btn {
+  position: relative; min-width: 96px; padding: 0.4rem 0.9rem; border: none;
+  background: transparent; color: #6b7280;
+  font-family: inherit; font-size: 0.85rem; font-weight: 800; cursor: pointer;
+}
+.cm-lang-btn.active { background: #660033; color: #fff; }
+.cm-lang-btn.missing::after {
+  content: ''; position: absolute; top: 5px; inset-inline-end: 5px;
+  width: 5px; height: 5px; border-radius: 50%; background: #dc2626;
+}
+.cm-image-error { margin: -8px 0 0; padding: 8px 12px; border-radius: 6px; background: #fef2f2; border: 1px solid #fecaca; color: #b91c1c; font-size: 13px; }
+.cm-missing { margin: 0; font-size: 12px; color: rgba(47, 43, 61, 0.6); }
+
+.cm-footer { display: flex; align-items: stretch; gap: 1rem; margin-top: 0.5rem; flex-shrink: 0; }
+.cm-footer .cm-btn { flex: 1; }
+.cm-footer .cm-btn-primary, .cm-footer .cm-btn-danger { flex: 2; }
+.cm-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 0.85rem; border-radius: 10px;
+  font-family: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; white-space: nowrap;
+  transition: background 0.15s, opacity 0.15s;
+}
+.cm-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.cm-btn-cancel { background: #fff; border: 1px solid #e5e7eb; color: #6b7280; }
+.cm-btn-cancel:hover { background: #f9fafb; }
+.cm-btn-primary { background: #660033; border: none; color: #fff; }
+.cm-btn-primary:hover:not(:disabled) { background: #4d0026; }
+.cm-btn-danger { background: #ef4444; border: none; color: #fff; }
+.cm-btn-danger:hover:not(:disabled) { background: #dc2626; }
+.cm-btn:focus-visible, .cm-lang-btn:focus-visible, .cm-close:focus-visible { outline: 2px solid #660033; outline-offset: 2px; }
+
+/* View */
+.cm-view-hero { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 8px 0; }
+.cm-view-img {
+  display: flex; align-items: center; justify-content: center; overflow: hidden;
+  width: 96px; height: 96px; border-radius: 8px; background: #f8f7fa; border: 1px solid rgba(47, 43, 61, 0.12);
+}
+.cm-view-img img { width: 100%; height: 100%; object-fit: cover; }
+.cm-view-name { margin: 0; font-size: 20px; font-weight: 600; color: rgba(47, 43, 61, 0.9); text-align: center; }
+.cm-view-block { display: flex; flex-direction: column; align-items: flex-start; gap: 4px; }
+.cm-view-label { font-size: 13px; color: rgba(47, 43, 61, 0.6); }
+.cm-view-value { font-size: 15px; font-weight: 500; color: rgba(47, 43, 61, 0.9); }
+.cm-view-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.cm-children { display: flex; flex-direction: column; gap: 8px; width: 100%; margin: 4px 0 0; padding: 0; list-style: none; }
+.cm-child { display: flex; align-items: center; gap: 12px; padding: 8px 12px; border-radius: 8px; background: #f8f7fa; }
+.cm-child-img {
+  display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0;
+  width: 40px; height: 40px; border-radius: 6px; background: #fff; border: 1px solid rgba(47, 43, 61, 0.12);
+}
+.cm-child-img img { width: 100%; height: 100%; object-fit: cover; }
+.cm-child-text { display: flex; flex-direction: column; flex: 1; min-width: 0; }
+.cm-child-name { font-size: 14px; font-weight: 500; color: rgba(47, 43, 61, 0.9); }
+.cm-child-count { font-size: 12px; color: rgba(47, 43, 61, 0.55); }
+
+/* Delete */
+.cm-delete-body { display: flex; flex-direction: column; gap: 6px; font-size: 14px; line-height: 22px; color: rgba(47, 43, 61, 0.75); }
+.cm-delete-body p { margin: 0; }
+.cm-delete-warning { color: #ef4444; }
+
+@media (max-width: 600px) {
+  .cm-form, .cm-view { padding: 0 1.25rem 1.5rem; }
+  .cm-header { padding: 1.5rem 3.5rem 1rem; }
+  .cm-footer { flex-wrap: wrap; }
+  .cm-view-pair { grid-template-columns: 1fr; }
+}
 </style>

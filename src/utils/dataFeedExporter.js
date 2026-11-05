@@ -3,15 +3,19 @@
  * Transforms product data into Facebook Catalog CSV, Google Shopping XML, and JSON feeds.
  */
 
-// Helper to escape CSV strings
+import { sanitizeSpreadsheetCell } from './adminSecurity.js';
+
+// Helper to escape CSV strings and prevent CSV/Excel Formula Injection
 function escapeCSV(val) {
   if (val === null || val === undefined) return '""';
-  let str = String(val).replace(/"/g, '""');
   // Strip HTML tags if present for plain text description
-  str = str.replace(/<[^>]*>?/gm, '');
+  let str = String(val).replace(/<[^>]*>?/gm, '');
   // Clean newlines
-  str = str.replace(/[\r\n]+/g, ' ');
-  return `"${str.trim()}"`;
+  str = str.replace(/[\r\n]+/g, ' ').trim();
+  // Neutralize formula triggers (=, +, -, @, |, tab)
+  str = sanitizeSpreadsheetCell(str);
+  str = str.replace(/"/g, '""');
+  return `"${str}"`;
 }
 
 // Helper to escape XML special characters
@@ -31,7 +35,7 @@ function escapeXML(val) {
  * Generate Meta / Facebook Catalog Feed in CSV format
  * Fields: id, title, description, availability, condition, price, link, image_link, brand, google_product_category
  */
-export function generateMetaCSV(products = [], storeUrl = 'https://mastergas.sa', currency = 'JOD') {
+export function generateMetaCSV(products = [], storeUrl = 'https://mastergas.sa', currency = 'SAR') {
   const headers = [
     'id',
     'title',
@@ -91,7 +95,7 @@ export function generateMetaCSV(products = [], storeUrl = 'https://mastergas.sa'
 /**
  * Generate Google Merchant Center RSS 2.0 XML Feed
  */
-export function generateGoogleXML(products = [], storeUrl = 'https://mastergas.sa', currency = 'JOD') {
+export function generateGoogleXML(products = [], storeUrl = 'https://mastergas.sa', currency = 'SAR') {
   const baseUrl = storeUrl.replace(/\/$/, '');
   
   const itemsXML = products.map(product => {
@@ -144,7 +148,7 @@ export function generateGoogleXML(products = [], storeUrl = 'https://mastergas.s
 /**
  * Generate JSON Catalog Feed
  */
-export function generateJSONFeed(products = [], storeUrl = 'https://mastergas.sa', currency = 'JOD') {
+export function generateJSONFeed(products = [], storeUrl = 'https://mastergas.sa', currency = 'SAR') {
   const baseUrl = storeUrl.replace(/\/$/, '');
   
   const items = products.map(product => {

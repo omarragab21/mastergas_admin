@@ -1,6 +1,10 @@
 <script setup>
+import { localizeMessage } from '../utils/uiMessages';
 import { ref, onMounted, computed } from 'vue';
 import api from '../config/axios';
+import { useAdminText } from '../composables/useAdminText';
+
+const { tx } = useAdminText();
 
 // State
 const logs = ref([]);
@@ -59,7 +63,7 @@ const deleteLog = async (id) => {
 // Helpers
 const getActionTypeColor = (type) => {
     switch (type) {
-        case 'order': return '#000000';
+        case 'order': return '#660033';
         case 'product': return '#10b981';
         case 'user': return '#3b82f6';
         case 'setting': return '#f59e0b';
@@ -73,7 +77,7 @@ const alertMessage = ref('');
 const alertType = ref('success');
 
 const triggerAlert = (message, type = 'success') => {
-    alertMessage.value = message;
+    alertMessage.value = localizeMessage(message);
     alertType.value = type;
     showAlert.value = true;
     setTimeout(() => showAlert.value = false, 3000);
@@ -84,9 +88,9 @@ const triggerAlert = (message, type = 'success') => {
   <div class="activity-page p-6">
     <!-- Breadcrumbs -->
     <div class="breadcrumb mb-4">
-       <span>لوحة التحكم الرئيسية</span>
+       <span>{{ tx('لوحة التحكم الرئيسية', 'Dashboard') }}</span>
        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
-       <span class="active">سجل الأنشطة</span>
+       <span class="active">{{ tx('سجل الأنشطة', 'Activity Log') }}</span>
     </div>
 
     <!-- Header -->
@@ -97,8 +101,8 @@ const triggerAlert = (message, type = 'success') => {
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
                 </div>
                 <div>
-                    <h1>تقارير لوحة التحكم</h1>
-                    <p>سجل نشاطات المديرين والإجراءات المتخذة</p>
+                    <h1>{{ tx('تقارير لوحة التحكم', 'Dashboard Reports') }}</h1>
+                    <p>{{ tx('سجل نشاطات المديرين والإجراءات المتخذة', 'Log of administrator activity and actions') }}</p>
                 </div>
             </div>
         </div>
@@ -109,22 +113,22 @@ const triggerAlert = (message, type = 'success') => {
        <div class="flex-row gap-4">
           <div class="search-wrapper flex-1">
              <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-             <input type="text" v-model="searchQuery" @input="fetchLogs" placeholder="البحث في النشاطات..." class="search-input" />
+             <input type="text" v-model="searchQuery" @input="fetchLogs" :placeholder="tx('البحث في النشاطات...', 'Search activity...')" class="search-input" />
           </div>
           
           <div class="select-wrapper">
              <select v-model="selectedActionType" @change="fetchLogs" class="form-select">
-                <option value="">جميع النشاطات</option>
-                <option value="order">الطلبات</option>
-                <option value="product">المنتجات</option>
-                <option value="user">المستخدمين</option>
-                <option value="setting">الإعدادات</option>
+                <option value="">{{ tx('جميع النشاطات', 'All Activity') }}</option>
+                <option value="order">{{ tx('الطلبات', 'Orders') }}</option>
+                <option value="product">{{ tx('المنتجات', 'Products') }}</option>
+                <option value="user">{{ tx('المستخدمين', 'Users') }}</option>
+                <option value="setting">{{ tx('الإعدادات', 'Settings') }}</option>
              </select>
           </div>
 
           <div class="select-wrapper">
              <select v-model="selectedAdmin" @change="fetchLogs" class="form-select">
-                <option value="">جميع المديرين</option>
+                <option value="">{{ tx('جميع المديرين', 'All Admins') }}</option>
                 <option v-for="admin in admins" :key="admin.id" :value="admin.id">{{ admin.name }}</option>
              </select>
           </div>
@@ -133,8 +137,8 @@ const triggerAlert = (message, type = 'success') => {
 
     <!-- Logs List -->
     <div class="logs-list">
-       <div v-if="loading" class="text-center p-10 color-gray">جاري التحميل...</div>
-       <div v-else-if="logs.length === 0" class="text-center p-10 color-gray">لا توجد سجلات مطابقة</div>
+       <div v-if="loading" class="text-center p-10 color-gray">{{ tx('جاري التحميل...', 'Loading...') }}</div>
+       <div v-else-if="logs.length === 0" class="text-center p-10 color-gray">{{ tx('لا توجد سجلات مطابقة', 'No matching activity logs') }}</div>
        <template v-else>
           <div v-for="log in logs" :key="log.id" class="log-card fade-in mb-4">
              <!-- Trash Icon Left -->
@@ -147,7 +151,7 @@ const triggerAlert = (message, type = 'success') => {
                 <div class="admin-part">
                    <div class="admin-names">
                       <span class="a-name">{{ log.admin_name }}</span>
-                      <span class="a-role">{{ log.admin_role || 'مدير' }}</span>
+                      <span class="a-role">{{ log.admin_role || tx('مدير', 'Admin') }}</span>
                    </div>
                    <div class="admin-avatar">
                       <img :src="log.admin_avatar" v-if="log.admin_avatar" />
@@ -182,26 +186,26 @@ const triggerAlert = (message, type = 'success') => {
     </div>
 
     <!-- Alert -->
-    <div v-if="showAlert" :class="['alert-toast', alertType]">
+    <div v-if="showAlert" :class="['alert-toast', alertType, 'show']">
        {{ alertMessage }}
     </div>
   </div>
 </template>
 
 <style scoped>
-.activity-page { font-family: 'IBM Plex Sans Arabic', sans-serif; direction: rtl; }
+.activity-page { font-family: 'IBM Plex Sans Arabic', sans-serif; direction: inherit; }
 
 /* Breadcrumbs */
 .breadcrumb { display: flex; align-items: center; gap: 8px; font-size: 0.85rem; color: #9ca3af; }
 .breadcrumb svg { transform: rotate(180deg); color: #d1d5db; }
-.breadcrumb .active { color: #000000; font-weight: 700; }
+.breadcrumb .active { color: #660033; font-weight: 700; }
 
 /* Header */
 .header-section { display: flex; justify-content: space-between; align-items: center; }
 .page-title-area h1 { font-size: 1.4rem; font-weight: 800; color: #1f2937; margin: 0; }
 .page-title-area p { color: #6b7280; font-size: 0.85rem; margin: 0; }
 .title-with-icon { display: flex; align-items: center; gap: 12px; }
-.icon-box { background: #f3f4f6; color: #000000; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+.icon-box { background: #f3f4f6; color: #660033; width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
 
 /* Filters Card */
 .filters-card { background: white; border-radius: 12px; padding: 15px; border: 1px solid #f3f4f6; }
@@ -241,17 +245,13 @@ const triggerAlert = (message, type = 'success') => {
 
 .admin-avatar { width: 34px; height: 34px; border-radius: 50%; overflow: hidden; background: #f3f4f6; flex-shrink: 0; }
 .admin-avatar img { width: 100%; height: 100%; object-fit: cover; }
-.avatar-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f3f4f6; color: #000000; font-weight: 800; font-size: 0.85rem; }
+.avatar-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #f3f4f6; color: #660033; font-weight: 800; font-size: 0.85rem; }
 
 .log-footer { margin-right: 20px; border-right: 1px solid #f3f4f6; padding-right: 20px; }
 .time-stamp { display: flex; align-items: center; gap: 6px; color: #9ca3af; font-size: 0.75rem; font-weight: 600; font-family: sans-serif; }
 .time-stamp svg { color: #d1d5db; }
 
 /* Alert */
-.alert-toast { position: fixed; top: 24px; left: 50%; transform: translateX(-50%); padding: 12px 24px; border-radius: 10px; color: white; font-weight: 700; z-index: 2000; box-shadow: 0 10px 15px rgba(0,0,0,0.1); animation: toastIn 0.3s ease-out; }
-@keyframes toastIn { from { top: -50px; opacity: 0; } to { top: 24px; opacity: 1; } }
-.alert-toast.success { background: #10b981; }
-.alert-toast.error { background: #ef4444; }
 
 .fade-in { animation: fadeIn 0.4s ease-out; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }

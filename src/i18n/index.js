@@ -2,7 +2,36 @@ import { createI18n } from 'vue-i18n';
 
 const messages = {
   ar: {
-    currency: '﷼',
+    admin: {
+      nav: {
+        dashboard: 'لوحة القيادة', categories: 'أقسام المنتجات', products: 'المنتجات', attributes: 'خصائص المنتجات', feeds: 'تغذية المنتجات', orders: 'الطلبات', returns: 'المرتجعات', pages: 'الصفحات الديناميكية', reviews: 'تقييمات المنتجات', customers: 'العملاء', coupons: 'أكواد الخصم', offers: 'إدارة العروض', discounts: 'إدارة الباقات', sliders: 'إعلانات السلايدر', payments: 'بوابات الدفع', messages: 'رسائل العملاء', topics: 'صفحات الموقع', settings: 'إعداد الموقع', brands: 'العلامات التجارية', admins: 'إدارة المديرين', inventory: 'إدارة المخزون', branches: 'الفروع', activity: 'سجل النشاطات', permissions: 'الصلاحيات', accounts: 'التقارير المالية', integrations: 'التكاملات', countries: 'الدول', cities: 'المدن', shipping: 'أسعار الشحن', settings_general: 'بيانات الموقع', settings_homepage: 'الصفحة الرئيسية', settings_producttabs: 'تفاصيل المنتج', settings_commerce: 'الأسعار والشحن', settings_contact: 'التواصل والبريد', settings_location: 'العنوان وساعات العمل', settings_branding: 'الهوية البصرية', settings_about: 'من نحن', settings_preview: 'معاينة الموقع', settings_privacy: 'سياسة الخصوصية', settings_terms: 'الشروط والأحكام'
+      },
+      profile: { admin: 'مدير النظام', my_profile: 'الملف الشخصي', logout: 'تسجيل الخروج', language: 'اللغة', switch_to: 'English', dashboard: 'لوحة التحكم الرئيسية' },
+      dashboard: {
+        title: 'لوحة القيادة', subtitle: 'نظرة عامة على أداء المتجر', loading: 'جاري تحميل البيانات...', retry: 'إعادة المحاولة', products: 'المنتجات', customers: 'العملاء', today_orders: 'طلبات اليوم', monthly_sales: 'مبيعات الشهر', today_sales: 'مبيعات اليوم', orders_distribution: 'توزيع الطلبات', orders_total: 'إجمالي الطلبات', sales_chart: 'مخطط المبيعات', monthly: 'شهري', daily: 'يومي', recent_orders: 'أحدث الطلبات', best_sellers: 'أفضل المنتجات مبيعاً', returns: 'طلبات مرتجعة', inventory: 'تنبيهات المخزون', view_all: 'عرض الكل', manage_inventory: 'إدارة المخزون', status: 'الحالة', amount: 'المبلغ', customer: 'العميل', order_number: 'رقم الطلب', revenue: 'الإيرادات', sales: 'المبيعات', product: 'المنتج', no_orders: 'لا توجد طلبات', no_data: 'لا توجد بيانات', loading_section: 'جاري التحميل...', no_returns: 'لا توجد طلبات إرجاع', no_inventory: 'لا توجد تنبيهات مخزون', out_of_stock: 'نفد المخزون', remaining: 'متبقي', pending: 'قيد الانتظار', processing: 'قيد المعالجة', shipped: 'قيد الشحن', completed: 'مكتمل', cancelled: 'ملغي', returned: 'مرتجع', pending_review: 'بانتظار المراجعة', approved: 'تمت الموافقة', rejected: 'مرفوض', refunded: 'تم الاسترداد', error: 'حدث خطأ أثناء تحميل البيانات', server_error: 'خطأ من السيرفر', no_response: 'لا يوجد استجابة من السيرفر', sar: 'ر.س', confirmed: 'تم التأكيد', orders_unit: 'طلب', awaiting: 'بانتظار', no_sales: 'لا توجد مبيعات مدفوعة بعد', paid_only_hint: 'المبيعات تحسب الطلبات المدفوعة فقط'
+      },
+      finance: {
+        title: 'التقارير المالية', subtitle: 'تقارير المبيعات والإيرادات المحققة', period: 'الفترة', from: 'من', to: 'إلى', apply: 'عرض', export: 'تصدير', exported: 'تم تصدير التقرير',
+        presets: { this_month: 'هذا الشهر', last_7: 'آخر 7 أيام', last_30: 'آخر 30 يوم', last_month: 'الشهر الماضي', this_year: 'هذه السنة', custom: 'فترة مخصصة' },
+        gross: 'إجمالي المبيعات', net: 'صافي الإيراد المحقق', refunds: 'المبالغ المستردة', aov: 'متوسط قيمة الطلب',
+        settled_orders: '{n} طلب مدفوع', after_refunds: 'بعد خصم المرتجعات', refunded_orders: '{n} طلب مسترد', per_order: 'لكل طلب مدفوع',
+        vs_previous: 'عن الفترة السابقة', no_compare: 'لا توجد بيانات للمقارنة',
+        bridge_title: 'من المبيعات إلى صافي الإيراد', bridge_hint: 'مكونات المبيعات وما يتبقى بعد المرتجعات',
+        products: 'المنتجات', tax: 'الضريبة', shipping: 'الشحن', discounts: 'الخصومات', gross_short: 'إجمالي المبيعات', refunds_short: 'المستردات', net_short: 'صافي الإيراد',
+        composition_title: 'تكوين المبيعات', gateways_title: 'طرق الدفع', transactions: '{n} عملية',
+        top_products_title: 'أعلى المنتجات إيراداً', units: '{n} قطعة', share_of_sales: 'من مبيعات المنتجات',
+        risk_title: 'مؤشرات المخاطر', cancelled_amount: 'قيمة الطلبات الملغاة', cancelled_orders: '{n} طلب ملغي', cancel_rate: 'نسبة الإلغاء', refund_rate: 'نسبة الاسترداد',
+        cancel_rate_hint: 'من الطلبات الملغاة والمدفوعة', refund_rate_hint: 'من إجمالي المبيعات',
+        empty_title: 'لا توجد مبيعات مدفوعة في هذه الفترة', empty_hint: 'جرّب فترة أخرى من القائمة.', no_data: 'لا توجد بيانات',
+        generated_at: 'تم إنشاء التقرير', paid_only_note: 'الأرقام تحسب الطلبات المدفوعة فقط، والطلبات الملغاة تظهر في مؤشرات المخاطر.',
+        reconcile_warning: 'الأرقام القادمة من الخادم لا تتطابق: المنتجات + الضريبة + الشحن − الخصومات لا يساوي إجمالي المبيعات.',
+        invalid_range: 'تاريخ النهاية يجب أن يكون في نفس يوم البداية أو بعده', error: 'تعذّر تحميل التقرير', retry: 'إعادة المحاولة',
+        methods: { cash_on_delivery: 'الدفع عند الاستلام', cod: 'الدفع عند الاستلام', credit_card: 'بطاقة ائتمان', card: 'بطاقة ائتمان', paytabs: 'بطاقة ائتمان (PayTabs)', bank_transfer: 'تحويل بنكي', wallet: 'المحفظة الإلكترونية', unknown: 'غير محدد' },
+        csv: { period: 'الفترة', section_summary: 'الملخص', products: 'المنتجات (المجموع الفرعي)', tax: 'الضريبة', shipping: 'الشحن', discounts: 'الخصومات', gross: 'إجمالي المبيعات', refunds: 'المبالغ المستردة', net: 'صافي الإيراد المحقق', aov: 'متوسط قيمة الطلب', settled: 'الطلبات المدفوعة', refunded_orders: 'الطلبات المستردة', cancelled_amount: 'قيمة الطلبات الملغاة', cancelled_count: 'عدد الطلبات الملغاة', section_gateways: 'طريقة الدفع', amount: 'المبلغ', transactions: 'العمليات', section_products: 'المنتج', units: 'الكمية', revenue: 'الإيراد' }
+      },
+      settings: { title: 'إعداد الموقع', subtitle: 'إدارة إعدادات النظام العامة', save: 'حفظ التغييرات', saving: 'جاري الحفظ...', general: 'الإعدادات العامة', social: 'مواقع التواصل', homepage: 'الصفحة الرئيسية', about: 'من نحن', success: 'تم حفظ الإعدادات بنجاح', failed: 'فشل حفظ الإعدادات', site_name: 'اسم الموقع', free_delivery: 'حد التوصيل المجاني', shipping_cost: 'تكلفة الشحن الثابتة', tax_rate: 'نسبة الضريبة', support_phone: 'رقم الدعم', whatsapp: 'رابط الواتساب', email: 'البريد الإلكتروني الرئيسي', support_email: 'بريد الدعم', address_ar: 'العنوان بالعربية', address_en: 'العنوان بالإنجليزية', working_hours_ar: 'ساعات العمل بالعربية', working_hours_en: 'ساعات العمل بالإنجليزية', friday_hours_ar: 'ساعات يوم الجمعة بالعربية', friday_hours_en: 'ساعات يوم الجمعة بالإنجليزية', logo: 'شعار الموقع', favicon: 'أيقونة المتصفح', footer_logo: 'شعار الفوتر', choose_logo: 'اختيار شعار', choose_favicon: 'اختيار أيقونة', choose_footer_logo: 'اختيار شعار الفوتر', upload_logo_hint: 'قم بتحميل شعار الموقع الرئيسي.', upload_favicon_hint: 'تظهر بجانب اسم الموقع في التبويبات.', upload_footer_hint: 'الشعار الذي يظهر في أسفل الصفحة.', categories_hint: 'اختر الفئات التي تود عرض منتجاتها في الصفحة الرئيسية.', category_one: 'الفئة المخصصة الأولى', category_two: 'الفئة المخصصة الثانية', home_titles: 'عناوين الأقسام في الصفحة الرئيسية', category_title_ar: 'عنوان قسم الفئات (عربي)', category_title_en: 'عنوان قسم الفئات (English)', offers_title_ar: 'عنوان قسم العروض (عربي)', offers_title_en: 'عنوان قسم العروض (English)', about_hint: 'محتوى صفحة من نحن يظهر على الموقع.', about_title_ar: 'عنوان الصفحة (عربي)', about_title_en: 'عنوان الصفحة (English)', about_content_ar: 'محتوى الصفحة (عربي)', about_content_en: 'Page Content (English)', main_logo_note: 'PNG أو SVG | 200x200 بكسل', favicon_note: 'PNG أو ICO | 32x32 بكسل', footer_logo_note: 'PNG أو SVG | خلفية شفافة' }
+    },
+    currency: 'ر.س',
     use_code: 'استخدم كود',
     top_bar_welcome: 'أهلاً بك في Mastergas',
     free_delivery_over: 'شحن مجاني للطلبات فوق',
@@ -279,7 +308,7 @@ const messages = {
       delete_failed: 'فشل الحذف',
       status_pending: 'قيد الانتظار',
       status_processing: 'جاري التجهيز',
-      status_shipped: 'تم الشحن',
+      status_shipped: 'الطلب في الطريق',
       status_delivered: 'تم التوصيل',
       status_cancelled: 'ملغي',
       return_status_pending: 'قيد المراجعة',
@@ -481,6 +510,35 @@ const messages = {
     },
   },
   en: {
+    admin: {
+      nav: {
+        dashboard: 'Dashboard', categories: 'Product Categories', products: 'Products', attributes: 'Product Attributes', feeds: 'Product Feeds', orders: 'Orders', returns: 'Returns', pages: 'Dynamic Pages', reviews: 'Product Reviews', customers: 'Customers', coupons: 'Discount Codes', offers: 'Offers', discounts: 'Bundles', sliders: 'Slider Ads', payments: 'Payment Gateways', messages: 'Customer Messages', topics: 'Website Pages', settings: 'Site setup', brands: 'Brands', admins: 'Administrators', inventory: 'Inventory', branches: 'Branches', activity: 'Activity Log', permissions: 'Permissions', accounts: 'Financial Reports', integrations: 'Integrations', countries: 'Countries', cities: 'Cities', shipping: 'Shipping Rates', settings_general: 'Site info', settings_homepage: 'Homepage', settings_producttabs: 'Product details', settings_commerce: 'Pricing & shipping', settings_contact: 'Contact & email', settings_location: 'Address & working hours', settings_branding: 'Visual identity', settings_about: 'About us', settings_preview: 'Site preview', settings_privacy: 'Privacy policy', settings_terms: 'Terms & conditions'
+      },
+      profile: { admin: 'System Admin', my_profile: 'My profile', logout: 'Logout', language: 'Language', switch_to: 'العربية', dashboard: 'Dashboard Home' },
+      dashboard: {
+        title: 'Dashboard', subtitle: 'Overview of store performance', loading: 'Loading dashboard data...', retry: 'Retry', products: 'Products', customers: 'Customers', today_orders: "Today's Orders", monthly_sales: 'Monthly Sales', today_sales: "Today's Sales", orders_distribution: 'Order Distribution', orders_total: 'Total Orders', sales_chart: 'Sales Chart', monthly: 'Monthly', daily: 'Daily', recent_orders: 'Recent Orders', best_sellers: 'Best-Selling Products', returns: 'Returns', inventory: 'Inventory Alerts', view_all: 'View all', manage_inventory: 'Manage inventory', status: 'Status', amount: 'Amount', customer: 'Customer', order_number: 'Order number', revenue: 'Revenue', sales: 'Sales', product: 'Product', no_orders: 'No orders yet', no_data: 'No data available', loading_section: 'Loading...', no_returns: 'No return requests', no_inventory: 'No inventory alerts', out_of_stock: 'Out of stock', remaining: 'remaining', pending: 'Pending', processing: 'Processing', shipped: 'Shipped', completed: 'Completed', cancelled: 'Cancelled', returned: 'Returned', pending_review: 'Pending review', approved: 'Approved', rejected: 'Rejected', refunded: 'Refunded', error: 'Unable to load dashboard data', server_error: 'Server error', no_response: 'No response from server', sar: 'SAR', confirmed: 'Confirmed', orders_unit: 'orders', awaiting: 'pending', no_sales: 'No paid sales yet', paid_only_hint: 'Sales count paid orders only'
+      },
+      finance: {
+        title: 'Financial Reports', subtitle: 'Sales and realised revenue', period: 'Period', from: 'From', to: 'To', apply: 'Show', export: 'Export', exported: 'Report exported',
+        presets: { this_month: 'This month', last_7: 'Last 7 days', last_30: 'Last 30 days', last_month: 'Last month', this_year: 'This year', custom: 'Custom range' },
+        gross: 'Gross Sales', net: 'Net Realised Revenue', refunds: 'Refunds', aov: 'Average Order Value',
+        settled_orders: '{n} paid orders', after_refunds: 'After refunds', refunded_orders: '{n} refunded orders', per_order: 'Per paid order',
+        vs_previous: 'vs previous period', no_compare: 'Nothing to compare with',
+        bridge_title: 'From Sales to Net Revenue', bridge_hint: 'What sales are made of and what is kept after refunds',
+        products: 'Products', tax: 'Tax', shipping: 'Shipping', discounts: 'Discounts', gross_short: 'Gross sales', refunds_short: 'Refunds', net_short: 'Net revenue',
+        composition_title: 'Sales Composition', gateways_title: 'Payment Methods', transactions: '{n} transactions',
+        top_products_title: 'Top Products by Revenue', units: '{n} units', share_of_sales: 'of product sales',
+        risk_title: 'Risk Indicators', cancelled_amount: 'Cancelled order value', cancelled_orders: '{n} cancelled orders', cancel_rate: 'Cancellation rate', refund_rate: 'Refund rate',
+        cancel_rate_hint: 'of cancelled and paid orders', refund_rate_hint: 'of gross sales',
+        empty_title: 'No paid sales in this period', empty_hint: 'Try another period from the list.', no_data: 'No data',
+        generated_at: 'Report generated', paid_only_note: 'Figures count paid orders only; cancelled orders appear under risk indicators.',
+        reconcile_warning: 'The server figures do not add up: products + tax + shipping − discounts differs from gross sales.',
+        invalid_range: 'The end date must be on or after the start date', error: 'Unable to load the report', retry: 'Retry',
+        methods: { cash_on_delivery: 'Cash on delivery', cod: 'Cash on delivery', credit_card: 'Credit card', card: 'Credit card', paytabs: 'Credit card (PayTabs)', bank_transfer: 'Bank transfer', wallet: 'Wallet', unknown: 'Not specified' },
+        csv: { period: 'Period', section_summary: 'Summary', products: 'Products (subtotal)', tax: 'Tax', shipping: 'Shipping', discounts: 'Discounts', gross: 'Gross sales', refunds: 'Refunds', net: 'Net realised revenue', aov: 'Average order value', settled: 'Paid orders', refunded_orders: 'Refunded orders', cancelled_amount: 'Cancelled order value', cancelled_count: 'Cancelled orders', section_gateways: 'Payment method', amount: 'Amount', transactions: 'Transactions', section_products: 'Product', units: 'Units', revenue: 'Revenue' }
+      },
+      settings: { title: 'Site setup', subtitle: 'Manage general system settings', save: 'Save changes', saving: 'Saving...', general: 'General settings', social: 'Social media', homepage: 'Homepage', about: 'About us', success: 'Settings saved successfully', failed: 'Failed to save settings', site_name: 'Site name', free_delivery: 'Free delivery threshold', shipping_cost: 'Flat shipping cost', tax_rate: 'Tax rate', support_phone: 'Support phone', whatsapp: 'WhatsApp link', email: 'Primary email', support_email: 'Support email', address_ar: 'Address (Arabic)', address_en: 'Address (English)', working_hours_ar: 'Working hours (Arabic)', working_hours_en: 'Working hours (English)', friday_hours_ar: 'Friday hours (Arabic)', friday_hours_en: 'Friday hours (English)', logo: 'Website logo', favicon: 'Favicon', footer_logo: 'Footer logo', choose_logo: 'Choose logo', choose_favicon: 'Choose favicon', choose_footer_logo: 'Choose footer logo', upload_logo_hint: 'Upload the primary website logo.', upload_favicon_hint: 'Shown next to the site name in browser tabs.', upload_footer_hint: 'Logo displayed at the bottom of the website.', categories_hint: 'Choose the categories to feature on the homepage.', category_one: 'Custom category one', category_two: 'Custom category two', home_titles: 'Homepage section titles', category_title_ar: 'Category section title (Arabic)', category_title_en: 'Category section title (English)', offers_title_ar: 'Offers section title (Arabic)', offers_title_en: 'Offers section title (English)', about_hint: 'Content displayed on the About page.', about_title_ar: 'Page title (Arabic)', about_title_en: 'Page title (English)', about_content_ar: 'Page content (Arabic)', about_content_en: 'Page content (English)', main_logo_note: 'PNG or SVG | 200x200 px', favicon_note: 'PNG or ICO | 32x32 px', footer_logo_note: 'PNG or SVG | Transparent background' }
+    },
     currency: 'SAR',
     use_code: 'Use code',
     free_delivery_over: 'Free Delivery on orders over',
@@ -757,7 +815,7 @@ const messages = {
       delete_failed: 'Delete failed',
       status_pending: 'Pending',
       status_processing: 'Processing',
-      status_shipped: 'Shipped',
+      status_shipped: 'Out for delivery',
       status_delivered: 'Delivered',
       status_cancelled: 'Cancelled',
       return_status_pending: 'Under Review',

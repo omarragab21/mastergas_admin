@@ -1,19 +1,19 @@
 <template>
   <div class="cities-view">
     <div class="page-header">
-      <h1 class="page-title">إدارة المدن</h1>
+      <h1 class="page-title">{{ tx('إدارة المدن', 'City Management') }}</h1>
       <button class="add-btn" @click="showModal = true">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="12" y1="5" x2="12" y2="19"/>
           <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        إضافة مدينة
+        {{ tx('إضافة مدينة', 'Add City') }}
       </button>
     </div>
 
     <div class="filters">
       <select v-model="selectedCountry" @change="fetchCities">
-        <option value="">كل الدول</option>
+        <option value="">{{ tx('كل الدول', 'All Countries') }}</option>
         <option v-for="country in countries" :key="country.id" :value="country.id">
           {{ country.name }}
         </option>
@@ -24,31 +24,31 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th>الاسم</th>
-            <th>الدولة</th>
-            <th>سعر الشحن</th>
-            <th>الحالة</th>
-            <th>الإجراءات</th>
+            <th>{{ tx('الاسم', 'Name') }}</th>
+            <th>{{ tx('الدولة', 'Country') }}</th>
+            <th>{{ tx('سعر الشحن', 'Shipping Cost') }}</th>
+            <th>{{ tx('الحالة', 'Status') }}</th>
+            <th>{{ tx('الإجراءات', 'Actions') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="city in cities" :key="city.id">
-            <td>{{ city.name }}</td>
-            <td>{{ city.country?.name }}</td>
+            <td>{{ localizedName(city) }}</td>
+            <td>{{ localizedName(city.country) }}</td>
             <td>{{ city.shipping_rate?.shipping_cost ? city.shipping_rate.shipping_cost + ' ' + currency : '-' }}</td>
             <td>
               <span class="status-badge" :class="city.is_active ? 'active' : 'inactive'">
-                {{ city.is_active ? 'نشط' : 'غير نشط' }}
+                {{ city.is_active ? tx('نشط', 'Active') : tx('غير نشط', 'Inactive') }}
               </span>
             </td>
             <td class="actions">
-              <button class="btn-icon" @click="editCity(city)" title="تعديل">
+              <button class="btn-icon" @click="editCity(city)" :title="tx('تعديل', 'Edit')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                 </svg>
               </button>
-              <button class="btn-icon delete" @click="deleteCity(city.id)" title="حذف">
+              <button class="btn-icon delete" @click="deleteCity(city.id)" :title="tx('حذف', 'Delete')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="3 6 5 6 21 6"></polyline>
                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -63,38 +63,38 @@
     <!-- Modal -->
     <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
       <div class="modal-content">
-        <h2>{{ isEdit ? 'تعديل مدينة' : 'إضافة مدينة' }}</h2>
+        <h2>{{ isEdit ? tx('تعديل مدينة', 'Edit City') : tx('إضافة مدينة', 'Add City') }}</h2>
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
-            <label>الدولة *</label>
+            <label>{{ tx('الدولة', 'Country') }} *</label>
             <select v-model="form.country_id" required>
-              <option value="">اختر الدولة</option>
+              <option value="">{{ tx('اختر الدولة', 'Select Country') }}</option>
               <option v-for="country in countries" :key="country.id" :value="country.id">
-                {{ country.name }}
+                {{ localizedName(country) }}
               </option>
             </select>
           </div>
           <div class="form-group">
-            <label>الاسم *</label>
+            <label>{{ tx('الاسم', 'Name') }} *</label>
             <input v-model="form.name" type="text" required />
           </div>
           <div class="form-group">
-            <label>الاسم بالإنجليزي</label>
+            <label>{{ tx('الاسم بالإنجليزي', 'English Name') }}</label>
             <input v-model="form.name_en" type="text" />
           </div>
           <div class="form-group">
-            <label>الترتيب</label>
+            <label>{{ tx('الترتيب', 'Sort Order') }}</label>
             <input v-model="form.sort_order" type="number" />
           </div>
           <div class="form-group checkbox">
             <label>
               <input v-model="form.is_active" type="checkbox" />
-              نشط
+              {{ tx('نشط', 'Active') }}
             </label>
           </div>
           <div class="modal-actions">
-            <button type="button" class="btn-secondary" @click="showModal = false">إلغاء</button>
-            <button type="submit" class="btn-primary">حفظ</button>
+            <button type="button" class="btn-secondary" @click="showModal = false">{{ tx('إلغاء', 'Cancel') }}</button>
+            <button type="submit" class="btn-primary">{{ tx('حفظ', 'Save') }}</button>
           </div>
         </form>
       </div>
@@ -105,6 +105,10 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '../config/axios';
+import { useAdminText } from '../composables/useAdminText';
+
+const { tx, locale } = useAdminText();
+const localizedName = (item) => item?.name_i18n?.[locale.value] || (locale.value === 'en' ? item?.name_en || item?.name : item?.name || item?.name_en);
 
 const cities = ref([]);
 const countries = ref([]);
@@ -112,7 +116,7 @@ const selectedCountry = ref('');
 const showModal = ref(false);
 const isEdit = ref(false);
 const editingId = ref(null);
-const currency = ref('JOD');
+const currency = ref('SAR');
 const form = ref({
   country_id: '',
   name: '',
@@ -192,7 +196,7 @@ onMounted(() => {
 
 <style scoped>
 .cities-view {
-  padding: 2rem;
+  padding: 0;
 }
 
 .page-header {
@@ -212,7 +216,7 @@ onMounted(() => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #000000;
+  background: #660033;
   color: #fff;
   border: none;
   padding: 0.65rem 1.1rem;
@@ -223,10 +227,10 @@ onMounted(() => {
   cursor: pointer;
   transition: all 0.2s;
 }
-.add-btn:hover { background: #262626; }
+.add-btn:hover { background: #4d0026; }
 
 .btn-primary {
-  background: #000000;
+  background: #660033;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -331,7 +335,7 @@ onMounted(() => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;

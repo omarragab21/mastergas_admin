@@ -5,9 +5,9 @@ import { API_TTL } from '../services/apiClient';
 
 export const defaultSettings = {
   site_name: 'ماسترجاز | Mastergas',
-  logo: '/brand/mastergas-logo.png',
-  footer_logo: '/brand/mastergas-logo-white.png',
-  favicon: '/brand/mastergas-icon.png',
+  logo: '/brand/tijara-logo-full.png',
+  footer_logo: '/brand/tijara-logo-full.png',
+  favicon: '/brand/tijara-logo.png',
   currency: 'SAR',
   currency_ar: 'ر.س',
   currency_en: 'SAR',
@@ -15,7 +15,7 @@ export const defaultSettings = {
   shipping_cost: 25,
   tax_rate: 15,
   support_phone: '+966500000000',
-  support_email: 'info@mastergas.com',
+  support_email: 'info@mastergas.com.sa',
   address_ar: 'المملكة العربية السعودية',
   address_en: 'Saudi Arabia',
 };
@@ -45,6 +45,20 @@ const normalizeSettings = (data) => {
     }
     settingsObj[setting.key] = value;
   });
+  if (settingsObj.social_links && typeof settingsObj.social_links === 'object') {
+    Object.assign(settingsObj, settingsObj.social_links);
+  }
+  if (settingsObj.default_shipping_cost !== undefined) {
+    settingsObj.shipping_cost = settingsObj.default_shipping_cost;
+  }
+  if (settingsObj.vat_percentage !== undefined) {
+    // vat_percentage is already a percentage (14 = 14%), as the backend applies it.
+    const vat = Number(settingsObj.vat_percentage);
+    settingsObj.tax_rate = Number.isFinite(vat) ? vat : settingsObj.tax_rate;
+  }
+  if (settingsObj.site_contact_phone !== undefined) {
+    settingsObj.support_phone = settingsObj.site_contact_phone;
+  }
   return settingsObj;
 };
 
@@ -75,8 +89,8 @@ export function useSettings() {
   };
 
   const currency = computed(() => {
-    if (!settings.value) return locale.value === 'ar' ? '﷼' : 'SAR';
-    return locale.value === 'ar' ? (settings.value.currency_ar || '﷼') : (settings.value.currency_en || 'SAR');
+    // Follows the dashboard language: «ر.س» in Arabic, «SAR» in English.
+    return locale.value === 'en' ? 'SAR' : 'ر.س';
   });
 
   const getSetting = (key, defaultValue = null) => settings.value?.[key] ?? defaultSettings[key] ?? defaultValue;

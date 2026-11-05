@@ -5,8 +5,8 @@
       <div class="login-form-wrapper">
         <!-- العنوان -->
         <div class="login-header">
-          <h2 class="login-title">تسجيل الدخول</h2>
-          <p class="login-subtitle">لوحة التحكم الإدارية — ماستر غاز</p>
+          <h2 class="login-title">مرحباً بك في تجارة</h2>
+          <p class="login-subtitle">أدخل بيانات الاعتماد للوصول إلى لوحة التحكم</p>
         </div>
 
         <!-- نموذج تسجيل الدخول -->
@@ -17,13 +17,16 @@
             <div class="input-wrapper">
               <input
                 id="email"
+                name="email"
                 v-model="form.email"
                 type="email"
                 required
-                placeholder="admin@mastergas.sa"
+                placeholder="admin@example.com"
                 class="form-input"
                 :class="{ 'input-error': errors.email }"
-                autocomplete="email"
+                autocomplete="username"
+                spellcheck="false"
+                enterkeyhint="next"
               />
               <span class="input-icon">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -41,13 +44,15 @@
             <div class="input-wrapper">
               <input
                 id="password"
+                name="password"
                 v-model="form.password"
                 :type="showPassword ? 'text' : 'password'"
                 required
-                placeholder="••••••••"
+                placeholder="أدخل كلمة المرور"
                 class="form-input"
                 :class="{ 'input-error': errors.password }"
                 autocomplete="current-password"
+                enterkeyhint="done"
               />
               <span class="input-icon">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -56,26 +61,24 @@
                 </svg>
               </span>
               <button
+                v-if="form.password"
                 type="button"
                 class="toggle-password"
                 @click="showPassword = !showPassword"
                 tabindex="-1"
                 aria-label="إظهار أو إخفاء كلمة المرور"
               >
-                <svg v-if="!showPassword" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <PasswordEyeIcon v-if="showPassword" />
+                <svg v-else width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true">
                   <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                   <circle cx="12" cy="12" r="3"/>
-                </svg>
-                <svg v-else width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
-                  <line x1="1" y1="1" x2="23" y2="23"/>
                 </svg>
               </button>
             </div>
             <span v-if="errors.password" class="error-msg">{{ errors.password }}</span>
           </div>
 
-          <!-- تذكرني ونسيت كلمة المرور -->
+          <!-- تذكرني -->
           <div class="form-row">
             <label class="remember-label">
               <input
@@ -83,10 +86,8 @@
                 v-model="form.remember"
                 class="remember-checkbox"
               />
-              <span class="checkmark"></span>
               <span>تذكرني</span>
             </label>
-            <a href="#" class="forgot-link">نسيت كلمة المرور؟</a>
           </div>
 
           <!-- رسالة الخطأ العامة -->
@@ -106,12 +107,10 @@
             :disabled="loading"
           >
             <span v-if="!loading" class="btn-content">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon">
-                <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
-                <polyline points="10 17 15 12 10 7"/>
-                <line x1="15" y1="12" x2="3" y2="12"/>
-              </svg>
               <span>تسجيل الدخول إلى لوحة التحكم</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon">
+                <polyline points="15 18 9 12 15 6" />
+              </svg>
             </span>
             <span v-else class="btn-loading">
               <span class="spinner"></span>
@@ -120,63 +119,57 @@
           </button>
         </form>
       </div>
-
-      <!-- Footer -->
-      <div class="login-footer">
-        <p>جميع الحقوق محفوظة © ماستر غاز Mastergas {{ currentYear }}</p>
-      </div>
     </div>
 
     <!-- القسم الأيمن: لوحة العلامة التجارية -->
     <div class="login-right">
-      <!-- اللوجو والشارة -->
+      <!-- اللوجو والعنوان العلوي -->
       <div class="brand-logo">
-        <img src="/brand/mastergas-logo-white.png" alt="ماستر غاز" class="brand-logo-img" />
-        <span class="brand-badge">
-          <svg class="admin-badge-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
-          </svg>
-          لوحة الإدارة
-        </span>
+        <img src="/brand/tijara-icon-light.svg" alt="Tijara" class="brand-logo-img" />
+        <span class="brand-logo-text">لوحة الإدارة</span>
       </div>
 
       <!-- المحتوى الرئيسي -->
       <div class="brand-content">
-        <span class="brand-pill">نظام إدارة الأجهزة الإيطالية الفاخرة</span>
         <h1 class="brand-title">
-          أجهزة مطبخ بمعايير<br />إيطالية فاخرة
+          إدارة منصة<br />التجارة الإلكترونية
         </h1>
         <p class="brand-desc">
-          لوحة التحكم الإدارية المركزية لمتابعة المنتجات، إدارة المخزون، تتبع طلبات العملاء، وضبط أسعار الشحن ومؤشرات الأداء.
+          الوصول إلى لوحة التحكم لمراقبة المبيعات وإدارة المنتجات وتنمية أعمالك.
         </p>
-      </div>
-
-      <!-- زخرفة دوائر في الخلفية -->
-      <div class="brand-decoration">
-        <div class="deco-circle deco-circle-1"></div>
-        <div class="deco-circle deco-circle-2"></div>
-        <div class="deco-circle deco-circle-3"></div>
       </div>
 
       <!-- Footer للقسم الأيمن -->
       <div class="brand-footer">
-        <p>جميع الحقوق محفوظة © ماستر غاز Mastergas {{ currentYear }}</p>
+        <p>جميع الحقوق محفوظة © Be Kite {{ currentYear }}</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { apiErrorMessage } from '../utils/apiMessage';
 import { ref, computed, onMounted } from 'vue';
 import api from '../config/axios';
 import { useRouter } from 'vue-router';
+import PasswordEyeIcon from '../components/PasswordEyeIcon.vue';
+import {
+  checkLoginRateLimit,
+  recordLoginFailure,
+  resetLoginRateLimit,
+  isExplicitNonAdminUser,
+  clearAdminSessionArtifacts,
+  hasControlCharacters,
+} from '../utils/adminSecurity';
 
 const router = useRouter();
 
-const savedEmail = localStorage.getItem('remembered_email');
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const rawSavedEmail = String(localStorage.getItem('remembered_email') || '').trim();
+const savedEmail = EMAIL_REGEX.test(rawSavedEmail) ? rawSavedEmail : '';
 
 const form = ref({
-  email: savedEmail || '',
+  email: savedEmail,
   password: '',
   remember: Boolean(savedEmail),
 });
@@ -189,15 +182,14 @@ const showPassword = ref(false);
 const currentYear = computed(() => new Date().getFullYear());
 
 onMounted(() => {
-  // الحفاظ الدائم على أيقونة ماستر غاز وعنوان التاب ومنع استرجاع أيقونات قديمة
   let link = document.querySelector("link[rel*='icon']");
   if (!link) {
     link = document.createElement('link');
     link.rel = 'icon';
     document.head.appendChild(link);
   }
-  link.href = '/brand/mastergas-icon.png';
-  document.title = 'ماستر غاز | تسجيل الدخول للوحة التحكم';
+  link.type = 'image/svg+xml';
+  link.href = '/brand/tijara-icon-dark.svg';
 });
 
 const validate = () => {
@@ -205,7 +197,7 @@ const validate = () => {
 
   if (!form.value.email) {
     errors.value.email = 'البريد الإلكتروني مطلوب';
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.value.email)) {
+  } else if (!EMAIL_REGEX.test(form.value.email.trim())) {
     errors.value.email = 'البريد الإلكتروني غير صحيح';
   }
 
@@ -221,23 +213,48 @@ const validate = () => {
 const handleLogin = async () => {
   error.value = '';
 
+  const rateLimit = checkLoginRateLimit();
+  if (rateLimit.blocked) {
+    error.value = `تم تجاوز الحد المسموح لمحاولات الدخول. يرجى الانتظار ${rateLimit.remainingSeconds} ثانية ثم المحاولة مجدداً`;
+    return;
+  }
+
   if (!validate()) return;
 
   loading.value = true;
 
   try {
+    const cleanEmail = form.value.email.trim();
     const response = await api.post('/v1/admin/login', {
-      email: form.value.email,
+      email: cleanEmail,
       password: form.value.password,
     });
 
+    const rawToken = String(response.data?.token ?? response.data?.access_token ?? '').trim();
+    const user = response.data?.user || response.data?.admin || response.data?.customer || {};
+
+    if (!rawToken || rawToken === 'undefined' || rawToken === 'null' || hasControlCharacters(rawToken)) {
+      error.value = 'تعذر التحقق من جلسة الدخول، يرجى المحاولة مرة أخرى';
+      return;
+    }
+
+    if (isExplicitNonAdminUser(user)) {
+      clearAdminSessionArtifacts(localStorage);
+      form.value.password = '';
+      error.value = 'غير مصرح لهذا الحساب بالدخول إلى لوحة الإدارة';
+      return;
+    }
+
+    resetLoginRateLimit();
+    clearAdminSessionArtifacts(localStorage);
+
     // حفظ الـ token والمعلومات
-    localStorage.setItem('token', response.data.token);
-    const user = response.data.user || response.data.admin || response.data.customer || {};
+    localStorage.setItem('token', rawToken);
     localStorage.setItem('admin', JSON.stringify(user));
+    form.value.password = '';
 
     if (form.value.remember) {
-      localStorage.setItem('remembered_email', form.value.email);
+      localStorage.setItem('remembered_email', cleanEmail);
     } else {
       localStorage.removeItem('remembered_email');
     }
@@ -245,7 +262,13 @@ const handleLogin = async () => {
     // الانتقال للوحة التحكم
     router.push('/admin/dashboard');
   } catch (err) {
-    error.value = err.response?.data?.message || 'البريد الإلكتروني أو كلمة المرور غير صحيحة';
+    form.value.password = '';
+    const failure = recordLoginFailure();
+    if (failure.blocked) {
+      error.value = `تم تجاوز الحد المسموح لمحاولات الدخول. يرجى الانتظار ${failure.remainingSeconds} ثانية ثم المحاولة مجدداً`;
+    } else {
+      error.value = apiErrorMessage(err, 'البريد الإلكتروني أو كلمة المرور غير صحيحة');
+    }
   } finally {
     loading.value = false;
   }
@@ -260,7 +283,7 @@ const handleLogin = async () => {
   min-height: 100vh;
   direction: ltr; /* LTR على الحاوية لترتيب الأعمدة: نموذج يسار، براند يمين */
   font-family: 'IBM Plex Sans Arabic', sans-serif;
-  background: var(--bg-main, #ffffff);
+  background: #f8f7fa;
 }
 
 /* ===== القسم الأيسر (النموذج) ===== */
@@ -268,8 +291,8 @@ const handleLogin = async () => {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: var(--bg-main, #ffffff);
+  justify-content: center;
+  background: #f8f7fa;
   padding: 3rem;
   position: relative;
   min-height: 100vh;
@@ -277,11 +300,10 @@ const handleLogin = async () => {
 }
 
 .login-form-wrapper {
-  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  max-width: 380px;
+  max-width: 400px;
   margin: auto;
   width: 100%;
 }
@@ -289,21 +311,22 @@ const handleLogin = async () => {
 /* ===== رأس صفحة تسجيل الدخول ===== */
 .login-header {
   text-align: right;
-  margin-bottom: 2rem;
+  margin-bottom: 1.85rem;
 }
 
 .login-title {
   font-size: 1.75rem;
-  font-weight: 800;
-  color: #111827;
-  margin-bottom: 0.4rem;
-  letter-spacing: -0.4px;
+  font-weight: 600;
+  color: #3b3547 !important;
+  margin-bottom: 0.45rem;
+  letter-spacing: -0.3px;
 }
 
 .login-subtitle {
   font-size: 0.88rem;
-  color: #64748b;
+  color: #7e7a8a !important;
   line-height: 1.5;
+  font-weight: 400;
 }
 
 /* ===== النموذج ===== */
@@ -320,9 +343,9 @@ const handleLogin = async () => {
 }
 
 .form-label {
-  font-size: 0.82rem;
-  font-weight: 600;
-  color: #1f2937;
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: #3b3547 !important;
   text-align: right;
 }
 
@@ -334,13 +357,13 @@ const handleLogin = async () => {
 
 .form-input {
   width: 100%;
-  padding: 0.72rem 2.5rem 0.72rem 2.5rem;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 8px;
+  padding: 0.7rem 2.5rem 0.7rem 1rem;
+  border: 1px solid #e2e0e7 !important;
+  border-radius: 6px;
   font-size: 0.85rem;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
-  color: #0f172a;
-  background: #ffffff;
+  color: #1f2937 !important;
+  background: #ffffff !important;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
   direction: ltr;
   text-align: right;
@@ -348,25 +371,25 @@ const handleLogin = async () => {
 }
 
 .form-input::placeholder {
-  color: #94a3b8;
+  color: #8b8896 !important;
   direction: ltr;
   text-align: right;
 }
 
 .form-input:focus {
-  border-color: #111827;
-  box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.1);
+  border-color: #660033 !important;
+  box-shadow: 0 0 0 3px rgba(102, 0, 51, 0.12);
 }
 
 .form-input.input-error {
-  border-color: #ef4444;
+  border-color: #ef4444 !important;
   box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
 }
 
 .input-icon {
   position: absolute;
   right: 0.85rem;
-  color: #94a3b8;
+  color: #787586;
   display: flex;
   align-items: center;
   pointer-events: none;
@@ -375,7 +398,7 @@ const handleLogin = async () => {
 .toggle-password {
   position: absolute;
   left: 0.85rem;
-  color: #94a3b8;
+  color: #787586;
   cursor: pointer;
   background: none;
   border: none;
@@ -386,7 +409,7 @@ const handleLogin = async () => {
 }
 
 .toggle-password:hover {
-  color: #111827;
+  color: #660033;
 }
 
 .error-msg {
@@ -395,41 +418,52 @@ const handleLogin = async () => {
   text-align: right;
 }
 
-/* ===== صف تذكرني + نسيت كلمة المرور ===== */
+/* ===== صف تذكرني ===== */
 .form-row {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 0.1rem;
+  margin-top: 0.15rem;
 }
 
 .remember-label {
   display: flex;
   align-items: center;
-  gap: 0.45rem;
+  gap: 0.5rem;
   cursor: pointer;
-  font-size: 0.8rem;
-  color: #475569;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #2e2b3a !important;
   user-select: none;
 }
 
 .remember-checkbox {
-  width: 15px;
-  height: 15px;
-  accent-color: #111827;
+  appearance: none;
+  -webkit-appearance: none;
+  width: 14px;
+  height: 14px;
+  border: 1px solid #d4d2dc;
+  border-radius: 3px;
+  background-color: #ffffff;
   cursor: pointer;
+  display: inline-grid;
+  place-content: center;
+  margin: 0;
+  transition: all 0.15s ease;
 }
 
-.forgot-link {
-  font-size: 0.8rem;
-  color: #475569;
-  text-decoration: none;
-  transition: color 0.2s;
+.remember-checkbox:checked {
+  background-color: #660033;
+  border-color: #660033;
 }
 
-.forgot-link:hover {
-  color: #0f172a;
-  text-decoration: underline;
+.remember-checkbox:checked::before {
+  content: '';
+  width: 8px;
+  height: 5px;
+  border-left: 1.8px solid #ffffff;
+  border-bottom: 1.8px solid #ffffff;
+  transform: rotate(-45deg) translate(0.5px, -0.5px);
 }
 
 /* ===== رسالة الخطأ العامة ===== */
@@ -441,20 +475,20 @@ const handleLogin = async () => {
   border: 1px solid #fecaca;
   color: #dc2626;
   padding: 0.65rem 0.85rem;
-  border-radius: 8px;
+  border-radius: 6px;
   font-size: 0.8rem;
 }
 
-/* ===== زر تسجيل الدخول (لون ماستر غاز الفاخر) ===== */
+/* ===== زر تسجيل الدخول ===== */
 .login-btn {
   width: 100%;
-  padding: 0.82rem 1rem;
-  background: #111827;
+  padding: 0.78rem 1rem;
+  background: #660033;
   color: #ffffff;
-  border: 1px solid #1f2937;
-  border-radius: 8px;
-  font-size: 0.88rem;
-  font-weight: 700;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.86rem;
+  font-weight: 500;
   font-family: 'IBM Plex Sans Arabic', sans-serif;
   cursor: pointer;
   transition: all 0.25s ease;
@@ -463,18 +497,10 @@ const handleLogin = async () => {
   overflow: hidden;
 }
 
-.login-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(255,255,255,0.06) 0%, rgba(255,255,255,0) 100%);
-  pointer-events: none;
-}
-
 .login-btn:hover:not(:disabled) {
-  background: #000000;
+  background: #4d0026;
   transform: translateY(-1px);
-  box-shadow: 0 8px 24px rgba(17, 24, 39, 0.25);
+  box-shadow: 0 6px 20px rgba(102, 0, 51, 0.3);
 }
 
 .login-btn:active:not(:disabled) {
@@ -490,7 +516,7 @@ const handleLogin = async () => {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: 0.65rem;
 }
 
 .btn-icon {
@@ -517,22 +543,19 @@ const handleLogin = async () => {
   to { transform: rotate(360deg); }
 }
 
-/* ===== فوتر القسم الأيسر ===== */
-.login-footer {
-  text-align: center;
-  font-size: 0.75rem;
-  color: #94a3b8;
-  padding-top: 1rem;
-}
-
-/* ===== القسم الأيمن (البراندينج بلون وهوية ماستر غاز) ===== */
+/* ===== القسم الأيمن (البراندينج) ===== */
 .login-right {
-  width: 44%;
-  background: linear-gradient(145deg, #090d16 0%, #111827 50%, #1e293b 100%);
+  width: 40%;
+  background-color: #660033;
+  background-image:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.065) 0%, rgba(255, 255, 255, 0) 65%),
+    linear-gradient(to right, rgba(255, 255, 255, 0.022) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.022) 1px, transparent 1px);
+  background-size: 100% 100%, 48px 48px, 48px 48px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding: 2.75rem 3rem;
+  padding: 2.25rem 2.5rem;
   position: relative;
   overflow: hidden;
   min-height: 100vh;
@@ -542,37 +565,23 @@ const handleLogin = async () => {
 .brand-logo {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 12px;
   justify-content: flex-start;
   position: relative;
   z-index: 2;
 }
 
 .brand-logo-img {
-  height: 34px;
-  width: auto;
+  width: 42px;
+  height: 42px;
   object-fit: contain;
 }
 
-.brand-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(255, 255, 255, 0.08);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #f1f5f9;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 0.32rem 0.85rem;
-  border-radius: 9999px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-.admin-badge-icon {
-  color: #38bdf8;
-  flex-shrink: 0;
+.brand-logo-text {
+  color: #ffffff !important;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
 /* المحتوى الرئيسي للبراند */
@@ -587,85 +596,35 @@ const handleLogin = async () => {
   z-index: 2;
 }
 
-.brand-pill {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: #cbd5e1;
-  font-size: 0.74rem;
-  font-weight: 600;
-  padding: 0.25rem 0.8rem;
-  border-radius: 9999px;
-  margin-bottom: 1.25rem;
-  letter-spacing: 0.2px;
-}
-
 .brand-title {
-  font-size: 2.35rem;
-  font-weight: 800;
-  color: #ffffff;
-  line-height: 1.35;
-  margin-bottom: 1.15rem;
-  letter-spacing: -0.6px;
+  font-size: 2.4rem;
+  font-weight: 600;
+  color: #ffffff !important;
+  line-height: 1.32;
+  margin-bottom: 1rem;
+  letter-spacing: -0.5px;
   text-align: right;
 }
 
 .brand-desc {
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.75);
-  line-height: 1.8;
-  max-width: 360px;
+  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.78) !important;
+  line-height: 1.7;
+  max-width: 390px;
   text-align: right;
-}
-
-/* زخارف الدوائر */
-.brand-decoration {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.deco-circle {
-  position: absolute;
-  border-radius: 50%;
-}
-
-.deco-circle-1 {
-  width: 420px;
-  height: 420px;
-  top: -100px;
-  left: -140px;
-  background: radial-gradient(circle, rgba(56, 189, 248, 0.06) 0%, rgba(255, 255, 255, 0) 70%);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.deco-circle-2 {
-  width: 260px;
-  height: 260px;
-  bottom: 60px;
-  right: -80px;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0) 70%);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.deco-circle-3 {
-  width: 160px;
-  height: 160px;
-  top: 42%;
-  left: 15%;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid rgba(255, 255, 255, 0.04);
 }
 
 /* فوتر القسم الأيمن */
 .brand-footer {
-  text-align: center;
+  text-align: right;
   font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.5) !important;
   position: relative;
   z-index: 2;
+}
+
+.brand-footer p {
+  color: rgba(255, 255, 255, 0.5) !important;
 }
 
 /* ===== Responsive ===== */

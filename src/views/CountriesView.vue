@@ -1,59 +1,49 @@
 <template>
   <div class="countries-view">
     <div class="page-header">
-      <h1 class="page-title">إدارة الدول</h1>
+      <h1 class="page-title">{{ tx('إدارة الدول', 'Country Management') }}</h1>
       <div class="header-actions">
-        <button class="btn-seed" @click="seedJordan" :disabled="seedingJordan">
-          <svg v-if="!seedingJordan" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
-          <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="spinning"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
-          {{ seedingJordan ? 'جاري التحميل...' : 'تحميل الأردن ومحافظاته 🇯🇴' }}
-        </button>
-        <button class="add-btn" @click="showModal = true">
+        <button v-if="!countries.length" class="add-btn" @click="openAdd">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="12" y1="5" x2="12" y2="19"/>
             <line x1="5" y1="12" x2="19" y2="12"/>
           </svg>
-          إضافة دولة
+          {{ tx('إضافة دولة', 'Add Country') }}
         </button>
       </div>
-    </div>
-
-    <!-- Seed Result Toast -->
-    <div v-if="seedMessage" :class="['seed-toast', seedMessageType]">
-      {{ seedMessage }}
     </div>
 
     <div class="table-container">
       <table class="data-table">
         <thead>
           <tr>
-            <th>العلم</th>
-            <th>الاسم</th>
-            <th>الكود</th>
-            <th>المدن</th>
-            <th>الحالة</th>
-            <th>الإجراءات</th>
+            <th>{{ tx('العلم', 'Flag') }}</th>
+            <th>{{ tx('الاسم', 'Name') }}</th>
+            <th>{{ tx('الكود', 'Code') }}</th>
+            <th>{{ tx('المدن', 'Cities') }}</th>
+            <th>{{ tx('الحالة', 'Status') }}</th>
+            <th>{{ tx('الإجراءات', 'Actions') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="country in countries" :key="country.id">
             <td>{{ country.flag || '-' }}</td>
-            <td>{{ country.name }}</td>
+            <td>{{ localizedName(country) }}</td>
             <td>{{ country.code }}</td>
             <td>{{ country.cities?.length || 0 }}</td>
             <td>
               <span class="status-badge" :class="country.is_active ? 'active' : 'inactive'">
-                {{ country.is_active ? 'نشط' : 'غير نشط' }}
+                {{ country.is_active ? tx('نشط', 'Active') : tx('غير نشط', 'Inactive') }}
               </span>
             </td>
             <td class="actions">
-              <button class="btn-icon" @click="editCountry(country)" title="تعديل">
+              <button class="btn-icon" @click="editCountry(country)" :title="tx('تعديل', 'Edit')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                   <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                 </svg>
               </button>
-              <button class="btn-icon delete" @click="deleteCountry(country.id)" title="حذف">
+              <button class="btn-icon delete" @click="deleteCountry(country.id)" :title="tx('حذف', 'Delete')">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <polyline points="3 6 5 6 21 6"></polyline>
                   <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
@@ -68,37 +58,37 @@
     <!-- Modal -->
     <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
       <div class="modal-content">
-        <h2>{{ isEdit ? 'تعديل دولة' : 'إضافة دولة' }}</h2>
+        <h2>{{ isEdit ? tx('تعديل دولة', 'Edit Country') : tx('إضافة دولة', 'Add Country') }}</h2>
         <form @submit.prevent="handleSubmit">
           <div class="form-group">
-            <label>الاسم *</label>
+            <label>{{ tx('الاسم', 'Name') }} *</label>
             <input v-model="form.name" type="text" required />
           </div>
           <div class="form-group">
-            <label>الاسم بالإنجليزي</label>
+            <label>{{ tx('الاسم بالإنجليزي', 'English Name') }}</label>
             <input v-model="form.name_en" type="text" />
           </div>
           <div class="form-group">
-            <label>الكود *</label>
+            <label>{{ tx('الكود', 'Code') }} *</label>
             <input v-model="form.code" type="text" required maxlength="5" />
           </div>
           <div class="form-group">
-            <label>العلم (Emoji)</label>
+            <label>{{ tx('العلم (Emoji)', 'Flag (Emoji)') }}</label>
             <input v-model="form.flag" type="text" />
           </div>
           <div class="form-group">
-            <label>الترتيب</label>
+            <label>{{ tx('الترتيب', 'Sort Order') }}</label>
             <input v-model="form.sort_order" type="number" />
           </div>
           <div class="form-group checkbox">
             <label>
               <input v-model="form.is_active" type="checkbox" />
-              نشط
+              {{ tx('نشط', 'Active') }}
             </label>
           </div>
           <div class="modal-actions">
-            <button type="button" class="btn-secondary" @click="showModal = false">إلغاء</button>
-            <button type="submit" class="btn-primary">حفظ</button>
+            <button type="button" class="btn-secondary" @click="showModal = false">{{ tx('إلغاء', 'Cancel') }}</button>
+            <button type="submit" class="btn-primary">{{ tx('حفظ', 'Save') }}</button>
           </div>
         </form>
       </div>
@@ -109,82 +99,13 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import api from '../config/axios';
+import { useAdminText } from '../composables/useAdminText';
+
+const { tx, locale } = useAdminText();
+const localizedName = (item) => item?.name_i18n?.[locale.value] || (locale.value === 'en' ? item?.name_en || item?.name : item?.name || item?.name_en);
 
 const countries = ref([]);
 const showModal = ref(false);
-const seedingJordan = ref(false);
-const seedMessage = ref('');
-const seedMessageType = ref('success');
-
-const JORDAN_GOVERNORATES = [
-  { name: 'عمّان',        name_en: 'Amman',   sort_order: 1 },
-  { name: 'إربد',         name_en: 'Irbid',   sort_order: 2 },
-  { name: 'الزرقاء',      name_en: 'Zarqa',   sort_order: 3 },
-  { name: 'البلقاء',      name_en: 'Balqa',   sort_order: 4 },
-  { name: 'الكرك',        name_en: 'Karak',   sort_order: 5 },
-  { name: 'مأدبا',        name_en: 'Madaba',  sort_order: 6 },
-  { name: 'الطفيلة',     name_en: 'Tafileh', sort_order: 7 },
-  { name: 'معان',         name_en: "Ma'an",  sort_order: 8 },
-  { name: 'العقبة',       name_en: 'Aqaba',   sort_order: 9 },
-  { name: 'المفرق',       name_en: 'Mafraq',  sort_order: 10 },
-  { name: 'جرش',          name_en: 'Jerash',  sort_order: 11 },
-  { name: 'عجلون',        name_en: 'Ajloun',  sort_order: 12 },
-];
-
-const showSeedToast = (msg, type = 'success') => {
-  seedMessage.value = msg;
-  seedMessageType.value = type;
-  setTimeout(() => { seedMessage.value = ''; }, 4000);
-};
-
-const seedJordan = async () => {
-  if (seedingJordan.value) return;
-  seedingJordan.value = true;
-  try {
-    // 1. Find or create Jordan
-    let jordan = countries.value.find(c =>
-      c.code === 'JO' || c.name === 'الأردن' || c.name_en === 'Jordan'
-    );
-    if (!jordan) {
-      const res = await api.post('/dashboard/countries', {
-        name: 'الأردن', name_en: 'Jordan', code: 'JO',
-        flag: '🇯🇴', is_active: true, sort_order: 1,
-      });
-      jordan = res.data.data || res.data;
-    }
-    const countryId = jordan.id;
-
-    // 2. Fetch existing cities for Jordan to avoid duplicates
-    const citiesRes = await api.get('/dashboard/cities', { params: { country_id: countryId } });
-    const existing = (citiesRes.data.data || []).map(c => c.name);
-
-    // 3. Create missing governorates
-    let created = 0;
-    for (const gov of JORDAN_GOVERNORATES) {
-      if (existing.includes(gov.name)) continue;
-      await api.post('/dashboard/cities', {
-        country_id: countryId,
-        name: gov.name,
-        name_en: gov.name_en,
-        is_active: true,
-        sort_order: gov.sort_order,
-      });
-      created++;
-    }
-
-    await fetchCountries();
-    if (created > 0) {
-      showSeedToast(`تم إضافة الأردن و ${created} محافظة بنجاح`);
-    } else {
-      showSeedToast('الأردن ومحافظاته موجودة مسبقاً', 'info');
-    }
-  } catch (err) {
-    console.error('Seed Jordan failed', err);
-    showSeedToast('حدث خطأ أثناء تحميل الأردن', 'error');
-  } finally {
-    seedingJordan.value = false;
-  }
-};
 const isEdit = ref(false);
 const editingId = ref(null);
 const form = ref({
@@ -196,10 +117,19 @@ const form = ref({
   sort_order: 0,
 });
 
+const isSaudi = (c) => String(c?.code || '').toUpperCase() === 'SA' || c?.name_en === 'Saudi Arabia' || c?.name === 'السعودية' || c?.name === 'المملكة العربية السعودية';
+
+const openAdd = () => {
+  resetForm();
+  form.value = { ...form.value, name: 'السعودية', name_en: 'Saudi Arabia', code: 'SA', flag: '🇸🇦' };
+  showModal.value = true;
+};
+
 const fetchCountries = async () => {
   try {
     const res = await api.get('/dashboard/countries');
-    countries.value = res.data.data;
+    // Shipping is Saudi Arabia only: other countries are never listed or edited here.
+    countries.value = (res.data.data || []).filter(isSaudi);
   } catch (error) {
     console.error('Failed to fetch countries', error);
   }
@@ -255,7 +185,7 @@ onMounted(fetchCountries);
 
 <style scoped>
 .countries-view {
-  padding: 2rem;
+  padding: 0;
 }
 
 .page-header {
@@ -277,7 +207,7 @@ onMounted(fetchCountries);
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #000000;
+  background: #660033;
   color: #fff;
   border: none;
   padding: 0.65rem 1.1rem;
@@ -288,10 +218,10 @@ onMounted(fetchCountries);
   cursor: pointer;
   transition: all 0.2s;
 }
-.add-btn:hover { background: #262626; }
+.add-btn:hover { background: #4d0026; }
 
 .btn-primary {
-  background: #000000;
+  background: #660033;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -303,36 +233,9 @@ onMounted(fetchCountries);
   font-weight: 700;
 }
 
-.btn-seed {
-  background: #f0fdf4;
-  color: #15803d;
-  border: 1px solid #bbf7d0;
-  padding: 10px 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  transition: 0.2s;
-}
-.btn-seed:hover { background: #dcfce7; }
-.btn-seed:disabled { opacity: 0.6; cursor: not-allowed; }
 .spinning { animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
 
-.seed-toast {
-  margin-bottom: 1rem;
-  padding: 12px 20px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  animation: fadeIn 0.3s ease;
-}
-.seed-toast.success { background: #dcfce7; color: #15803d; border: 1px solid #bbf7d0; }
-.seed-toast.error   { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }
-.seed-toast.info    { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
 @keyframes fadeIn { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: translateY(0); } }
 
 .btn-secondary {
@@ -416,7 +319,7 @@ onMounted(fetchCountries);
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.7);
   display: flex;
   align-items: center;
   justify-content: center;

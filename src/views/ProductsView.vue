@@ -3,15 +3,15 @@
     <!-- Header -->
     <div class="page-header">
       <div class="header-titles">
-        <h2 class="page-title">إدارة المنتجات</h2>
-        <p class="page-subtitle">إضافة وتعديل وإدارة المنتجات</p>
+        <h2 class="page-title">{{ tx('إدارة المنتجات', 'Product Management') }}</h2>
+        <p class="page-subtitle">{{ tx('إضافة وتعديل وإدارة المنتجات', 'Add, edit and manage products') }}</p>
       </div>
       <button class="add-btn" @click="openAddModal">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="12" y1="5" x2="12" y2="19"/>
           <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        إضافة منتج جديد
+        {{ tx('إضافة منتج جديد', 'Add Product') }}
       </button>
     </div>
 
@@ -24,7 +24,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">إجمالي المنتجات</span>
+          <span class="stat-label">{{ tx('إجمالي المنتجات', 'Total Products') }}</span>
           <span class="stat-value">{{ totalProducts }}</span>
         </div>
       </div>
@@ -35,7 +35,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">منتجات نشطة</span>
+          <span class="stat-label">{{ tx('منتجات نشطة', 'Active Products') }}</span>
           <span class="stat-value">{{ activeProductsCount }}</span>
         </div>
       </div>
@@ -46,7 +46,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">منتجات غير نشطة</span>
+          <span class="stat-label">{{ tx('منتجات غير نشطة', 'Inactive Products') }}</span>
           <span class="stat-value">{{ inactiveProductsCount }}</span>
         </div>
       </div>
@@ -57,7 +57,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">إجمالي المبيعات</span>
+          <span class="stat-label">{{ tx('إجمالي المبيعات', 'Total Sales') }}</span>
           <span class="stat-value">{{ totalSales }}</span>
         </div>
       </div>
@@ -69,20 +69,20 @@
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" class="search-icon">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" v-model="searchQuery" placeholder="البحث عن منتج..." class="search-input" />
+        <input type="text" v-model="searchQuery" :placeholder="tx('البحث عن منتج...', 'Search products...')" class="search-input" />
       </div>
       <div class="filter-select">
         <select v-model="statusFilter" class="form-select">
-          <option value="">جميع الحالات</option>
-          <option value="active">نشط</option>
-          <option value="inactive">غير نشط</option>
+          <option value="">{{ tx('جميع الحالات', 'All statuses') }}</option>
+          <option value="active">{{ tx('نشط', 'Active') }}</option>
+          <option value="inactive">{{ tx('غير نشط', 'Inactive') }}</option>
         </select>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="select-icon" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
       <div class="filter-select">
         <select v-model="catFilter" class="form-select">
-          <option value="">جميع الأقسام</option>
-          <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+          <option value="">{{ tx('جميع الأقسام', 'All categories') }}</option>
+          <option v-for="c in categoryFilterOptions" :key="c.id" :value="c.id">{{ c.label }}</option>
         </select>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" class="select-icon" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
@@ -93,36 +93,34 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th class="col-name">المنتج</th>
-            <th class="col-price">السعر</th>
-            <th class="col-stock">المخزون</th>
-            <th class="col-sales">المبيعات</th>
-            <th class="col-status">الحالة</th>
-            <th class="col-actions">الإجراءات</th>
+            <th class="col-name">{{ tx('المنتج', 'Product') }}</th>
+            <th class="col-price">{{ tx('السعر', 'Price') }}</th>
+            <th class="col-stock">{{ tx('المخزون', 'Stock') }}</th>
+            <th class="col-sales">{{ tx('المبيعات', 'Sales') }}</th>
+            <th class="col-status">{{ tx('الحالة', 'Status') }}</th>
+            <th class="col-actions">{{ tx('الإجراءات', 'Actions') }}</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-if="loading" class="state-row"><td colspan="6">جاري التحميل...</td></tr>
-          <tr v-else-if="filteredProducts.length === 0" class="state-row"><td colspan="6">لا توجد منتجات مطابقة</td></tr>
+          <tr v-if="loading" class="state-row"><td colspan="6">{{ tx('جاري التحميل...', 'Loading...') }}</td></tr>
+          <tr v-else-if="filteredProducts.length === 0" class="state-row"><td colspan="6">{{ tx('لا توجد منتجات مطابقة', 'No matching products found') }}</td></tr>
           <template v-else>
             <tr v-for="prod in filteredProducts" :key="prod.id" class="data-row">
               <td class="col-name">
                 <div class="prod-name-cell">
                   <div class="prod-image">
-                    <img v-if="prod.images?.length" :src="prod.images[0]" :alt="prod.name_i18n?.ar || prod.name" />
-                    <svg v-else width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                    <span v-if="prod.images?.length > 1" class="multi-img-badge" :title="`${prod.images.length} صور للمنتج`">+{{ prod.images.length }}</span>
+                    <img :src="productImage(prod)" :alt="localizedName(prod, prod.name)" @error="handleImageError" />
+                    <span v-if="prod.images?.length > 1" class="multi-img-badge" :title="`${prod.images.length} ${tx('صور للمنتج', 'product images')}`">+{{ prod.images.length }}</span>
                   </div>
                   <div class="prod-details">
-                    <span class="prod-title">{{ prod.name_i18n?.ar || prod.name }}</span>
-                    <span class="prod-cat-badge">{{ productCategoryName(prod, categories) || 'غير محدد' }}</span>
+                    <span class="prod-title">{{ localizedName(prod, prod.name) }}</span>
+                    <span class="prod-cat-badge">{{ productCategoryName(prod, categories) || tx('غير محدد', 'Uncategorized') }}</span>
                   </div>
                 </div>
               </td>
               <td class="col-price">
                 <div class="price-cell">
-                  <span class="current-price">{{ formatPrice(prod.price * (1 - (getDiscountPercent(prod) / 100))) }} د.أ</span>
-                  <span v-if="getDiscountPercent(prod) > 0" class="old-price">{{ formatPrice(prod.price) }} د.أ</span>
+                  <span class="current-price">{{ formatPrice(prod.price) }} {{ cur }}</span>
                 </div>
               </td>
               <td class="col-stock">
@@ -135,18 +133,21 @@
               </td>
               <td class="col-status">
                 <span class="status-badge" :class="prod.status === 'active' ? 'active' : 'inactive'">
-                  {{ prod.status === 'active' ? 'نشط' : 'غير نشط' }}
+                  {{ prod.status === 'active' ? tx('نشط', 'Active') : tx('غير نشط', 'Inactive') }}
                 </span>
               </td>
               <td class="col-actions">
                 <div class="actions-group">
-                  <button class="action-btn delete-btn" @click="confirmDelete(prod)" title="حذف">
+                  <button class="action-btn delete-btn" @click="confirmDelete(prod)" :title="tx('حذف', 'Delete')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg>
                   </button>
-                  <button class="action-btn edit-btn" @click="openEditModal(prod)" title="تعديل">
+                  <button class="action-btn edit-btn" @click="openEditModal(prod)" :title="tx('تعديل', 'Edit')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
                   </button>
-                  <button class="action-btn view-btn" @click="openViewModal(prod)" title="عرض">
+                  <button class="action-btn duplicate-btn" @click="openDuplicateModal(prod)" :title="tx('نسخ المنتج', 'Duplicate')" data-testid="product-duplicate">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                  </button>
+                  <button class="action-btn view-btn" @click="openViewModal(prod)" :title="tx('عرض', 'View')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
                   </button>
                 </div>
@@ -160,19 +161,19 @@
     <!-- Pagination -->
     <div class="pagination-container" v-if="totalProductsCount > 0">
       <div class="pagination-info">
-        <span>إظهار {{ totalProductsCount > 0 ? (currentPage - 1) * perPage + 1 : 0 }} - {{ Math.min(currentPage * perPage, totalProductsCount) }} من أصل {{ totalProductsCount }} منتج</span>
+        <span>{{ tx('إظهار', 'Showing') }} {{ totalProductsCount > 0 ? (currentPage - 1) * perPage + 1 : 0 }} - {{ Math.min(currentPage * perPage, totalProductsCount) }} {{ tx('من أصل', 'of') }} {{ totalProductsCount }} {{ tx('منتج', 'products') }}</span>
       </div>
       <div class="pagination-controls" v-if="totalPages > 1">
-        <button class="pagination-btn" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" title="السابق" aria-label="السابق">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+        <button class="pagination-btn" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1" :title="tx('السابق', 'Previous')" :aria-label="tx('السابق', 'Previous')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
         </button>
         <div class="pagination-pages">
           <button v-for="page in totalPages" :key="page" class="pagination-page-btn" :class="{ active: currentPage === page }" @click="goToPage(page)">
             {{ page }}
           </button>
         </div>
-        <button class="pagination-btn" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" title="التالي" aria-label="التالي">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+        <button class="pagination-btn" @click="goToPage(currentPage + 1)" :disabled="currentPage === totalPages" :title="tx('التالي', 'Next')" :aria-label="tx('التالي', 'Next')">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
         </button>
       </div>
     </div>
@@ -183,92 +184,106 @@
         <button class="modal-close" @click="closeModal">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
-        <div class="form-header"><div class="header-icon-main"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><h3 class="modal-title-main">{{ isEdit ? 'تعديل المنتج' : 'إضافة منتج جديدة' }}</h3><p class="modal-subtitle-main">أدخل معلومات السلعة للجدول</p></div>
+        <div class="form-header"><div class="modal-heading-row"><div class="header-icon-main"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div><h3 class="modal-title-main">{{ isEdit ? tx('تعديل المنتج', 'Edit Product') : duplicateSource ? tx(`نسخ منتج: ${duplicateSource.name}`, `Duplicate: ${duplicateSource.name}`) : tx('إضافة منتج جديد', 'Add New Product') }}</h3></div><p class="modal-subtitle-main">{{ duplicateSource ? tx('بيانات وصور المنتج منسوخة؛ راجعها ثم احفظ لإضافتها كمنتج جديد.', 'The product data and images are copied; review them, then save to add a new product.') : tx('أدخل معلومات السلعة للجدول', 'Enter product information') }}</p></div>
 
-        <div class="i18n-toggle" role="tablist" aria-label="Language">
+        <div class="i18n-toggle" role="tablist" aria-label="Language" dir="ltr">
           <button type="button" class="i18n-btn" :class="{ active: activeLang === 'en' }" @click="activeLang = 'en'">English</button>
           <button type="button" class="i18n-btn" :class="{ active: activeLang === 'ar' }" @click="activeLang = 'ar'">العربية</button>
         </div>
 
         <!-- Tabs -->
         <div class="modal-tabs">
-          <button class="tab-btn" :class="{ active: currentTab === 'info' }" @click.prevent="currentTab = 'info'">معلومات المنتج</button>
-          <button class="tab-btn" :class="{ active: currentTab === 'attributes' }" @click.prevent="currentTab = 'attributes'">خصائص المنتج</button>
+          <button class="tab-btn" :class="{ active: currentTab === 'info' }" @click.prevent="currentTab = 'info'">{{ tx('معلومات المنتج', 'Product Information') }}</button>
+          <button class="tab-btn" :class="{ active: currentTab === 'attributes' }" @click.prevent="currentTab = 'attributes'">{{ tx('خصائص المنتج', 'Product Attributes') }}</button>
         </div>
         
-        <form @submit.prevent="submitForm" class="prod-form">
+        <form @submit.prevent="submitForm" class="prod-form" novalidate>
           <div v-show="currentTab === 'info'" class="tab-pane">
             <!-- Images Upload -->
             <div class="form-group">
               <div class="image-label-row">
-                <label class="form-label mb-0" style="text-align: right;">صور المنتج <span class="req">*</span></label>
+                <label class="form-label mb-0" style="text-align: right;">{{ tx('صور المنتج', 'Product Images') }} <span class="req">*</span></label>
                 <span class="images-count-badge">
-                  {{ form.existing_images.length + form.new_images.length }} / {{ maxImages }} صور
+                  {{ form.existing_images.length + form.new_images.length }} / {{ maxImages }} {{ tx('صور', 'images') }}
                 </span>
               </div>
               <div class="image-uploader">
                 <!-- Dropzone -->
                 <div class="upload-box" @click="triggerFileInput" v-if="(form.existing_images.length + form.new_images.length) < maxImages">
                   <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" multiple class="hidden-input" />
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#000000" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                  <p>اضغط أو اسحب لرفع صور متعددة للمنتج<br><span>(JPG, PNG, WebP | بحد أقصى {{ maxImages }} صورة)</span></p>
+                  <ImageCropModal v-bind="cropModal" @close="closeCrop" @cropped="finishCrop" />
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#660033" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+                  <p>{{ tx('اضغط أو اسحب لرفع صور متعددة للمنتج', 'Click or drag to upload multiple product images') }}<br><span>(JPG, PNG, WebP | {{ tx('بحد أقصى', 'up to') }} {{ maxImages }} {{ tx('صورة', 'images') }})</span></p>
                 </div>
                 <div class="upload-box disabled" v-else>
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="1.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
-                  <p>تم بلوغ الحد الأقصى ({{ maxImages }} صورة)</p>
+                  <p>{{ tx('تم بلوغ الحد الأقصى', 'Maximum reached') }} ({{ maxImages }} {{ tx('صورة', 'images') }})</p>
                 </div>
                 <!-- Images Preview -->
-                <div class="preview-grid" v-if="imagePreviews.length > 0 || form.existing_images.length > 0">
+                <div class="preview-grid" v-if="imagePreviews.length > 0 || form.existing_images.length > 0 || duplicateLoading > 0 || duplicateFailed.length > 0">
                   <!-- Existing Images -->
                   <div class="preview-item" v-for="(img, idx) in form.existing_images" :key="'e'+idx">
                     <img :src="img" />
-                    <span v-if="idx === 0" class="primary-tag-badge">الرئيسية</span>
-                    <button v-else type="button" class="set-primary-btn" @click.prevent="setPrimaryExistingImage(idx)" title="تعيين كصورة رئيسية للمنتج">
-                      ★ تعيين كرئيسية
+                    <span v-if="idx === 0" class="primary-tag-badge">{{ tx('الرئيسية', 'Primary') }}</span>
+                    <button v-else type="button" class="set-primary-btn" @click.prevent="setPrimaryExistingImage(idx)" :title="tx('تعيين كصورة رئيسية للمنتج', 'Set as primary product image')">
+                      ★ {{ tx('تعيين كرئيسية', 'Set primary') }}
                     </button>
-                    <button type="button" class="remove-img-btn" @click.prevent="removeExistingImage(idx)" title="حذف الصورة">✕</button>
+                    <button type="button" class="remove-img-btn" @click.prevent="removeExistingImage(idx)" :title="tx('حذف الصورة', 'Delete image')">✕</button>
                   </div>
                   <!-- New Staged Images -->
                   <div class="preview-item new-preview-item" v-for="(file, idx) in imagePreviews" :key="'p'+idx">
                     <img :src="file.preview" />
-                    <span v-if="form.existing_images.length === 0 && idx === 0" class="primary-tag-badge">الرئيسية</span>
-                    <button v-else type="button" class="set-primary-btn" @click.prevent="setPrimaryNewImage(idx)" title="تعيين كصورة رئيسية للمنتج">
-                      ★ تعيين كرئيسية
+                    <span v-if="form.existing_images.length === 0 && idx === 0" class="primary-tag-badge">{{ tx('الرئيسية', 'Primary') }}</span>
+                    <button v-else type="button" class="set-primary-btn" @click.prevent="setPrimaryNewImage(idx)" :title="tx('تعيين كصورة رئيسية للمنتج', 'Set as primary product image')">
+                      ★ {{ tx('تعيين كرئيسية', 'Set primary') }}
                     </button>
-                    <button type="button" class="remove-img-btn" @click.prevent="removeNewImage(idx)" title="إلغاء الصورة">✕</button>
+                    <button type="button" class="remove-img-btn" @click.prevent="removeNewImage(idx)" :title="tx('إلغاء الصورة', 'Remove image')">✕</button>
+                    <ImageCropButton compact class="thumb-crop-btn" @crop="recropNewImage(idx)" />
+                  </div>
+                  <!-- Duplicate: images still downloading from the original product -->
+                  <div class="preview-item copy-loading-item" v-for="n in duplicateLoading" :key="'l'+n" data-testid="duplicate-image-loading">
+                    <span class="copy-spinner"></span>
+                    <small>{{ tx('جاري نسخ الصورة…', 'Copying image…') }}</small>
+                  </div>
+                  <!-- Duplicate: images that could not be copied -->
+                  <div class="preview-item copy-failed-item" v-for="(url, idx) in duplicateFailed" :key="'f'+idx" data-testid="duplicate-image-failed">
+                    <img :src="url" />
+                    <small>{{ tx('تعذر نسخ الصورة', 'Could not copy') }}</small>
+                    <button type="button" class="retry-copy-btn" @click.prevent="retryDuplicateImage(idx)">{{ tx('إعادة المحاولة', 'Retry') }}</button>
+                    <button type="button" class="remove-img-btn" @click.prevent="duplicateFailed.splice(idx, 1)" :title="tx('تجاهل الصورة', 'Skip image')">✕</button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <!-- Long Text Fields with simple fake toolbar -->
+            <!-- Basic fields -->
             <div class="form-group" v-show="activeLang === 'ar'">
-              <label class="form-label">اسم المنتج (عربي) <span class="req">*</span></label>
-              <input type="text" v-model="form.name_ar" class="form-control" placeholder="أدخل اسم المنتج بالعربي (Enter product name in Arabic)" />
+              <label class="form-label">{{ tx('اسم المنتج (عربي)', 'Product name (Arabic)') }} <span class="req">*</span></label>
+              <input type="text" v-model="form.name_ar" class="form-control" placeholder="أدخل اسم المنتج بالعربي" />
             </div>
 
             <div class="form-group" v-show="activeLang === 'en'">
-              <label class="form-label">اسم المنتج (English) <span class="req">*</span></label>
+              <label class="form-label">{{ tx('اسم المنتج (English)', 'Product name (English)') }} <span class="req">*</span></label>
               <input type="text" v-model="form.name_en" class="form-control" placeholder="Product name in English (اسم المنتج بالإنجليزية)" />
             </div>
 
             <div class="form-row">
               <div class="form-group half-width">
-                <label class="form-label">القسم الرئيسي <span class="req">*</span></label>
+                <label class="form-label">{{ tx('القسم الرئيسي', 'Main category') }} <span class="req">*</span></label>
                 <div class="select-wrapper">
                   <select v-model="form.category_id" class="form-control" required @change="updateSubcats">
-                    <option value="" disabled selected>اختر القسم الرئيسي هنا (Select Main Category)</option>
-                    <option v-for="c in categories" :key="c.id" :value="c.id">{{ c.name }}</option>
+                    <option value="" disabled selected>{{ tx('اختر القسم الرئيسي هنا', 'Select main category') }}</option>
+                    <option v-for="c in categories" :key="c.id" :value="c.id">{{ categoryOptionLabel(c) }}</option>
                   </select>
                   <svg class="select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
               </div>
               <div class="form-group half-width">
-                <label class="form-label">القسم الفرعي</label>
+                <label class="form-label">{{ tx('القسم الفرعي', 'Subcategory') }}</label>
                 <div class="select-wrapper">
                   <select v-model="form.subcategory_id" class="form-control" :disabled="!subCategories.length">
-                    <option value="">لا يوجد (None)</option>
-                    <option v-for="sc in subCategories" :key="sc.id" :value="sc.id">{{ sc.name }}</option>
+                    <option value="">{{ tx('لا يوجد', 'None') }}</option>
+                    <option v-for="sc in subCategories" :key="sc.id" :value="sc.id">{{ categoryOptionLabel(sc) }}</option>
                   </select>
                   <svg class="select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
@@ -277,75 +292,148 @@
 
             <div class="form-row">
               <div class="form-group half-width">
-                <label class="form-label">السعر (د.أ) <span class="req">*</span></label>
-                <input type="number" step="0.01" min="0" v-model="form.price" class="form-control no-rtl-issue" placeholder="0.00 (Price in JOD)" required />
-              </div>
-              <div class="form-group half-width">
-                <label class="form-label">الخصم (%)</label>
-                <input type="number" step="0.1" min="1" max="99" v-model="form.discount" class="form-control no-rtl-issue" placeholder="1–99% (Discount)" />
-                <span class="field-hint">الحد الأدنى المقبول من النظام 1% — يُطبَّق تلقائياً عند ترك الحقل فارغاً.</span>
+                <label class="form-label">{{ tx('السعر', 'Price') }} ({{ cur }}) <span class="req">*</span></label>
+                <input type="number" step="0.01" min="0" v-model="form.price" class="form-control no-rtl-issue" placeholder="0.00" required />
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group half-width">
-                <label class="form-label">المخزون <span class="req">*</span></label>
-                <input type="number" min="0" v-model="form.quantity" class="form-control no-rtl-issue" placeholder="0 (Stock)" required />
+                <label class="form-label">{{ tx('المخزون', 'Stock') }} <span class="req">*</span></label>
+                <input type="number" min="0" v-model="form.quantity" class="form-control no-rtl-issue" placeholder="0" :required="!isEdit" :disabled="isEdit" data-testid="product-stock" />
+                <router-link v-if="isEdit && editingId" :to="{ name: 'InventoryProduct', params: { id: editingId } }" class="stock-manage-link" data-testid="manage-stock-link">{{ tx('تعديل المخزون من «إدارة المخزون»', 'Change the stock in “Inventory”') }}</router-link>
               </div>
               <div class="form-group half-width">
-                <label class="form-label">الحالة</label>
+                <label class="form-label">{{ tx('الحالة', 'Status') }}</label>
                 <div class="select-wrapper">
                   <select v-model="form.is_active" class="form-control">
-                    <option :value="true">نشط (Active)</option>
-                    <option :value="false">غير نشط (Inactive)</option>
+                    <option :value="true">{{ tx('نشط', 'Active') }}</option>
+                    <option :value="false">{{ tx('غير نشط', 'Inactive') }}</option>
                   </select>
                   <svg class="select-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                 </div>
               </div>
             </div>
 
-            <!-- Long Text Fields with simple fake toolbar -->
-            <div class="form-group" v-show="activeLang === 'ar'">
-              <label class="form-label">وصف المنتج (عربي) <span class="req">*</span></label>
-              <div class="rich-textarea-mock">
-                <div class="rt-toolbar"><span class="rt-icon">B</span><span class="rt-icon">I</span><span class="rt-icon">U</span></div>
-                <textarea v-model="form.description_ar" class="form-control rt-body" placeholder="أدخل تفاصيل ووصف المنتج بالعربي هنا... (Enter product description in Arabic...)"></textarea>
+            <!-- Featured: the product joins the website's «featured products» lists -->
+            <div class="form-group featured-box">
+              <label class="featured-check">
+                <input type="checkbox" v-model="form.is_featured" data-testid="product-featured" />
+                <span>{{ tx('منتج مميز', 'Featured product') }}</span>
+              </label>
+              <small class="featured-hint">{{ tx('يظهر المنتج في قوائم «المنتجات المميزة» بالموقع.', 'The product shows in the website’s “Featured products” lists.') }}</small>
+            </div>
+
+            <!-- Basic fields -->
+
+            <!-- Content sections: each one is a list of points (type + Enter) -->
+            <div class="form-group points-group" data-testid="overview-text">
+              <label class="form-label">{{ tabName('overview') }} <span class="req">*</span></label>
+              <p class="points-hint">{{ tx(`نص قصير لا يتعدى سطرين، يظهر في تبويب «${tabName('overview')}».`, `A short text of up to two lines, shown in the “${tabName('overview')}” tab.`) }}</p>
+              <div class="overview-box">
+                <textarea
+                  v-show="activeLang === 'ar'"
+                  v-model="form.description_ar"
+                  dir="rtl"
+                  rows="2"
+                  :maxlength="overviewMaxLength"
+                  class="overview-textarea"
+                  placeholder="اكتب نظرة عامة مختصرة عن المنتج في سطرين"
+                  @keydown.enter.prevent
+                ></textarea>
+                <textarea
+                  v-show="activeLang === 'en'"
+                  v-model="form.description_en"
+                  dir="ltr"
+                  rows="2"
+                  :maxlength="overviewMaxLength"
+                  class="overview-textarea"
+                  placeholder="Write a short product overview in up to two lines"
+                  @keydown.enter.prevent
+                ></textarea>
+                <span class="overview-counter" dir="ltr">{{ (activeLang === 'ar' ? form.description_ar : form.description_en).length }} / {{ overviewMaxLength }}</span>
               </div>
             </div>
 
-            <div class="form-group" v-show="activeLang === 'en'">
-              <label class="form-label">وصف المنتج (English)</label>
-              <div class="rich-textarea-mock">
-                <div class="rt-toolbar"><span class="rt-icon">B</span><span class="rt-icon">I</span><span class="rt-icon">U</span></div>
-                <textarea v-model="form.description_en" class="form-control rt-body" placeholder="Product description in English (وصف المنتج بالإنجليزية)..."></textarea>
-              </div>
+            <div class="form-group points-group" data-testid="points-features">
+              <label class="form-label">{{ tabName('features') }}</label>
+              <p class="points-hint">{{ tx('تظهر أسفل السعر في صفحة المنتج بعلامة صح، وفي تبويب خاص لو أضفته من إعدادات «تفاصيل المنتج».', 'Shown under the price on the product page with a check mark, and in its own tab if you add one in “Product details” settings.') }}</p>
+              <PointListInput
+                v-show="activeLang === 'ar'"
+                v-model="form.features_ar"
+                dir="rtl"
+                label="المميزات"
+                placeholder="اكتب نقطة ثم اضغط زر الإدخال"
+                add-label="إضافة نقطة"
+                remove-label="حذف النقطة"
+                empty-label="لم تتم إضافة نقاط بعد"
+                tip="اضغط زر الإدخال لإضافة نقطة جديدة"
+              />
+              <PointListInput
+                v-show="activeLang === 'en'"
+                v-model="form.features_en"
+                dir="ltr"
+                label="Features"
+                placeholder="Type a point and press Enter"
+                add-label="Add point"
+                remove-label="Remove point"
+                empty-label="No points added yet"
+                tip="Press Enter to add a new point"
+              />
             </div>
 
-            <div class="form-group">
-              <label class="form-label">المميزات ونظرة عامة (Features & Overview)</label>
-              <div class="rich-textarea-mock">
-                <div class="rt-toolbar"><span class="rt-icon">B</span><span class="rt-icon">I</span><span class="rt-icon">U</span></div>
-                <textarea v-show="activeLang === 'ar'" v-model="form.features_ar" class="form-control rt-body" placeholder="أدخل المزايا الرئيسية للمنتج (تغذي تبويب نظرة عامة بالمتجر - ميزة في كل سطر)..."></textarea>
-                <textarea v-show="activeLang === 'en'" v-model="form.features_en" class="form-control rt-body" placeholder="Key product features (powers the Overview tab)..."></textarea>
-              </div>
+            <div class="form-group points-group" data-testid="points-tips">
+              <label class="form-label">{{ tabName('installation') }}</label>
+              <p class="points-hint">{{ tx(`تظهر في تبويب «${tabName('installation')}».`, `Shown in the “${tabName('installation')}” tab.`) }}</p>
+              <PointListInput
+                v-show="activeLang === 'ar'"
+                v-model="form.tips_ar"
+                dir="rtl"
+                label="التركيب"
+                placeholder="اكتب نقطة ثم اضغط زر الإدخال"
+                add-label="إضافة نقطة"
+                remove-label="حذف النقطة"
+                empty-label="لم تتم إضافة نقاط بعد"
+                tip="اضغط زر الإدخال لإضافة نقطة جديدة"
+              />
+              <PointListInput
+                v-show="activeLang === 'en'"
+                v-model="form.tips_en"
+                dir="ltr"
+                label="Installation"
+                placeholder="Type a point and press Enter"
+                add-label="Add point"
+                remove-label="Remove point"
+                empty-label="No points added yet"
+                tip="Press Enter to add a new point"
+              />
             </div>
-            
-            <div class="form-group">
-              <label class="form-label">دليل التركيب وإرشادات الاستخدام (Installation Guide & Tips)</label>
-              <div class="rich-textarea-mock">
-                <div class="rt-toolbar"><span class="rt-icon">B</span><span class="rt-icon">I</span><span class="rt-icon">U</span></div>
-                <textarea v-show="activeLang === 'ar'" v-model="form.tips_ar" class="form-control rt-body" placeholder="أدخل متطلبات التركيب وخطوات التركيب وإرشادات الأمان (تغذي تبويب التركيب بالمتجر)..."></textarea>
-                <textarea v-show="activeLang === 'en'" v-model="form.tips_en" class="form-control rt-body" placeholder="Installation requirements, steps, and safety notes (powers the Installation tab)..."></textarea>
-              </div>
-            </div>
-            
-            <div class="form-group">
-              <label class="form-label">الشحن والإرجاع والضمان (Shipping, Returns & Warranty)</label>
-              <div class="rich-textarea-mock">
-                <div class="rt-toolbar"><span class="rt-icon">B</span><span class="rt-icon">I</span><span class="rt-icon">U</span></div>
-                <textarea v-show="activeLang === 'ar'" v-model="form.shipping_info_ar" class="form-control rt-body" placeholder="تفاصيل الشحن، شروط الاستبدال والإرجاع، ومدة وسياسة الضمان (تغذي تبويب الشحن والإرجاع بالمتجر)..."></textarea>
-                <textarea v-show="activeLang === 'en'" v-model="form.shipping_info_en" class="form-control rt-body" placeholder="Shipping, returns, and warranty terms (powers Shipping & Returns tab)..."></textarea>
-              </div>
+
+            <div class="form-group points-group" data-testid="points-shipping_info">
+              <label class="form-label">{{ tabName('shipping') }}</label>
+              <p class="points-hint">{{ tx(`تظهر في تبويب «${tabName('shipping')}».`, `Shown in the “${tabName('shipping')}” tab.`) }}</p>
+              <PointListInput
+                v-show="activeLang === 'ar'"
+                v-model="form.shipping_info_ar"
+                dir="rtl"
+                label="الشحن والإرجاع"
+                placeholder="اكتب نقطة ثم اضغط زر الإدخال"
+                add-label="إضافة نقطة"
+                remove-label="حذف النقطة"
+                empty-label="لم تتم إضافة نقاط بعد"
+                tip="اضغط زر الإدخال لإضافة نقطة جديدة"
+              />
+              <PointListInput
+                v-show="activeLang === 'en'"
+                v-model="form.shipping_info_en"
+                dir="ltr"
+                label="Shipping & Returns"
+                placeholder="Type a point and press Enter"
+                add-label="Add point"
+                remove-label="Remove point"
+                empty-label="No points added yet"
+                tip="Press Enter to add a new point"
+              />
             </div>
           </div>
 
@@ -491,18 +579,63 @@
             </div>
 
             <div v-if="attributesLoading" class="attributes-state-card">
-              جاري تحميل خصائص المنتجات من API...
+              {{ tx('جاري تحميل خصائص المنتجات من API...', 'Loading product attributes from API...') }}
             </div>
             <div v-else-if="attributesLoadError" class="attributes-state-card error">
-              تعذر تحميل خصائص المنتجات. اضغط لإعادة المحاولة.
-              <button type="button" class="attributes-retry-btn" @click.prevent="fetchDependencies">إعادة المحاولة</button>
+              {{ tx('تعذر تحميل خصائص المنتجات. اضغط لإعادة المحاولة.', 'Unable to load product attributes. Retry to try again.') }}
+              <button type="button" class="attributes-retry-btn" @click.prevent="fetchDependencies">{{ tx('إعادة المحاولة', 'Retry') }}</button>
             </div>
 
-            <!-- Product attributes -->
-            <div class="variant-section-card api-attributes-section" v-else-if="apiAttributesList.length > 0">
+            <!-- Core attributes (marked «أساسية» on the attributes page): one value each, or «غير متوفر» -->
+            <div class="variant-section-card core-attributes-section" v-else-if="coreAttributeRows.length > 0">
+              <div class="core-attrs-header">
+                <h4 class="variant-section-title">{{ tx('الخصائص الأساسية', 'Core attributes') }}</h4>
+                <p class="variant-section-desc">{{ tx('اختر قيمة واحدة لكل خاصية، أو «غير متوفر» لو المنتج ما فيهوش الخاصية دي. القيم المختارة تظهر في المواصفات الفنية في صفحة المنتج.', 'Pick one value for each attribute, or «Not available» if the product does not have it. The chosen values show in the product\'s technical specifications.') }}</p>
+              </div>
+              <div class="core-attrs-list">
+                <div v-for="row in coreAttributeRows" :key="row.attribute.id" class="core-attr-row" :class="{ 'is-missing': !coreRowDone(row.attribute) }" :data-core-attribute="row.attribute.id">
+                  <div class="core-attr-title">
+                    <span>{{ attrTitle(row.attribute) }} <span class="req">*</span></span>
+                    <span class="core-attr-count" :class="{ complete: coreRowDone(row.attribute) }">
+                      {{ coreRowStatus(row.attribute) }}
+                    </span>
+                  </div>
+                  <div class="core-attr-values">
+                    <button
+                      v-for="val in row.attribute.values"
+                      :key="val.id"
+                      type="button"
+                      class="core-attr-chip"
+                      :class="{ active: isApiAttributeSelected(row.attribute.name, val.label) }"
+                      :aria-pressed="isApiAttributeSelected(row.attribute.name, val.label)"
+                      @click="toggleApiAttribute(row.attribute.name, val.label)"
+                    >
+                      <span v-if="val.color" class="api-attribute-color-dot" :style="{ background: val.color }"></span>
+                      <span class="val-text">{{ valTitle(val) }}</span>
+                    </button>
+                    <span v-if="!row.attribute.values || !row.attribute.values.length" class="text-muted-xs">{{ tx('لا توجد قيم مسجلة لهذه الخاصية.', 'No values are registered for this attribute.') }}</span>
+                  </div>
+                  <button
+                    type="button"
+                    class="core-attr-chip not-available-chip"
+                    :class="{ active: isNotAvailable(row.attribute.name) }"
+                    :aria-pressed="isNotAvailable(row.attribute.name)"
+                    data-testid="core-not-available"
+                    @click="setNotAvailable(row.attribute.name)"
+                  >{{ tx('غير متوفر', 'Not available') }}</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Other product attributes -->
+            <div class="variant-section-card api-attributes-section" v-if="otherAttributesList.length > 0 && !attributesLoading && !attributesLoadError">
+              <div class="core-attrs-header">
+                <h4 class="variant-section-title">{{ tx('مواصفات إضافية', 'Additional specifications') }}</h4>
+                <p class="variant-section-desc">{{ tx('قيمة واحدة لكل مواصفة (اختيارية).', 'One value per specification (optional).') }}</p>
+              </div>
               <div class="other-attrs-list">
-                  <div v-for="attr in apiAttributesList" :key="attr.id" class="other-attr-row">
-                    <label class="other-attr-label">{{ attr.label }} ({{ attr.name }})</label>
+                  <div v-for="attr in otherAttributesList" :key="attr.id" class="other-attr-row">
+                    <label class="other-attr-label">{{ locale === 'en' ? attrTitle(attr) : (attr.label === attr.name ? attr.label : `${attr.label} (${attr.name})`) }}</label>
                     <div class="attr-values-list" v-if="attr.values && attr.values.length > 0">
                       <button
                         v-for="val in attr.values"
@@ -514,11 +647,11 @@
                       >
                         <span class="checkmark" :class="{ active: isApiAttributeSelected(attr.name, val.label) }"></span>
                         <span v-if="val.color" class="api-attribute-color-dot" :style="{ background: val.color }"></span>
-                        <span class="val-text">{{ val.label }}</span>
+                        <span class="val-text">{{ valTitle(val) }}</span>
                       </button>
                   </div>
                   <div v-else class="attr-no-vals">
-                    <span class="text-muted-xs">لا توجد قيم مسجلة لهذه الخاصية.</span>
+                    <span class="text-muted-xs">{{ tx('لا توجد قيم مسجلة لهذه الخاصية.', 'No values are registered for this attribute.') }}</span>
                   </div>
                 </div>
               </div>
@@ -601,9 +734,9 @@
           </div>
 
           <div class="form-actions">
-            <button type="button" class="btn-cancel" @click="closeModal">إلغاء</button>
+            <button type="button" class="btn-cancel" @click="closeModal">{{ tx('إلغاء', 'Cancel') }}</button>
             <button type="submit" class="btn-submit" :disabled="isSubmitting">
-              {{ isSubmitting ? 'جاري الحفظ...' : (isEdit ? 'تعديل' : 'إضافة المنتج') }}
+              {{ isSubmitting ? tx('جاري الحفظ...', 'Saving...') : (isEdit ? tx('تعديل', 'Update') : tx('إضافة المنتج', 'Add Product')) }}
             </button>
           </div>
         </form>
@@ -618,53 +751,48 @@
         </button>
 
         <div class="view-image-slider">
-          <img v-if="viewProduct?.images?.length" :src="viewProduct.images[currentImageIdx]" class="view-main-image" />
-          <div v-else class="view-main-image-placeholder">لا توجد صورة</div>
+          <img :src="productImage(viewProduct, currentImageIdx)" class="view-main-image" @error="handleImageError" />
           <button v-if="viewProduct?.images?.length > 1" class="slider-btn prev-btn" @click.prevent="prevImage">&#10095;</button>
           <button v-if="viewProduct?.images?.length > 1" class="slider-btn next-btn" @click.prevent="nextImage">&#10094;</button>
           <div v-if="viewProduct?.images?.length > 1" class="image-indicator">{{currentImageIdx + 1}} / {{viewProduct.images.length}}</div>
         </div>
         <div class="view-thumbnails" v-if="viewProduct?.images?.length > 1">
-          <img v-for="(img, idx) in viewProduct.images" :key="idx" :src="img" class="thumb-img" :class="{active: currentImageIdx === idx}" @click="currentImageIdx = idx" />
+          <img v-for="(img, idx) in viewProduct.images" :key="idx" :src="img" class="thumb-img" :class="{active: currentImageIdx === idx}" @click="currentImageIdx = idx" @error="handleImageError" />
         </div>
 
         <div class="view-body-wrapper">
           <div class="view-title-row">
             <div>
-              <h3 class="view-title">{{ viewProduct?.name }}</h3>
-              <p class="view-subtitle">{{ productCategoryName(viewProduct, categories) || 'غير محدد' }} <span v-if="viewProduct?.subcategory">/ {{ viewProduct?.subcategory }}</span></p>
+              <h3 class="view-title">{{ localizedName(viewProduct, viewProduct?.name) }}</h3>
+              <p class="view-subtitle">{{ productCategoryName(viewProduct, categories) || tx('غير محدد', 'Uncategorized') }} <span v-if="viewProduct?.subcategory">/ {{ viewProduct?.subcategory }}</span></p>
             </div>
             <div class="view-status-badge" :class="viewProduct?.status === 'active' ? 'active' : 'inactive'">
-              {{ viewProduct?.status === 'active' ? 'نشط' : 'غير نشط' }}
+              {{ viewProduct?.status === 'active' ? tx('نشط', 'Active') : tx('غير نشط', 'Inactive') }}
             </div>
           </div>
 
           <div class="view-stats-grid">
             <div class="v-stat-box">
-              <span class="v-stat-label">السعر</span>
-              <span class="v-stat-value green-text">{{ formatPrice(viewProduct?.price * (1 - ((viewProduct?.discount||0)/100))) }} <span style="font-size: 0.75rem">د.أ</span></span>
+              <span class="v-stat-label">{{ tx('السعر', 'Price') }}</span>
+              <span class="v-stat-value green-text">{{ formatPrice(viewProduct?.price) }} <span style="font-size: 0.75rem">{{ cur }}</span></span>
             </div>
             <div class="v-stat-box">
-              <span class="v-stat-label">الخصم</span>
-              <span class="v-stat-value">{{ viewProduct?.discount || 0 }}%</span>
-            </div>
-            <div class="v-stat-box">
-              <span class="v-stat-label">المتبقي</span>
+              <span class="v-stat-label">{{ tx('المتبقي', 'Remaining') }}</span>
               <span class="v-stat-value px-badge">{{ viewProduct?.stock }}</span>
             </div>
             <div class="v-stat-box">
-              <span class="v-stat-label">المبيعات</span>
-              <span class="v-stat-value">{{ viewProduct?.sales }} مرة</span>
+              <span class="v-stat-label">{{ tx('المبيعات', 'Sales') }}</span>
+              <span class="v-stat-value">{{ viewProduct?.sales }} {{ tx('مرة', 'times') }}</span>
             </div>
           </div>
 
           <div class="view-sections">
             <div class="v-section" v-if="viewProduct?.description">
-              <h4 class="v-section-title">نبذة عن المنتج</h4>
+              <h4 class="v-section-title">{{ tx('نبذة عن المنتج', 'About the product') }}</h4>
               <div class="v-section-content" style="white-space: pre-wrap;">{{ toLines(viewProduct?.description).join('\n') }}</div>
             </div>
             <div class="v-section" v-if="viewProduct?.features">
-              <h4 class="v-section-title">المميزات الرئيسية</h4>
+              <h4 class="v-section-title">{{ tx('المميزات الرئيسية', 'Key features') }}</h4>
               <div class="v-section-content">
                 <ul class="v-feature-list">
                   <li v-for="(feature, idx) in toLines(viewProduct.features)" :key="idx" v-show="feature.trim() !== ''">
@@ -674,7 +802,7 @@
               </div>
             </div>
             <div class="v-section" v-if="viewProduct?.tips">
-              <h4 class="v-section-title">نصائح</h4>
+              <h4 class="v-section-title">{{ tx('نصائح', 'Tips') }}</h4>
               <div class="v-section-content">
                 <ul class="v-feature-list">
                   <li v-for="(tip, idx) in toLines(viewProduct.tips)" :key="idx" v-show="tip.trim() !== ''">
@@ -684,11 +812,11 @@
               </div>
             </div>
             <div class="v-section" v-if="viewProduct?.shipping_info">
-              <h4 class="v-section-title">الشحن والضمان</h4>
+              <h4 class="v-section-title">{{ tx('الشحن والضمان', 'Shipping and warranty') }}</h4>
               <div class="v-section-content" style="white-space: pre-wrap;">{{ toLines(viewProduct.shipping_info).join('\n') }}</div>
             </div>
             <div class="v-section" v-if="Object.keys(viewProduct?.attributes || {}).length > 0">
-              <h4 class="v-section-title">خصائص المنتج</h4>
+              <h4 class="v-section-title">{{ tx('خصائص المنتج', 'Product attributes') }}</h4>
               <div class="v-section-content">
                 <div class="v-attr-row" v-for="(vals, key) in viewProduct.attributes" :key="key">
                   <span class="v-attr-key">{{ key }}:</span> 
@@ -704,10 +832,14 @@
           </div>
 
           <div class="view-footer-actions">
-            <button class="btn-cancel" @click="showViewModal = false;">إغلاق</button>
+            <button class="btn-cancel" @click="showViewModal = false;">{{ tx('إغلاق', 'Close') }}</button>
+            <button class="btn-outline-edit" @click="showViewModal = false; openDuplicateModal(viewProduct);" data-testid="view-duplicate">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+              {{ tx('نسخ المنتج', 'Duplicate') }}
+            </button>
             <button class="btn-outline-edit" @click="showViewModal=false; openEditModal(viewProduct); ">
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>  
-              تعديل المنتج
+              {{ tx('تعديل المنتج', 'Edit product') }}
             </button>
           </div>
         </div>
@@ -726,14 +858,46 @@
 </template>
 
 <script setup>
+import { localizeMessage } from '../utils/uiMessages';
+import { useCurrencyLabel } from '../composables/useCurrencyLabel';
+import { apiErrorMessage } from '../utils/apiMessage';
 import { ref, computed, onMounted, watch } from 'vue';
+import PointListInput from '../components/PointListInput.vue';
+import { useAdminText } from '../composables/useAdminText';
 import adminCatalogService from '../application/adminCatalogService';
 import { productCategoryName, toLines, toProductPayload } from '../domain/catalog/adminCatalog';
+import { loadSavedCoreIds, resolveCoreIds, splitByCoreIds } from '../services/coreAttributes';
+import { loadSavedProductTabs } from '../services/productTabs';
+import { sourceTitle } from '../domain/productTabs';
 import { dedupeColorOptions, isColorAttribute, normalizeProductAttributes } from '../utils/productAttributes';
+import { useDialog } from '../composables/useDialog';
+import { isTestProduct, visibleCategories, visibleProducts } from '../utils/catalogVisibility';
+import { safeObjectUrl } from '../utils/adminSecurity';
+import ImageCropModal from '../components/ImageCropModal.vue';
+import ImageCropButton from '../components/ImageCropButton.vue';
+import { useImageCrop } from '../composables/useImageCrop';
+
+const { tx, locale } = useAdminText();
+const dialog = useDialog();
+const { cur } = useCurrencyLabel();
+const { cropModal, closeCrop, finishCrop, prepareImage, recropImage } = useImageCrop();
+const localizedName = (item, fallback = '') => {
+  if (!item || typeof item !== 'object') return fallback || item || '';
+  const language = localStorage.getItem('lang') === 'en' ? 'en' : 'ar';
+  return item.name_i18n?.[language] || item.name_i18n?.ar || item.name_i18n?.en || item.name || fallback;
+};
 
 // States
 const products = ref([]);
 const categories = ref([]);
+const categoryOptionLabel = (category) => (category.is_active === false || category.is_active === 0
+  ? `${category.name} (${tx('غير نشط', 'Inactive')})`
+  : category.name);
+// Filter list: every main category followed by its sub-categories.
+const categoryFilterOptions = computed(() => categories.value.flatMap(main => [
+  { id: main.id, label: categoryOptionLabel(main) },
+  ...(main.subchildren || []).map(sub => ({ id: sub.id, label: `— ${categoryOptionLabel(sub)}` })),
+]));
 const attributesList = ref([]);
 const attributesLoading = ref(false);
 const attributesLoadError = ref(false);
@@ -751,7 +915,8 @@ const totalProductsCount = ref(0);
 const customInputs = ref({});
 const customAttributes = ref({});
 
-const maxImages = 15;
+const maxImages = 4;
+const overviewMaxLength = 200; // keeps the overview to roughly two lines on the product page
 
 const presetColorMap = {
   'أسود': '#111827',
@@ -834,6 +999,35 @@ const customSizeInput = ref('');
 // All rendered standard attributes displayed in the product form come from the API.
 // The legacy custom sections are intentionally removed from the attributes tab.
 const apiAttributesList = computed(() => attributesList.value);
+// Core attributes are the ones marked «أساسية» on the attributes page (settings key core_attribute_ids);
+// they come first and need one value each, or «غير متوفر». Every attribute takes a single value.
+const savedCoreIds = ref(null);
+// Field names follow the product page tab names set in Settings > Product details.
+const savedProductTabs = ref(null);
+const tabName = (source) => sourceTitle(savedProductTabs.value, source, locale.value === 'en' ? 'en' : 'ar');
+const coreAndOtherAttributes = computed(() => {
+  const { core, others } = splitByCoreIds(apiAttributesList.value, resolveCoreIds(savedCoreIds.value, apiAttributesList.value));
+  return { core: core.map((attribute) => ({ attribute })), others };
+});
+const coreAttributeRows = computed(() => coreAndOtherAttributes.value.core);
+const otherAttributesList = computed(() => coreAndOtherAttributes.value.others);
+const selectedCount = (attributeName) => (
+  Array.isArray(form.value.selectedAttributes[attributeName]) ? form.value.selectedAttributes[attributeName].length : 0
+);
+const isNotAvailable = (attributeName) => Boolean(form.value.notAvailable?.[attributeName]);
+const setNotAvailable = (attributeName) => {
+  const next = !isNotAvailable(attributeName);
+  form.value.notAvailable = { ...(form.value.notAvailable || {}), [attributeName]: next };
+  if (next) form.value.selectedAttributes = { ...form.value.selectedAttributes, [attributeName]: [] };
+};
+const coreRowDone = (attribute) => isNotAvailable(attribute.name) || selectedCount(attribute.name) === 1;
+const coreRowStatus = (attribute) => {
+  if (isNotAvailable(attribute.name)) return tx('غير متوفر', 'Not available');
+  const count = selectedCount(attribute.name);
+  if (count === 1) return form.value.selectedAttributes[attribute.name][0];
+  if (count > 1) return tx('اختر قيمة واحدة فقط', 'Pick one value only');
+  return tx('لم يتم الاختيار', 'Not chosen');
+};
 
 const isApiAttributeSelected = (attributeName, valueLabel) => (
   Array.isArray(form.value.selectedAttributes[attributeName]) &&
@@ -844,10 +1038,12 @@ const toggleApiAttribute = (attributeName, valueLabel) => {
   const selected = Array.isArray(form.value.selectedAttributes[attributeName])
     ? form.value.selectedAttributes[attributeName]
     : [];
-  const checked = selected.includes(valueLabel);
-  const next = checked
-    ? selected.filter(value => value !== valueLabel)
-    : Array.from(new Set([...selected, valueLabel]));
+  // One value per attribute: picking another value replaces it; picking it again clears it.
+  const checked = selected.length === 1 && selected[0] === valueLabel;
+  const next = checked ? [] : [valueLabel];
+  if (form.value.notAvailable?.[attributeName]) {
+    form.value.notAvailable = { ...form.value.notAvailable, [attributeName]: false };
+  }
 
   form.value.selectedAttributes = {
     ...form.value.selectedAttributes,
@@ -873,7 +1069,7 @@ const addCustomColor = () => {
   const name = customColorName.value.trim();
   const hex = customColorHex.value.trim() || '#111827';
   if (!name) {
-    triggerAlert('يرجى كتابة اسم اللون', 'error');
+    triggerAlert(tx('يرجى كتابة اسم اللون', 'Enter the color name'), 'error');
     return;
   }
   const exists = form.value.colors.some(c => c.label.toLowerCase() === name.toLowerCase());
@@ -883,7 +1079,7 @@ const addCustomColor = () => {
     customColorName.value = '';
     customColorHex.value = '#111827';
   } else {
-    triggerAlert('هذا اللون مضاف بالفعل للمنتج', 'error');
+    triggerAlert(tx('هذا اللون مضاف بالفعل للمنتج', 'This color is already added to the product'), 'error');
   }
 };
 
@@ -911,7 +1107,7 @@ const addCustomSize = () => {
     form.value.sizes.push(s);
     customSizeInput.value = '';
   } else {
-    triggerAlert('هذا المقاس مضاف بالفعل للمنتج', 'error');
+    triggerAlert(tx('هذا المقاس مضاف بالفعل للمنتج', 'This size is already added to the product'), 'error');
   }
 };
 
@@ -936,11 +1132,11 @@ const addCustomSpec = () => {
   const k = newSpecKey.value.trim();
   const v = newSpecVal.value.trim();
   if (!k) {
-    triggerAlert('يرجى تحديد أو كتابة اسم المواصفة', 'error');
+    triggerAlert(tx('يرجى تحديد أو كتابة اسم المواصفة', 'Select or enter the specification name'), 'error');
     return;
   }
   if (!v) {
-    triggerAlert('يرجى كتابة قيمة المواصفة', 'error');
+    triggerAlert(tx('يرجى كتابة قيمة المواصفة', 'Enter the specification value'), 'error');
     return;
   }
   if (!Array.isArray(form.value.specs)) {
@@ -966,6 +1162,11 @@ const removeSpec = (idx) => {
 const showFormModal = ref(false);
 const showViewModal = ref(false);
 const isEdit = ref(false);
+// Duplicating: the product being copied, and the state of copying its images.
+const duplicateSource = ref(null);
+const duplicateLoading = ref(0);
+const duplicateFailed = ref([]);
+let duplicateRun = 0;
 const editingId = ref(null);
 const currentTab = ref('info');
 const isSubmitting = ref(false);
@@ -974,7 +1175,17 @@ const currentImageIdx = ref(0);
 
 const fileInput = ref(null);
 const imagePreviews = ref([]); // new uploads
-const activeLang = ref('ar');
+// The form opens on the dashboard's language; Arabic tab sits on the right, English on the left.
+// Attribute and option names follow the dashboard language (the API labels are Arabic-first).
+const attrTitle = (attribute = {}) => (locale.value === 'en'
+  ? (attribute.translations?.en?.name || attribute.name_en || attribute.name || attribute.label)
+  : (attribute.label || attribute.name));
+const valTitle = (value = {}) => (locale.value === 'en'
+  ? (value.name_en || value.translations?.en?.name || value.label)
+  : (value.name_ar || value.label));
+
+const formLang = () => (locale.value === 'en' ? 'en' : 'ar');
+const activeLang = ref(formLang());
 
 const form = ref({
   name_ar: '',
@@ -985,6 +1196,7 @@ const form = ref({
   discount: '',
   quantity: '',
   is_active: true,
+  is_featured: false,
   category_id: '',
   subcategory_id: '',
   features_ar: '',
@@ -1043,9 +1255,15 @@ const totalSales = computed(() => {
 const totalPages = computed(() => Math.ceil(totalProductsCount.value / perPage.value) || 1);
 
 // Filtering
+// A main category matches its own products and those of its sub-categories.
+const filterCategoryIds = computed(() => {
+  const main = categories.value.find(c => Number(c.id) === Number(catFilter.value));
+  return new Set([Number(catFilter.value), ...((main?.subchildren || []).map(sub => Number(sub.id)))]);
+});
+
 const filteredProducts = computed(() => {
   const q = (searchQuery.value || '').toLowerCase();
-  return products.value.filter(p => {
+  return products.value.filter(p => !isTestProduct(p)).filter(p => {
     const nameAr = (p.name_i18n?.ar || p.name || '').toString().toLowerCase();
     const nameEn = (p.name_i18n?.en || '').toString().toLowerCase();
     const sku = (p.sku || '').toString().toLowerCase();
@@ -1054,7 +1272,7 @@ const filteredProducts = computed(() => {
       statusFilter.value === 'active' ? (p.status === 'active' || p.is_active === true || p.is_active === 1) :
       (p.status !== 'active' && !p.is_active && p.is_active !== 1)
     ) : true;
-    const matchC = catFilter.value ? (p.category_id == catFilter.value || p.category === categories.value.find(c => c.id == catFilter.value)?.name) : true;
+    const matchC = catFilter.value ? filterCategoryIds.value.has(Number(p.category_id)) : true;
     return matchQ && matchS && matchC;
   });
 });
@@ -1070,7 +1288,7 @@ const showAlert = ref(false);
 const alertMessage = ref('');
 const alertType = ref('success');
 const triggerAlert = (msg, type = 'success') => {
-  alertMessage.value = msg;
+  alertMessage.value = localizeMessage(msg);
   alertType.value = type;
   showAlert.value = true;
   setTimeout(() => { showAlert.value = false; }, 3000);
@@ -1078,6 +1296,18 @@ const triggerAlert = (msg, type = 'success') => {
 
 // Utils
 const formatPrice = (p) => Number(p).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const productImage = (product, index = 0) => {
+  const rawImage = Array.isArray(product?.images) ? product.images[index] : product?.images;
+  const image = rawImage && typeof rawImage === 'object'
+    ? (rawImage.image_url || rawImage.url || rawImage.image || rawImage.path)
+    : rawImage;
+  return image || '/brand/tijara-logo.png';
+};
+const handleImageError = (event) => {
+  if (event?.target?.getAttribute('src') !== '/brand/tijara-logo.png') {
+    event.target.src = '/brand/tijara-logo.png';
+  }
+};
 
 // The dashboard API returns discount as an amount, while the product form
 // edits it as a percentage. Normalize both shapes before rendering/submitting.
@@ -1091,7 +1321,6 @@ const normalizeDiscountPercent = (discount, price) => {
   return Math.min(rawDiscount, 100);
 };
 
-const getDiscountPercent = (product) => normalizeDiscountPercent(product?.discount, product?.price);
 
 // Pagination
 const goToPage = (page) => {
@@ -1125,9 +1354,30 @@ const fetchProducts = async () => {
       params.search = searchQuery.value;
     }
 
-    const res = await adminCatalogService.listProducts(params);
-    products.value = res.data || res.items || [];
-    totalProductsCount.value = Number(res.meta?.total ?? res.total ?? products.value.length);
+    const mainCategory = catFilter.value
+      ? categories.value.find(c => Number(c.id) === Number(catFilter.value))
+      : null;
+    const subIds = (mainCategory?.subchildren || []).map(sub => sub.id);
+    if (subIds.length) {
+      // The API filters by one exact category id, so a main category is the
+      // union of itself and its sub-categories, paginated here.
+      const { page: _page, per_page: _perPage, category_id: _categoryId, ...baseParams } = params;
+      const lists = await Promise.all([mainCategory.id, ...subIds].map(id => (
+        adminCatalogService.listAllProducts({ ...baseParams, category_id: id })
+      )));
+      const merged = [...new Map(lists.flat().map(product => [product.id, product])).values()]
+        .filter(product => !isTestProduct(product))
+        .sort((a, b) => Number(b.id) - Number(a.id));
+      totalProductsCount.value = merged.length;
+      const start = (currentPage.value - 1) * perPage.value;
+      products.value = merged.slice(start, start + perPage.value);
+    } else {
+      const res = await adminCatalogService.listProducts(params);
+      const apiProducts = res.data || res.items || [];
+      products.value = visibleProducts(apiProducts);
+      const apiTotal = Number(res.meta?.total ?? res.total ?? products.value.length);
+      totalProductsCount.value = Math.max(0, apiTotal - apiProducts.filter(isTestProduct).length);
+    }
   } catch {
     triggerAlert('فشل استيراد المنتجات', 'error');
   } finally {
@@ -1138,10 +1388,11 @@ const fetchProducts = async () => {
 const fetchStats = async () => {
   try {
     const allList = await adminCatalogService.listAllProducts({ include_inactive: 1, show_all: 1 });
-    const totalCount = allList.length;
-    const activeCount = allList.filter(p => p.status === 'active').length;
-    const inactiveCount = allList.filter(p => p.status !== 'active').length;
-    const salesSum = allList.reduce((sum, p) => sum + Number(p.sales || p.sales_count || p.total_sold || 0), 0);
+    const visibleList = visibleProducts(allList);
+    const totalCount = visibleList.length;
+    const activeCount = visibleList.filter(p => p.status === 'active').length;
+    const inactiveCount = visibleList.filter(p => p.status !== 'active').length;
+    const salesSum = visibleList.reduce((sum, p) => sum + Number(p.sales || p.sales_count || p.total_sold || 0), 0);
     overallStats.value = { total: totalCount, active: activeCount, inactive: inactiveCount, totalSales: salesSum, isLoaded: true };
     totalProductsCount.value = totalCount;
   } catch (err) {
@@ -1153,12 +1404,17 @@ const fetchDependencies = async () => {
   attributesLoading.value = true;
   attributesLoadError.value = false;
   try {
-    const [allCategories, rawAttributes] = await Promise.all([
+    const [allCategories, rawAttributes, coreIds, productTabs] = await Promise.all([
       adminCatalogService.listCategories(),
       adminCatalogService.listAttributes(),
+      loadSavedCoreIds().catch(() => savedCoreIds.value),
+      loadSavedProductTabs().catch(() => savedProductTabs.value),
     ]);
-    categories.value = allCategories.filter(c => !c.parent_id);
-    const allC = allCategories;
+    savedCoreIds.value = coreIds;
+    savedProductTabs.value = productTabs;
+    const visibleCategoryList = visibleCategories(allCategories);
+    categories.value = visibleCategoryList.filter(c => !c.parent_id);
+    const allC = visibleCategoryList;
     categories.value.forEach(c => {
       c.subchildren = allC.filter(sc => Number(sc.parent_id) === Number(c.id));
     });
@@ -1193,11 +1449,13 @@ const updateSubcats = () => {
 
 // Modals Setup
 const openAddModal = () => {
-  if (!attributesList.value.length && !attributesLoading.value) fetchDependencies();
+  resetDuplicate();
+  // Categories may have been added since the page loaded, so always re-read them.
+  fetchDependencies();
   isEdit.value = false;
   editingId.value = null;
   currentTab.value = 'info';
-  activeLang.value = 'ar';
+  activeLang.value = formLang();
   imagePreviews.value = [];
   subCategories.value = [];
   customColorName.value = '';
@@ -1217,7 +1475,7 @@ const openAddModal = () => {
   customInputs.value = cInputs;
 
   form.value = {
-    name_ar: '', name_en: '', description_ar: '', description_en: '', price: '', discount: '', quantity: '', is_active: true,
+    name_ar: '', name_en: '', description_ar: '', description_en: '', price: '', discount: '', quantity: '', is_active: true, is_featured: false,
     category_id: '', subcategory_id: '',
     features_ar: '', features_en: '',
     tips_ar: '', tips_en: '',
@@ -1226,17 +1484,19 @@ const openAddModal = () => {
     colors: [],
     sizes: [],
     specs: [],
-    selectedAttributes: selAttr
+    selectedAttributes: selAttr,
+    notAvailable: {},
   };
   showFormModal.value = true;
 };
 
 const openEditModal = (prod) => {
+  resetDuplicate();
   if (!attributesList.value.length && !attributesLoading.value) fetchDependencies();
   isEdit.value = true;
   editingId.value = prod.id;
   currentTab.value = 'info';
-  activeLang.value = 'ar';
+  activeLang.value = formLang();
   imagePreviews.value = [];
   customColorName.value = '';
   customColorHex.value = '#111827';
@@ -1248,7 +1508,9 @@ const openEditModal = (prod) => {
     || allCategories.find(c => c.name === (typeof prod.category === 'object' ? prod.category.name : prod.category));
   const catId = cat?.parent_id ? cat.parent_id : (cat?.id || '');
   if (catId) {
-    subCategories.value = cat.subchildren || [];
+    // A product saved in a sub-category lists all siblings under its main category.
+    const mainCategory = categories.value.find(c => Number(c.id) === Number(catId));
+    subCategories.value = mainCategory?.subchildren || [];
   }
   const subcatId = cat?.parent_id ? cat.id : (subCategories.value.find(sc => sc.name === prod.subcategory)?.id || '');
 
@@ -1266,9 +1528,14 @@ const openEditModal = (prod) => {
       ? rawValues.map(value => typeof value === 'object' ? (value.label || value.name || '') : value)
       : [];
     const predefinedLabels = a.values ? a.values.map(v => v.label) : [];
-    
-    selAttr[key] = values.filter(v => predefinedLabels.includes(v));
-    custAttr[key] = values.filter(v => !predefinedLabels.includes(v));
+    // The product comes back in the admin's UI language while the option labels are Arabic-first,
+    // so also match the saved options by id (language independent).
+    const savedIds = new Set(Object.values(existingAttrs).flatMap(list => (Array.isArray(list) ? list : []))
+      .map(value => (value && typeof value === 'object' ? value.id : null)).filter(id => id != null).map(String));
+    const byId = (a.values || []).filter(v => v.id != null && savedIds.has(String(v.id))).map(v => v.label);
+
+    selAttr[key] = Array.from(new Set([...values.filter(v => predefinedLabels.includes(v)), ...byId]));
+    custAttr[key] = values.filter(v => !predefinedLabels.includes(v) && !byId.length);
     cInputs[key] = '';
   });
 
@@ -1338,9 +1605,11 @@ const openEditModal = (prod) => {
     description_ar: (prod.description_i18n && typeof prod.description_i18n === 'object' ? (prod.description_i18n.ar ?? prod.description) : prod.description) || '',
     description_en: (prod.description_i18n && typeof prod.description_i18n === 'object' ? (prod.description_i18n.en ?? '') : ''),
     price: prod.price,
-    discount: normalizeDiscountPercent(prod.discount, prod.price),
+    // 0 means "no discount": show the field blank, the input rejects values below 1 and would block saving.
+    discount: normalizeDiscountPercent(prod.discount, prod.price) || '',
     quantity: prod.stock,
     is_active: prod.status === 'active',
+    is_featured: [true, 1, '1', 'true'].includes(prod.is_featured),
     category_id: catId,
     subcategory_id: subcatId,
     features_ar: (prod.features_i18n && typeof prod.features_i18n === 'object' ? (prod.features_i18n.ar ?? prod.features) : prod.features) || '',
@@ -1350,11 +1619,17 @@ const openEditModal = (prod) => {
     shipping_info_ar: (prod.shipping_info_i18n && typeof prod.shipping_info_i18n === 'object' ? (prod.shipping_info_i18n.ar ?? prod.shipping_info) : prod.shipping_info) || '',
     shipping_info_en: (prod.shipping_info_i18n && typeof prod.shipping_info_i18n === 'object' ? (prod.shipping_info_i18n.en ?? '') : ''),
     existing_images: [...(prod.images || [])],
+    image_ids: { ...(prod.image_ids || {}) },
+    deleted_image_ids: [],
     new_images: [],
     colors: dedupeColorOptions(extractedColors),
     sizes: extractedSizes,
     specs: extractedSpecs,
-    selectedAttributes: selAttr
+    selectedAttributes: selAttr,
+    // A saved product without a value for a core attribute had it as «غير متوفر».
+    notAvailable: Object.fromEntries(coreAttributeRows.value
+      .filter(({ attribute }) => !(selAttr[attribute.name] || []).length && !(custAttr[attribute.name] || []).length)
+      .map(({ attribute }) => [attribute.name, true])),
   };
   showFormModal.value = true;
 };
@@ -1405,6 +1680,78 @@ const resolveAttributeValues = (attrName, valIds) => {
 
 const closeModal = () => {
   showFormModal.value = false;
+  resetDuplicate();
+};
+
+// ── Duplicate product ────────────────────────────────────────────────────────
+// Opens the add form filled with the product's data. Its images are downloaded
+// (through the same-origin /public/storage proxy, so the browser may read them)
+// and staged as new files: saving uploads them again with the new product, so
+// the copy keeps its own images even if the original is deleted.
+function resetDuplicate() {
+  duplicateRun += 1;
+  duplicateSource.value = null;
+  duplicateLoading.value = 0;
+  duplicateFailed.value = [];
+}
+
+const sameOriginImageUrl = (url) => {
+  try {
+    const parsed = new URL(url, window.location.origin);
+    if (parsed.pathname.startsWith('/public/storage/') || parsed.pathname.startsWith('/storage/')) return parsed.pathname + parsed.search;
+    return parsed.href;
+  } catch {
+    return url;
+  }
+};
+
+const imageUrlToFile = async (url, index) => {
+  const response = await fetch(sameOriginImageUrl(url), { credentials: 'omit' });
+  if (!response.ok) throw new Error(`HTTP ${response.status}`);
+  const blob = await response.blob();
+  if (!blob.type.startsWith('image/')) throw new Error('Not an image');
+  const ext = (blob.type.split('/')[1] || 'jpg').replace('jpeg', 'jpg').replace('svg+xml', 'svg');
+  return new File([blob], `product-copy-${index + 1}.${ext}`, { type: blob.type });
+};
+
+const stageCopiedImages = async (urls, run) => {
+  duplicateLoading.value += urls.length;
+  const results = await Promise.allSettled(urls.map((url, index) => imageUrlToFile(url, index)));
+  if (run !== duplicateRun) return;
+  duplicateLoading.value -= urls.length;
+  // Keep the original order: the first image stays the primary one.
+  results.forEach((result, index) => {
+    if (result.status === 'fulfilled' && form.value.new_images.length < maxImages) {
+      form.value.new_images.push(result.value);
+      imagePreviews.value.push({ file: result.value, preview: safeObjectUrl(result.value) });
+    } else if (result.status === 'rejected') {
+      duplicateFailed.value.push(urls[index]);
+    }
+  });
+};
+
+const retryDuplicateImage = (idx) => {
+  const [url] = duplicateFailed.value.splice(idx, 1);
+  if (url) stageCopiedImages([url], duplicateRun);
+};
+
+const openDuplicateModal = (prod) => {
+  openEditModal(prod);
+  // Same data, but saved as a new product.
+  isEdit.value = false;
+  editingId.value = null;
+  duplicateSource.value = { id: prod.id, name: form.value.name_ar || form.value.name_en || prod.name || '' };
+  const copyName = (name, suffix) => (String(name || '').trim() ? `${String(name).trim()} ${suffix}` : '');
+  form.value.name_ar = copyName(form.value.name_ar, '(نسخة)');
+  form.value.name_en = copyName(form.value.name_en, '(Copy)');
+  // A copy stays hidden from the website until it is reviewed and activated.
+  form.value.is_active = false;
+  form.value.is_featured = false;
+  form.value.quantity = Number.isInteger(Number(form.value.quantity)) && Number(form.value.quantity) >= 0 ? form.value.quantity : 0;
+  const urls = (form.value.existing_images || []).filter(Boolean).slice(0, maxImages);
+  form.value.existing_images = [];
+  form.value.new_images = [];
+  if (urls.length) stageCopiedImages(urls, duplicateRun);
 };
 
 // Images Uploader
@@ -1412,34 +1759,57 @@ const triggerFileInput = () => {
   fileInput.value.click();
 };
 
-const handleFileChange = (e) => {
-  const files = Array.from(e.target.files);
-  const currentTotal = form.value.existing_images.length + form.value.new_images.length;
-  
-  if (currentTotal + files.length > maxImages) {
-    triggerAlert(`يُسمح بـ ${maxImages} صورة كحد أقصى للمنتج الواحد`, 'error');
-    const allowedCount = maxImages - currentTotal;
-    if (allowedCount > 0) {
-      files.slice(0, allowedCount).forEach(file => {
-        form.value.new_images.push(file);
-        imagePreviews.value.push({ file, preview: URL.createObjectURL(file) });
-      });
-    }
-  } else {
-    files.forEach(file => {
-      form.value.new_images.push(file);
-      imagePreviews.value.push({ file, preview: URL.createObjectURL(file) });
-    });
+const productCropOptions = (position, total) => ({
+  maxSizeMB: 5,
+  defaultRatio: '1:1',
+  fileName: 'product',
+  title: total > 1
+    ? tx(`قص وضبط صورة المنتج (${position} من ${total})`, `Crop & resize product image (${position} of ${total})`)
+    : tx('قص وضبط صورة المنتج (Crop & Resize)', 'Crop & resize product image'),
+});
+
+// Picked images open the crop modal one after another, in the order picked.
+const handleFileChange = async (e) => {
+  const rawFiles = Array.from(e.target.files || []);
+  e.target.value = null;
+  if (!rawFiles.length) return;
+
+  const room = maxImages - form.value.existing_images.length - form.value.new_images.length;
+  if (rawFiles.length > room) {
+    triggerAlert(tx(`يُسمح بـ ${maxImages} صورة كحد أقصى للمنتج الواحد`, `A product can have at most ${maxImages} images`), 'error');
   }
-  e.target.value = null; // reset
+  const filesToAdd = rawFiles.slice(0, Math.max(0, room));
+
+  for (const [index, picked] of filesToAdd.entries()) {
+    const { file, error } = await prepareImage(picked, productCropOptions(index + 1, filesToAdd.length));
+    if (error) {
+      triggerAlert(error, 'error');
+      continue;
+    }
+    form.value.new_images.push(file);
+    imagePreviews.value.push({ file, preview: safeObjectUrl(file) });
+  }
+};
+
+const recropNewImage = async (idx) => {
+  const current = imagePreviews.value[idx];
+  if (!current) return;
+  const { file, error } = await recropImage(current.file, productCropOptions(1, 1));
+  if (error) triggerAlert(error, 'error');
+  if (!file || imagePreviews.value[idx] !== current) return;
+  form.value.new_images.splice(idx, 1, file);
+  imagePreviews.value.splice(idx, 1, { file, preview: safeObjectUrl(file, current.preview) });
 };
 
 const removeExistingImage = (idx) => {
-  form.value.existing_images.splice(idx, 1);
+  const [removedUrl] = form.value.existing_images.splice(idx, 1);
+  const removedId = form.value.image_ids?.[removedUrl];
+  if (removedId != null) form.value.deleted_image_ids = [...(form.value.deleted_image_ids || []), removedId];
 };
 const removeNewImage = (idx) => {
+  const removed = imagePreviews.value.splice(idx, 1)[0];
+  if (removed?.preview) safeObjectUrl(null, removed.preview);
   form.value.new_images.splice(idx, 1);
-  imagePreviews.value.splice(idx, 1);
 };
 
 const setPrimaryExistingImage = (idx) => {
@@ -1460,30 +1830,63 @@ const setPrimaryNewImage = (idx) => {
 };
 
 // Form Submission
-const validateProductForm = (f) => {
-  if (!f.category_id && !f.subcategory_id) return 'القسم الرئيسي مطلوب';
-  if (f.price === '' || f.price == null || !(Number(f.price) >= 0)) return 'السعر يجب أن يكون رقماً صحيحاً (0 أو أكبر)';
-  if (f.quantity === '' || f.quantity == null || !Number.isInteger(Number(f.quantity)) || Number(f.quantity) < 0) return 'المخزون يجب أن يكون عدداً صحيحاً (0 أو أكبر)';
-  if (f.discount !== '' && f.discount != null && (Number(f.discount) < 1 || Number(f.discount) > 99)) return 'نسبة الخصم يجب أن تكون بين 1% و99%';
+const validateProductForm = (f, { isEdit = false } = {}) => {
+  if (!f.category_id && !f.subcategory_id) return tx('القسم الرئيسي مطلوب', 'Main category is required');
+  if (f.price === '' || f.price == null || !(Number(f.price) >= 0)) return tx('السعر يجب أن يكون رقماً صحيحاً (0 أو أكبر)', 'Price must be a valid number (0 or more)');
+  // The stock is entered once, when the product is added; it is locked (and not sent) when editing.
+  if (!isEdit && (f.quantity === '' || f.quantity == null || !Number.isInteger(Number(f.quantity)) || Number(f.quantity) < 0)) return tx('المخزون يجب أن يكون عدداً صحيحاً (0 أو أكبر)', 'Stock must be a whole number (0 or more)');
   return '';
 };
 
 const submitForm = async () => {
   if (!String(form.value.name_ar || '').trim()) {
     activeLang.value = 'ar';
-    triggerAlert('اسم المنتج بالعربي مطلوب', 'error');
+    triggerAlert(tx('اسم المنتج بالعربي مطلوب', 'Arabic product name is required'), 'error');
     return;
   }
   if (!String(form.value.name_en || '').trim()) {
     activeLang.value = 'en';
-    triggerAlert('اسم المنتج بالإنجليزية مطلوب', 'error');
+    triggerAlert(tx('اسم المنتج بالإنجليزية مطلوب', 'English product name is required'), 'error');
     return;
   }
-  const productError = validateProductForm(form.value);
+  if (!isEdit.value && !form.value.new_images.length) {
+    currentTab.value = 'info';
+    triggerAlert(tx('أضف صورة واحدة على الأقل للمنتج', 'Add at least one product image'), 'error');
+    return;
+  }
+  const productError = validateProductForm(form.value, { isEdit: isEdit.value });
   if (productError) {
     currentTab.value = 'info';
     triggerAlert(productError, 'error');
     return;
+  }
+
+  const attrName = attrTitle;
+  const missingCore = coreAttributeRows.value.find(({ attribute }) => !coreRowDone(attribute));
+  if (missingCore) {
+    currentTab.value = 'attributes';
+    triggerAlert(selectedCount(missingCore.attribute.name) > 1
+      ? tx(`اختر قيمة واحدة فقط لـ «${attrName(missingCore.attribute)}»`, `Choose only one value for "${attrName(missingCore.attribute)}"`)
+      : tx(`اختر قيمة لـ «${attrName(missingCore.attribute)}» أو «غير متوفر»`, `Choose a value for "${attrName(missingCore.attribute)}" or "Not available"`), 'error');
+    return;
+  }
+  const multiValued = otherAttributesList.value.find((attribute) => selectedCount(attribute.name) > 1);
+  if (multiValued) {
+    currentTab.value = 'attributes';
+    triggerAlert(tx(`اختر قيمة واحدة فقط لـ «${attrName(multiValued)}»`, `Choose only one value for "${attrName(multiValued)}"`), 'error');
+    return;
+  }
+
+  if (duplicateSource.value) {
+    if (duplicateLoading.value > 0) {
+      triggerAlert(tx('انتظر حتى ينتهي نسخ صور المنتج', 'Wait until the product images finish copying'), 'error');
+      return;
+    }
+    if (!form.value.new_images.length) {
+      currentTab.value = 'info';
+      triggerAlert(tx('أضف صورة واحدة على الأقل للمنتج المنسوخ', 'Add at least one image for the copied product'), 'error');
+      return;
+    }
   }
 
   isSubmitting.value = true;
@@ -1532,6 +1935,8 @@ const submitForm = async () => {
     }
   });
   const payload = toProductPayload(form.value);
+  if (isEdit.value) delete payload.number;
+  if (isEdit.value && form.value.deleted_image_ids?.length) payload.delete_image_ids = form.value.deleted_image_ids;
   payload.attributes = JSON.stringify(finalAttributes);
   payload.color_options = JSON.stringify(payloadColors);
   payload.size_options = JSON.stringify(form.value.sizes || []);
@@ -1544,31 +1949,44 @@ const submitForm = async () => {
   try {
     if (isEdit.value) {
       await adminCatalogService.updateProduct(editingId.value, payload, form.value.new_images);
-      triggerAlert('تم تحديث المنتج بنجاح');
+      triggerAlert(tx('تم تحديث المنتج بنجاح', 'Product updated successfully'));
     } else {
       await adminCatalogService.createProduct(payload, form.value.new_images);
-      triggerAlert('تم إضافة المنتج بنجاح');
+      triggerAlert(duplicateSource.value ? tx('تم نسخ المنتج وإضافته كمنتج جديد (غير نشط)', 'Product copied and added as a new inactive product') : tx('تم إضافة المنتج بنجاح', 'Product added successfully'));
     }
     closeModal();
     fetchProducts();
     fetchStats();
   } catch (error) {
-    const msg = error.response?.data?.message || 'حدث خطأ يرجى تعبئة الحقول المطلوبة';
+    const msg = apiErrorMessage(error, 'حدث خطأ يرجى تعبئة الحقول المطلوبة');
     triggerAlert(msg, 'error');
   } finally {
     isSubmitting.value = false;
   }
 };
 
+const getDeleteErrorMessage = (error) => {
+  const message = String(error?.response?.data?.message || '').trim();
+  if (/order_items|foreign key constraint|cannot delete|طلبات|مرتبط/i.test(message)) {
+    return 'لا يمكن حذف هذا المنتج لأنه مرتبط بطلبات سابقة. عطّل المنتج من التعديل بدل حذفه نهائياً.';
+  }
+  return apiErrorMessage(error, 'فشل عملية الحذف');
+};
+
 const confirmDelete = async (prod) => {
-  if (confirm(`تأكيد حذف المنتج "${prod.name_i18n?.ar || prod.name}"؟`)) {
+  const name = locale.value === 'en' ? (prod.name_i18n?.en || prod.name) : (prod.name_i18n?.ar || prod.name);
+  const ok = await dialog.confirm(
+    tx(`سيتم حذف المنتج «${name}» نهائيًا.`, `The product "${name}" will be deleted permanently.`),
+    { type: 'error', title: tx('حذف المنتج؟', 'Delete this product?'), confirmText: tx('حذف المنتج', 'Delete product') },
+  );
+  if (ok) {
     try {
       await adminCatalogService.deleteProduct(prod.id);
       triggerAlert('تم الحذف بنجاح');
       fetchProducts();
       fetchStats();
-    } catch {
-      triggerAlert('فشل عملية الحذف', 'error');
+    } catch (error) {
+      triggerAlert(getDeleteErrorMessage(error), 'error');
     }
   }
 };
@@ -1576,8 +1994,14 @@ const confirmDelete = async (prod) => {
 </script>
 
 <style scoped>
+.points-hint { margin: 0 0 0.5rem; font-size: 0.78rem; color: #9ca3af; }
+.points-group { margin-bottom: 1.25rem; }
+.overview-box { position: relative; }
+.overview-textarea { width: 100%; box-sizing: border-box; resize: none; padding: 0.8rem 1rem 1.9rem; border: 1px solid #e5e7eb; border-radius: 12px; background: #f9fafb; font: 400 0.9rem/1.6 'IBM Plex Sans Arabic', sans-serif; color: #1f2937; outline: none; transition: 0.2s; }
+.overview-textarea:focus { background: #fff; border-color: #660033; box-shadow: 0 0 0 4px rgba(102, 0, 51, 0.08); }
+.overview-counter { position: absolute; inset-inline-end: 0.9rem; bottom: 0.5rem; font-size: 0.72rem; color: #9ca3af; pointer-events: none; }
 .products-page {
-  display: flex; flex-direction: column; gap: 1.5rem; direction: rtl; font-family: 'IBM Plex Sans Arabic', sans-serif; padding-bottom: 2rem;
+  display: flex; flex-direction: column; gap: 1.5rem; direction: inherit; font-family: 'IBM Plex Sans Arabic', sans-serif; padding-bottom: 2rem;
 }
 
 /* Page Header */
@@ -1588,7 +2012,7 @@ const confirmDelete = async (prod) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #000000;
+  background: #660033;
   color: #fff;
   border: none;
   padding: 0.65rem 1.1rem;
@@ -1599,7 +2023,7 @@ const confirmDelete = async (prod) => {
   cursor: pointer;
   transition: all 0.2s;
 }
-.add-btn:hover { background: #262626; }
+.add-btn:hover { background: #4d0026; }
 
 /* Stats Cards */
 .stats-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
@@ -1610,7 +2034,7 @@ const confirmDelete = async (prod) => {
 .stat-label { font-size: 0.75rem; font-weight: 700; color: #6b7280; }
 .stat-value { font-size: 1.5rem; font-weight: 800; color: #1f2937; margin-top: 0.2rem; }
 .stat-icon-wrapper { width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.active-icon { background: #f3f4f6; color: #000000; }
+.active-icon { background: #f3f4f6; color: #660033; }
 .empty-icon { background: #fee2e2; color: #dc2626; }
 .total-icon { background: #ecfdf5; color: #059669; }
 .main-icon { background: #fefce8; color: #ca8a04; }
@@ -1620,7 +2044,7 @@ const confirmDelete = async (prod) => {
 .search-box { flex: 1; position: relative; display: flex; align-items: center; }
 .search-icon { position: absolute; right: 1rem; color: #9ca3af; }
 .search-input { width: 100%; padding: 0.7rem 2.8rem 0.7rem 1rem; border: 1px solid #e5e7eb; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; outline: none; background: #fff; transition: border-color 0.2s; }
-.search-input:focus { border-color: #000000; }
+.search-input:focus { border-color: #660033; }
 .filter-select { position: relative; display: flex; align-items: center; min-width: 150px; }
 .form-select { width: 100%; padding: 0.7rem 1rem 0.7rem 2.5rem; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; color: #374151; appearance: none; outline: none; cursor: pointer; }
 .filter-select .select-icon { position: absolute; left: 1rem; color: #9ca3af; pointer-events: none; }
@@ -1650,12 +2074,18 @@ const confirmDelete = async (prod) => {
 .prod-image img { width: 100%; height: 100%; object-fit: cover; }
 .prod-details { display: flex; flex-direction: column; align-items: flex-start; }
 .prod-title { font-weight: 700; color: #111827; font-size: 0.85rem; line-height: 1.3; margin-bottom: 0.2rem; }
-.prod-cat-badge { background: #f3f4f6; color: #000000; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.65rem; font-weight: 600; }
+.prod-cat-badge { background: #f3f4f6; color: #660033; padding: 0.15rem 0.5rem; border-radius: 4px; font-size: 0.65rem; font-weight: 600; }
 
 .price-cell { display: flex; flex-direction: column; align-items: center; }
 .current-price { font-weight: 800; color: #059669; }
 .old-price { font-size: 0.7rem; color: #9ca3af; text-decoration: line-through; }
 
+.featured-box { display: flex; flex-direction: column; gap: 0.45rem; padding: 0.85rem 1rem; margin: 0.25rem 0 1.1rem; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; }
+.featured-check { display: inline-flex; align-items: center; gap: 0.6rem; cursor: pointer; font-size: 0.92rem; font-weight: 700; color: #1f2937; line-height: 1.4; }
+.featured-check input { width: 18px; height: 18px; flex-shrink: 0; margin: 0; accent-color: #660033; cursor: pointer; }
+.featured-hint { display: block; margin: 0; padding-inline-start: calc(18px + 0.6rem); font-size: 0.78rem; line-height: 1.6; color: #6b7280; }
+.stock-manage-link { font-size: 0.75rem; font-weight: 700; color: #660033; margin-top: 0.3rem; display: inline-block; }
+.form-control:disabled { background: #f3f4f6; color: #6b7280; cursor: not-allowed; }
 .stock-badge { padding: 0.2rem 0.6rem; border-radius: 20px; font-weight: 700; font-size: 0.75rem; }
 .in-stock { color: #374151; }
 .out-of-stock { color: #dc2626; background: #fee2e2; }
@@ -1676,7 +2106,7 @@ const confirmDelete = async (prod) => {
 
 
 /* Modal */
-.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 1rem; }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; z-index: 100; padding: 1rem; }
 .modal-content { background: #fff; border-radius: 12px; width: 100%; max-width: 600px; padding: 2rem; position: relative; max-height: 90vh; overflow-y: auto; }
 .form-content { max-width: 700px; }
 .modal-close { position: absolute; top: 1.2rem; left: 1.2rem; background: none; border: none; color: #9ca3af; cursor: pointer; transition: color 0.2s; }
@@ -1686,13 +2116,13 @@ const confirmDelete = async (prod) => {
 
 .i18n-toggle { display: inline-flex; border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; margin: 0.75rem auto 1.25rem; }
 .i18n-btn { border: none; background: transparent; padding: 0.4rem 0.9rem; font-weight: 700; font-size: 0.85rem; cursor: pointer; color: #6b7280; min-width: 96px; }
-.i18n-btn.active { background: #000000; color: #fff; }
+.i18n-btn.active { background: #660033; color: #fff; }
 
 /* Tabs */
 .modal-tabs { display: flex; gap: 1rem; border-bottom: 1px solid #e5e7eb; margin-bottom: 1.5rem; justify-content: center; }
 .tab-btn { background: none; border: none; color: #6b7280; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; padding: 0.6rem 1rem; cursor: pointer; position: relative; }
-.tab-btn.active { color: #000000; }
-.tab-btn.active::after { content:''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: #000000; }
+.tab-btn.active { color: #660033; }
+.tab-btn.active::after { content:''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: #660033; }
 .tab-pane { animation: fadeIn 0.3s; }
 .attributes-tab-pane { display: flex; flex-direction: column; }
 .attributes-tab-pane > .variant-section-card { order: 1; }
@@ -1707,7 +2137,7 @@ const confirmDelete = async (prod) => {
 .req { color: #dc2626; }
 .form-control { width: 100%; padding: 0.65rem 0.8rem; border: 1px solid #e5e7eb; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-size: 0.85rem; color: #1f2937; outline: none; transition: border-color 0.2s; text-align: right; }
 .no-rtl-issue { direction: ltr; text-align: right; }
-.form-control:focus { border-color: #000000; }
+.form-control:focus { border-color: #660033; }
 
 .select-wrapper { position: relative; display: flex; align-items: center; }
 .select-wrapper .form-control { appearance: none; padding-left: 2rem; cursor: pointer; }
@@ -1715,7 +2145,7 @@ const confirmDelete = async (prod) => {
 
 /* Fake Toolbar */
 .rich-textarea-mock { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
-.rich-textarea-mock:focus-within { border-color: #000000; }
+.rich-textarea-mock:focus-within { border-color: #660033; }
 .rt-toolbar { padding: 0.4rem 0.8rem; background: #f9fafb; border-bottom: 1px solid #e5e7eb; display: flex; gap: 0.5rem; }
 .rt-icon { font-weight: 700; font-size: 0.8rem; color: #6b7280; cursor: pointer; padding: 0.1rem 0.3rem; border-radius: 3px; }
 .rt-icon:hover { background: #e5e7eb; }
@@ -1724,12 +2154,23 @@ const confirmDelete = async (prod) => {
 
 /* Image Uploader */
 .image-label-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem; }
-.images-count-badge { font-size: 0.75rem; font-weight: 700; color: #000000; background: #f3f4f6; padding: 0.2rem 0.6rem; border-radius: 12px; }
+.action-btn.duplicate-btn { color: #0f766e; }
+.action-btn.duplicate-btn:hover { background: #ecfdf5; }
+.copy-loading-item, .copy-failed-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; background: #f9fafb; border: 1px dashed #d1d5db; text-align: center; padding: 6px; }
+.copy-loading-item small, .copy-failed-item small { font-size: 0.7rem; color: #6b7280; }
+.copy-failed-item { border-color: #fca5a5; background: #fef2f2; }
+.copy-failed-item img { opacity: 0.35; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.copy-failed-item small, .copy-failed-item .retry-copy-btn { position: relative; z-index: 1; }
+.copy-failed-item small { color: #b91c1c; font-weight: 700; }
+.retry-copy-btn { border: none; background: #660033; color: #fff; border-radius: 6px; font-size: 0.7rem; padding: 3px 8px; cursor: pointer; font-family: inherit; }
+.copy-spinner { width: 22px; height: 22px; border: 3px solid #e5e7eb; border-top-color: #660033; border-radius: 50%; animation: copy-spin 0.8s linear infinite; }
+@keyframes copy-spin { to { transform: rotate(360deg); } }
+.images-count-badge { font-size: 0.75rem; font-weight: 700; color: #660033; background: #f3f4f6; padding: 0.2rem 0.6rem; border-radius: 12px; }
 .image-uploader { display: flex; flex-direction: column; gap: 0.8rem; }
 .upload-box {
   border: 1.5px dashed #d1d5db; border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; transition: all 0.2s; background: #fafafa;
 }
-.upload-box:hover { border-color: #000000; background: #f3f4f6; }
+.upload-box:hover { border-color: #660033; background: #f3f4f6; }
 .hidden-input { display: none; }
 .upload-box p { font-size: 0.85rem; font-weight: 600; color: #374151; margin: 0.5rem 0 0; }
 .upload-box span { font-size: 0.75rem; color: #9ca3af; }
@@ -1737,14 +2178,15 @@ const confirmDelete = async (prod) => {
 .preview-item { width: 90px; height: 90px; border-radius: 8px; border: 1.5px solid #e5e7eb; position: relative; overflow: hidden; background: #f9fafb; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
 .preview-item img { width: 100%; height: 100%; object-fit: cover; }
 .primary-tag-badge {
-  position: absolute; bottom: 0; left: 0; right: 0; background: #000000; color: #fff; font-size: 0.65rem; font-weight: 700; text-align: center; padding: 2px 0; letter-spacing: 0.5px;
+  position: absolute; bottom: 0; left: 0; right: 0; background: #660033; color: #fff; font-size: 0.65rem; font-weight: 700; text-align: center; padding: 2px 0; letter-spacing: 0.5px;
 }
 .set-primary-btn {
   position: absolute; bottom: 0; left: 0; right: 0; background: rgba(17, 24, 39, 0.85); color: #fff; font-size: 0.6rem; font-weight: 700; border: none; padding: 3px 0; cursor: pointer; transition: background 0.2s; text-align: center;
 }
-.set-primary-btn:hover { background: #000000; }
+.set-primary-btn:hover { background: #660033; }
+.thumb-crop-btn { position: absolute; top: 3px; right: 3px; z-index: 2; }
 .remove-img-btn {
-  position: absolute; top: 3px; left: 3px; background: rgba(0,0,0,0.6); color: #fff; width: 20px; height: 20px; border-radius: 50%; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: background 0.2s; z-index: 2;
+  position: absolute; top: 3px; left: 3px; background: rgba(0, 0, 0, 0.6); color: #fff; width: 20px; height: 20px; border-radius: 50%; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; border: none; cursor: pointer; transition: background 0.2s; z-index: 2;
 }
 .remove-img-btn:hover { background: #dc2626; }
 
@@ -1758,9 +2200,9 @@ const confirmDelete = async (prod) => {
 }
 .variant-section-header { display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 0.8rem; }
 .variant-icon-wrapper { width: 38px; height: 38px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.color-icon-bg { background: #f3f4f6; color: #000000; }
+.color-icon-bg { background: #f3f4f6; color: #660033; }
 .size-icon-bg { background: #eff6ff; color: #2563eb; }
-.other-icon-bg { background: #f3f4f6; color: #000000; }
+.other-icon-bg { background: #f3f4f6; color: #660033; }
 .variant-section-title { font-size: 0.95rem; font-weight: 800; color: #111827; margin: 0 0 0.2rem 0; }
 .variant-section-desc { font-size: 0.75rem; color: #6b7280; margin: 0; }
 
@@ -1771,11 +2213,11 @@ const confirmDelete = async (prod) => {
 .color-preset-pill {
   display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.35rem 0.75rem; border: 1.5px solid #e5e7eb; border-radius: 20px; background: #fff; font-size: 0.8rem; font-weight: 700; color: #374151; cursor: pointer; transition: all 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
 }
-.color-preset-pill:hover { border-color: #000000; color: #000000; background: #f3f4f6; }
-.color-preset-pill.active { border-color: #000000; background: #f3f4f6; color: #000000; box-shadow: 0 0 0 1px #000000; }
+.color-preset-pill:hover { border-color: #660033; color: #660033; background: #f3f4f6; }
+.color-preset-pill.active { border-color: #660033; background: #f3f4f6; color: #660033; box-shadow: 0 0 0 1px #660033; }
 .preset-dot { width: 14px; height: 14px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.15); flex-shrink: 0; }
 .dot-white { border: 1px solid #d1d5db; }
-.preset-check { font-size: 0.75rem; font-weight: 800; color: #000000; margin-right: 0.2rem; }
+.preset-check { font-size: 0.75rem; font-weight: 800; color: #660033; margin-right: 0.2rem; }
 
 .custom-variant-box { background: #f9fafb; border: 1px solid #f3f4f6; border-radius: 8px; padding: 0.9rem; margin-bottom: 1rem; }
 .color-custom-row, .size-custom-row { display: flex; gap: 0.6rem; align-items: center; }
@@ -1785,9 +2227,9 @@ const confirmDelete = async (prod) => {
 .custom-color-hex { width: 80px; border: none; font-family: monospace; font-size: 0.8rem; font-weight: 700; padding: 0; }
 .custom-color-hex:focus { border: none; box-shadow: none; }
 .btn-add-variant {
-  display: inline-flex; align-items: center; gap: 0.4rem; background: #000000; color: #fff; border: 1px solid #000000; padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
+  display: inline-flex; align-items: center; gap: 0.4rem; background: #660033; color: #fff; border: 1px solid #660033; padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
 }
-.btn-add-variant:hover { background: #262626; border-color: #262626; }
+.btn-add-variant:hover { background: #4d0026; border-color: #4d0026; }
 
 .selected-items-block { border-top: 1px dashed #e5e7eb; padding-top: 0.8rem; margin-top: 0.5rem; }
 .selected-colors-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; }
@@ -1805,20 +2247,20 @@ const confirmDelete = async (prod) => {
 .size-preset-pill {
   display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.85rem; border: 1.5px solid #e5e7eb; border-radius: 8px; background: #fff; font-size: 0.8rem; font-weight: 700; color: #374151; cursor: pointer; transition: all 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
 }
-.size-preset-pill:active { border-color: #000000; background: #f3f4f6; color: #000000; box-shadow: 0 0 0 1px #000000; }
+.size-preset-pill:active { border-color: #660033; background: #f3f4f6; color: #660033; box-shadow: 0 0 0 1px #660033; }
 
 /* Technical Specs Admin Styles */
 .specs-presets-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.8rem; }
 .spec-preset-pill {
   display: inline-flex; align-items: center; padding: 0.35rem 0.75rem; border: 1.5px solid #e5e7eb; border-radius: 6px; background: #fff; font-size: 0.8rem; font-weight: 700; color: #374151; cursor: pointer; transition: all 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
 }
-.spec-preset-pill:hover { border-color: #000000; color: #000000; background: #f9fafb; }
+.spec-preset-pill:hover { border-color: #660033; color: #660033; background: #f9fafb; }
 
 .add-spec-row { display: flex; gap: 0.6rem; align-items: center; margin-bottom: 1rem; }
 .btn-add-spec {
-  display: inline-flex; align-items: center; gap: 0.4rem; background: #000000; color: #fff; border: 1px solid #000000; padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
+  display: inline-flex; align-items: center; gap: 0.4rem; background: #660033; color: #fff; border: 1px solid #660033; padding: 0.55rem 1.1rem; border-radius: 8px; font-size: 0.82rem; font-weight: 700; cursor: pointer; white-space: nowrap; transition: background 0.2s; font-family: 'IBM Plex Sans Arabic', sans-serif;
 }
-.btn-add-spec:hover { background: #262626; border-color: #262626; }
+.btn-add-spec:hover { background: #4d0026; border-color: #4d0026; }
 
 .specs-table-wrapper { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; margin-top: 0.5rem; margin-bottom: 1rem; }
 .specs-admin-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; text-align: right; }
@@ -1839,7 +2281,7 @@ const confirmDelete = async (prod) => {
   display: flex; align-items: center; justify-content: center; gap: 0.75rem; min-height: 120px; padding: 1rem; border: 1px dashed #d1d5db; border-radius: 10px; background: #f9fafb; color: #6b7280; font-size: 0.85rem; font-weight: 700;
 }
 .attributes-state-card.error { flex-direction: column; color: #b91c1c; background: #fff7f7; border-color: #fecaca; }
-.attributes-retry-btn { background: #000; color: #fff; border: 0; border-radius: 6px; padding: 0.45rem 0.9rem; cursor: pointer; font-family: inherit; font-weight: 700; }
+.attributes-retry-btn { background: #660033; color: #fff; border: 0; border-radius: 6px; padding: 0.45rem 0.9rem; cursor: pointer; font-family: inherit; font-weight: 700; }
 
 .other-attrs-list { display: flex; flex-direction: column; gap: 0.8rem; }
 .other-attr-row { background: #f9fafb; padding: 0.75rem 1rem; border-radius: 8px; border: 1px solid #f3f4f6; }
@@ -1848,42 +2290,42 @@ const confirmDelete = async (prod) => {
 .attr-values-list { display: flex; flex-wrap: wrap; gap: 0.8rem; }
 .attr-val-checkbox { display: inline-flex; align-items: center; gap: 0.4rem; cursor: pointer; position: relative; border: 0; padding: 0; background: transparent; font-family: inherit; }
 .checkmark { width: 16px; height: 16px; border: 1px solid #d1d5db; border-radius: 4px; display: inline-block; position: relative; background: #fff; transition: all 0.2s; }
-.checkmark.active { background: #000000; border-color: #000000; }
+.checkmark.active { background: #660033; border-color: #660033; }
 .api-attribute-color-dot { width: 12px; height: 12px; border-radius: 50%; border: 1px solid rgba(17, 24, 39, 0.15); flex: 0 0 auto; }
 .checkmark.active::after { content: ''; position: absolute; display: block; left: 4px; top: 1px; width: 4px; height: 8px; border: solid white; border-width: 0 2px 2px 0; transform: rotate(45deg); }
 .val-text { font-size: 0.85rem; font-weight: 600; color: #374151; }
-.color-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0,0,0,0.1); }
+.color-dot { width: 12px; height: 12px; border-radius: 50%; display: inline-block; border: 1px solid rgba(0, 0, 0, 0.1); }
 
 
 .form-actions { margin-top: 2rem; display: flex; justify-content: center; }
-.btn-submit { background: #000000; color: #fff; border: 1px solid #000000; padding: 0.65rem 2.5rem; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: background 0.2s; width: fit-content; }
-.btn-submit:hover:not(:disabled) { background: #262626; border-color: #262626; }
+.btn-submit { background: #660033; color: #fff; border: 1px solid #660033; padding: 0.65rem 2.5rem; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 600; font-size: 0.9rem; cursor: pointer; transition: background 0.2s; width: fit-content; }
+.btn-submit:hover:not(:disabled) { background: #4d0026; border-color: #4d0026; }
 .btn-submit:disabled { opacity: 0.7; cursor: not-allowed; }
 
 /* View Details Modal */
 .view-content { max-width: 500px; }
 .no-padding-top { padding-top: 0 !important; overflow-x: hidden; overflow-y: auto; }
-.floating-close { top: 1rem; left: 1rem; background: rgba(0,0,0,0.4); color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; z-index: 10; border: none; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-.floating-close:hover { background: rgba(0,0,0,0.6); color: white; }
+.floating-close { top: 1rem; left: 1rem; background: rgba(0, 0, 0, 0.4); color: white; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; z-index: 10; border: none; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
+.floating-close:hover { background: rgba(0, 0, 0, 0.6); color: white; }
 
 .view-image-slider { position: relative; width: calc(100% + 4rem); margin: 0 -2rem 1rem -2rem; height: 350px; background: #f3f4f6; display: flex; align-items: center; justify-content: center; overflow: hidden; }
 .view-main-image { width: 100%; height: 100%; object-fit: cover; }
 .view-main-image-placeholder { color: #9ca3af; font-size: 0.9rem; font-weight: 600; }
-.slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0,0,0,0.5); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 2; font-size: 1rem; }
-.slider-btn:hover { background: rgba(0,0,0,0.8); }
+.slider-btn { position: absolute; top: 50%; transform: translateY(-50%); background: rgba(0, 0, 0, 0.5); color: white; border: none; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.2s; z-index: 2; font-size: 1rem; }
+.slider-btn:hover { background: rgba(0, 0, 0, 0.8); }
 .prev-btn { left: 1rem; }
 .next-btn { right: 1rem; }
-.image-indicator { position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.6); color: white; padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; backdrop-filter: blur(4px); }
+.image-indicator { position: absolute; bottom: 1rem; left: 50%; transform: translateX(-50%); background: rgba(0, 0, 0, 0.6); color: white; padding: 0.25rem 0.7rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; letter-spacing: 1px; backdrop-filter: blur(4px); }
 
 .view-thumbnails { display: flex; gap: 0.6rem; justify-content: center; margin-bottom: 1.5rem; }
 .thumb-img { width: 45px; height: 45px; border-radius: 6px; object-fit: cover; cursor: pointer; border: 2px solid transparent; opacity: 0.5; transition: all 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
-.thumb-img.active { border-color: #000000; opacity: 1; transform: scale(1.05); }
+.thumb-img.active { border-color: #660033; opacity: 1; transform: scale(1.05); }
 .thumb-img:hover { opacity: 1; }
 
 .view-body-wrapper { padding: 0 0 0.5rem 0; }
 .view-title-row { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; gap: 1rem; border-bottom: 1px solid #f3f4f6; padding-bottom: 1.25rem; }
 .view-title { font-size: 1.3rem; font-weight: 800; color: #111827; margin: 0 0 0.4rem 0; line-height: 1.3; }
-.view-subtitle { font-size: 0.85rem; font-weight: 700; color: #000000; margin: 0; }
+.view-subtitle { font-size: 0.85rem; font-weight: 700; color: #660033; margin: 0; }
 .view-status-badge { padding: 0.35rem 0.85rem; border-radius: 20px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; display: inline-block; }
 .view-status-badge.active { background: #ecfdf5; color: #059669; border: 1px solid #a7f3d0; }
 .view-status-badge.inactive { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
@@ -1893,7 +2335,7 @@ const confirmDelete = async (prod) => {
 .v-stat-label { font-size: 0.7rem; color: #6b7280; font-weight: 700; margin-bottom: 0.4rem; }
 .v-stat-value { font-size: 1rem; font-weight: 800; color: #1f2937; }
 .green-text { color: #059669; font-size: 1.1rem; }
-.px-badge { background: #f3f4f6; color: #000000; padding: 0.15rem 0.5rem; border-radius: 6px; font-size: 0.85rem; }
+.px-badge { background: #f3f4f6; color: #660033; padding: 0.15rem 0.5rem; border-radius: 6px; font-size: 0.85rem; }
 
 .view-sections { display: flex; flex-direction: column; gap: 0.6rem; border-top: 1px solid #f3f4f6; margin-bottom: 1.5rem; padding-top: 1.2rem;}
 .v-section { background: #f9fafb; padding: 1.25rem; border-radius: 8px; border: 1px solid #f3f4f6; }
@@ -1901,7 +2343,7 @@ const confirmDelete = async (prod) => {
 .v-section-content { font-size: 0.85rem; color: #4b5563; line-height: 1.7; font-weight: 500; }
 .v-feature-list { list-style: none; padding: 0; margin: 0; }
 .v-feature-list li { position: relative; padding-left: 1.2rem; margin-bottom: 0.4rem; font-size: 0.85rem; color: #4b5563; }
-.v-feature-list li::before { content: '•'; position: absolute; left: 0; color: #000000; font-weight: 700; }
+.v-feature-list li::before { content: '•'; position: absolute; left: 0; color: #660033; font-weight: 700; }
 
 .v-attr-row { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: flex-start; margin-bottom: 0.6rem; }
 .v-attr-key { font-weight: 700; color: #374151; font-size: 0.85rem; }
@@ -1912,14 +2354,14 @@ const confirmDelete = async (prod) => {
 /* Pagination */
 .pagination-container { display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; padding: 0.75rem 1rem; background: #fff; border-radius: 10px; border: 1px solid #e5e7eb; }
 .pagination-info { font-size: 0.85rem; color: #6b7280; font-weight: 600; }
-.pagination-controls { display: flex; align-items: center; gap: 0.4rem; }
+.pagination-controls { display: flex; align-items: center; gap: 0.4rem; direction: ltr; }
 .pagination-btn { width: 36px; height: 36px; padding: 0; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; color: #374151; cursor: pointer; transition: all 0.2s; }
-.pagination-btn:hover:not(:disabled) { background: #000000; color: #fff; border-color: #000000; }
+.pagination-btn:hover:not(:disabled) { background: #660033; color: #fff; border-color: #660033; }
 .pagination-btn:disabled { opacity: 0.4; cursor: not-allowed; }
 .pagination-pages { display: flex; gap: 0.3rem; }
 .pagination-page-btn { width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; font-weight: 600; font-size: 0.85rem; color: #374151; cursor: pointer; transition: all 0.2s; }
 .pagination-page-btn:hover { background: #f3f4f6; }
-.pagination-page-btn.active { background: #000000; color: #fff; border-color: #000000; }
+.pagination-page-btn.active { background: #660033; color: #fff; border-color: #660033; }
 
 
 .v-attr-row { display: flex; align-items: flex-start; gap: 0.6rem; margin-bottom: 0.8rem; }
@@ -1943,14 +2385,10 @@ const confirmDelete = async (prod) => {
 .view-footer-actions button { flex: 1; padding: 0.75rem; border-radius: 8px; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
 .btn-cancel { background: #f3f4f6; color: #374151; border: none; }
 .btn-cancel:hover { background: #e5e7eb; color: #111827; }
-.btn-outline-edit { background: #fff; border: 1px solid #000000; color: #000000; }
+.btn-outline-edit { background: #fff; border: 1px solid #660033; color: #660033; }
 .btn-outline-edit:hover { background: #f3f4f6; }
 
 /* Alert */
-.alert-toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); padding: 0.75rem 1.5rem; border-radius: 30px; font-size: 0.85rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem; opacity: 0; transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); z-index: 1000; box-shadow: 0 4px 12px rgba(0,0,0,0.1); font-family: 'IBM Plex Sans Arabic', sans-serif; }
-.alert-toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-.alert-toast.success { background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-.alert-toast.error { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
 .alert-icon { flex-shrink: 0; }
 .field-hint { display: block; margin-top: 4px; font-size: 0.7rem; color: #6b7280; }
 
@@ -1960,7 +2398,8 @@ const confirmDelete = async (prod) => {
 .modal-content.form-modal.form-content { max-width: 700px; }
 .form-modal .modal-close { top: 1.5rem; left: 1.5rem; background: #f3f4f6; border: none; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; color: #9ca3af; font-size: 1.2rem; line-height: 1; }
 .form-modal .form-header { text-align: center; padding: 2rem 2rem 1.5rem 2rem; position: relative; }
-.form-modal .header-icon-main { width: 50px; height: 50px; background: #f3f4f6; color: #000000; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; }
+.form-modal .modal-heading-row { display: flex; align-items: center; justify-content: center; gap: 0.65rem; direction: inherit; }
+.form-modal .header-icon-main { width: 38px; height: 38px; background: #f3f4f6; color: #660033; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex: 0 0 auto; }
 .form-modal .modal-title-main { font-size: 1.3rem; font-weight: 800; color: #111827; margin: 0; }
 .form-modal .modal-subtitle-main { font-size: 0.85rem; color: #9ca3af; margin-top: 0.4rem; }
 .form-modal .cat-form, .form-modal .prod-form, .form-modal .value-form { padding: 0 2.5rem 2.5rem 2.5rem; }
@@ -1970,13 +2409,30 @@ const confirmDelete = async (prod) => {
 .form-modal .form-group { margin-bottom: 1.5rem; }
 .form-modal .form-label { font-size: 0.85rem; font-weight: 700; color: #374151; margin-bottom: 0.75rem; }
 .form-modal .form-control { padding: 0.8rem 1rem; border: 1px solid #e5e7eb; border-radius: 10px; background: #f9fafb; transition: 0.2s; }
-.form-modal .form-control:focus { background: #fff; border-color: #000000; box-shadow: 0 0 0 4px rgba(0,0,0,0.08); }
+.form-modal .form-control:focus { background: #fff; border-color: #660033; box-shadow: 0 0 0 4px rgba(0,0,0,0.08); }
 .form-modal .image-upload-box, .form-modal .upload-box { border: 2px dashed #e5e7eb; border-radius: 12px; background: #f9fafb; }
-.form-modal .image-upload-box:hover, .form-modal .upload-box:hover { border-color: #000000; background: #fff; }
+.form-modal .image-upload-box:hover, .form-modal .upload-box:hover { border-color: #660033; background: #fff; }
 .form-modal .form-actions { margin-top: 2rem; display: flex; gap: 1rem; justify-content: stretch; align-items: stretch; }
 .form-modal .btn-cancel { flex: 1; width: auto; padding: 0.85rem; border-radius: 10px; border: 1px solid #e5e7eb; background: #fff; color: #6b7280; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; }
-.form-modal .btn-submit { flex: 2; width: auto; min-width: 0; padding: 0.85rem; border-radius: 10px; border: none; background: #000000; color: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
-.form-modal .btn-submit:hover:not(:disabled) { background: #262626; }
+.form-modal .btn-submit { flex: 2; width: auto; min-width: 0; padding: 0.85rem; border-radius: 10px; border: none; background: #660033; color: #fff; font-family: 'IBM Plex Sans Arabic', sans-serif; font-weight: 700; font-size: 0.9rem; cursor: pointer; transition: 0.2s; }
+.form-modal .btn-submit:hover:not(:disabled) { background: #4d0026; }
 .form-modal .btn-submit:disabled { opacity: 0.6; }
 @media (max-width: 600px) { .form-modal .cat-form, .form-modal .prod-form, .form-modal .value-form { padding: 0 1.25rem 1.5rem; } .form-modal .modal-tabs { margin: 0 1.25rem 1.5rem; } }
+
+/* Core attributes (color, capacity, size) */
+.attributes-tab-pane > .core-attributes-section { order: -1; border-color: #660033; }
+.core-attrs-header { margin-bottom: 0.75rem; }
+.core-attr-row.is-missing { border-color: #fecaca; }
+.not-available-chip { margin-top: 8px; border-style: dashed !important; color: #6b7280; }
+.not-available-chip.active { background: #6b7280 !important; border-color: #6b7280 !important; color: #fff !important; }
+.core-attrs-list { display: flex; flex-direction: column; gap: 0.9rem; }
+.core-attr-row { background: #f9fafb; padding: 0.85rem 1rem; border-radius: 10px; border: 1px solid #e5e7eb; }
+.core-attr-title { display: flex; align-items: center; justify-content: space-between; gap: 0.75rem; font-weight: 700; margin-bottom: 0.6rem; }
+.core-attr-count { font-size: 0.8rem; font-weight: 600; color: #b45309; background: #fef3c7; border-radius: 999px; padding: 0.1rem 0.6rem; }
+.core-attr-count.complete { color: #047857; background: #d1fae5; }
+.core-attr-values { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+.core-attr-chip { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.4rem 0.85rem; border: 1px solid #d1d5db; border-radius: 8px; background: #fff; font: inherit; cursor: pointer; }
+.core-attr-chip.active { border-color: #660033; background: #660033; color: #fff; }
+.core-attr-chip .api-attribute-color-dot { border: 1px solid #d1d5db; }
+.core-attr-chip.active .val-text { color: #fff; }
 </style>

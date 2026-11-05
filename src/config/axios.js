@@ -1,49 +1,43 @@
 import axios from 'axios';
-import { localApiAdapter } from './localApi';
+import { isDataWrite, markDataChanged } from '../utils/dataFreshness';
+import { clearAdminSessionArtifacts } from '../utils/adminSecurity';
 
 const serverUrl = 'https://backend-tijara.be-kite.com/api';
 const envUrl = import.meta.env.VITE_API_BASE_URL;
 
 const isBrowser = typeof window !== 'undefined';
 const frappeMode = import.meta.env.VITE_FRAPPE_MODE === 'true';
-// VITE_DATA_MODE=api sends every request to the backend; anything else keeps the local snapshot for catalog/content.
-const useLiveApi = import.meta.env.VITE_DATA_MODE === 'api';
-
-// Dashboard data uses the local snapshot for now; authentication remains remote.
+// Every request goes to the remote Tijara API; there is no local data source.
 const baseURL = envUrl || (import.meta.env.DEV && isBrowser ? '/api' : serverUrl);
 
-const REMOTE_AUTH_PATHS = new Set([
-  '/v1/login',
-  '/v1/admin/login',
-  '/v1/register',
-  '/v1/logout',
-  '/v1/user',
-  '/frontend/login',
-  '/frontend/register',
-  '/frontend/logout',
-  '/frontend/user',
-  '/frontend/profile',
-  '/frontend/change-password',
-  '/frontend/forgot-password',
-]);
-
-// These Admin resources are backed by the Tijara API even when the rest of
-// the dashboard is running from the local snapshot during development.
+// Admin resources of the Tijara API; an auth failure on them ends the admin session.
 const LIVE_ADMIN_PATH_PREFIXES = [
+  '/v1/admins',
   '/v1/users',
   '/v1/categories',
   '/v1/discount_codes',
+  '/v1/offers',
   '/v1/products',
   '/v1/attributes',
   '/v1/orders',
   '/v1/sliders',
+  '/v1/reviews',
+  '/v1/contacts',
+  '/v1/returns',
+  '/v1/settings',
+  '/v1/site-images',
+  '/v1/reports',
 ];
+
+const isLiveAdminEndpoint = (cleanPath) =>
+  LIVE_ADMIN_PATH_PREFIXES.some((prefix) => cleanPath === prefix || cleanPath.startsWith(`${prefix}/`));
 
 const normalizePath = (url = '') => String(url).split('?')[0].replace(/^\/api/, '') || '/';
 
+// No instance-wide timeout: axios merges it into every request before the interceptor runs,
+// which made the per-route values from getRequestTimeout unreachable. The interceptor sets it.
 const api = axios.create({
   baseURL,
-  timeout: 6000,
   headers: {
     'Accept': 'application/json',
   },
@@ -61,16 +55,19 @@ const getRequestPath = (config = {}) => {
 
 const sanitizeParameters = (parameters = {}) => Object.fromEntries(
   Object.entries(parameters || {}).map(([key, value]) => {
-    const sensitive = /token|password|secret|authorization|email|phone/i.test(key);
+    const sensitive = /token|password|secret|authorization|email|phone|address|card|cvv|iban/i.test(key);
     return [key, sensitive ? '[redacted]' : value];
   })
 );
 
 export const getRequestTimeout = (url = '') => {
   const path = String(url).split('?')[0].replace(/^\/api/, '');
+  if (/^\/v1\/(admin\/)?login$/.test(path)) return 15000;
   if (/^\/frontend\/(settings|categories|offers|sliders)(\/|$)/.test(path)) return 4000;
   if (/^\/frontend\/products\/[^/]+$/.test(path)) return 6000;
   if (/^\/frontend\/products(\/|$)/.test(path)) return 6000;
+  // The contacts routes often take 5-12s on the live server; 6s cut them off mid-save.
+  if (/^\/v1\/contacts(\/|$)/.test(path)) return 20000;
   return 6000;
 };
 
@@ -88,7 +85,7 @@ export const recordApiMetric = (metric) => {
   const entry = { ...metric, recorded_at: new Date().toISOString() };
   apiMetrics.push(entry);
   if (apiMetrics.length > MAX_METRICS) apiMetrics.shift();
-  if (typeof window !== 'undefined') {
+  if (import.meta.env?.DEV && typeof window !== 'undefined') {
     window.__mastergasApiMetrics = apiMetrics;
   }
   return entry;
@@ -123,7 +120,8 @@ api.interceptors.request.use(config => {
 
   const requestId = config.headers['X-Request-ID'] || `mg-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
   config.headers['X-Request-ID'] = requestId;
-  config.timeout = config.timeout ?? getRequestTimeout(config.url);
+  // A timeout passed on the call wins; otherwise the route decides (axios leaves 0 when unset).
+  config.timeout = config.timeout || getRequestTimeout(config.url);
   config.__mastergasRequest = {
     requestId,
     startedAt: performanceNow(),
@@ -138,15 +136,15 @@ api.interceptors.request.use(config => {
 
   const requestUrl = config.url || '';
   const cleanPath = normalizePath(requestUrl);
-  const token = storage?.getItem('token');
+  // `/v1/site/*` is the customer-facing Site API, while `/v1/site-images`
+  // is an authenticated Admin upload endpoint. Keep the slash boundary so
+  // image uploads retain the admin token instead of being sent as storefront.
+  const isStorefrontPath = cleanPath.startsWith('/frontend') || cleanPath.startsWith('/v1/site/');
+  const rawToken = isStorefrontPath ? '' : String(storage?.getItem('token') ?? '').trim();
+  const token = rawToken && rawToken !== 'undefined' && rawToken !== 'null' ? rawToken : null;
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-  }
-  const isLiveAdminPath = LIVE_ADMIN_PATH_PREFIXES.some((prefix) => cleanPath === prefix || cleanPath.startsWith(`${prefix}/`));
-  if (!useLiveApi && !REMOTE_AUTH_PATHS.has(cleanPath) && !isLiveAdminPath) {
-    config.__localApi = true;
-    config.adapter = localApiAdapter;
   }
   if (frappeMode && cleanPath.startsWith('/frontend') && config.method?.toLowerCase() === 'get') {
     const parts = cleanPath.split('/').filter(Boolean);
@@ -204,6 +202,8 @@ let isRedirectingToAdminLogin = false;
 api.interceptors.response.use(
   response => {
     finalizeMetric(response.config, { status: response.status });
+    // A successful write makes every cached admin screen potentially stale.
+    if (isDataWrite(response.config)) markDataChanged();
     if (frappeMode && response.data?.message?.success) response.data = response.data.message;
     if (getRequestPath(response.config).startsWith('/frontend/products')) {
       performanceMark('mastergas:products-api-complete');
@@ -220,21 +220,21 @@ api.interceptors.response.use(
     // instead of 401, so treat that exact payload as an auth failure too.
     const isUnauthenticated = error.response?.status === 401
       || (error.response?.status === 500 && error.response?.data?.message === 'Unauthenticated.');
-    if (error.response && isUnauthenticated && !error.config?.__localApi) {
+    if (error.response && isUnauthenticated) {
       const url = error.config?.url || '';
       const cleanPath = url.split('?')[0].replace(/^\/api/, '');
-      const isFrontendReq = cleanPath.startsWith('/frontend');
+      const isFrontendReq = cleanPath.startsWith('/frontend') || cleanPath.startsWith('/v1/site');
       const isAdminReq = !isFrontendReq && (
         cleanPath.startsWith('/dashboard') || 
         cleanPath.startsWith('/v1/admins') || 
-        cleanPath.startsWith('/admin')
+        cleanPath.startsWith('/admin') ||
+        isLiveAdminEndpoint(cleanPath)
       );
       const isAdminPath = typeof window !== 'undefined' && window.location.pathname.startsWith('/admin');
 
       if (isAdminReq || isAdminPath) {
         const storage = getStorage();
-        storage?.removeItem('token');
-        storage?.removeItem('admin');
+        clearAdminSessionArtifacts(storage);
 
         if (typeof window !== 'undefined' && window.location.pathname !== '/admin/login' && !isRedirectingToAdminLogin) {
           isRedirectingToAdminLogin = true;

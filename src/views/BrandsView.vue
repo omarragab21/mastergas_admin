@@ -3,15 +3,15 @@
     <!-- Header -->
     <div class="page-header">
       <div class="header-titles">
-        <h2 class="page-title">العلامات التجارية</h2>
-        <p class="page-subtitle">إدارة الماركات والعلامات التجارية للمنتجات</p>
+        <h2 class="page-title">{{ tx('العلامات التجارية', 'Brands') }}</h2>
+        <p class="page-subtitle">{{ tx('إدارة الماركات والعلامات التجارية للمنتجات', 'Manage product brands') }}</p>
       </div>
       <button class="add-btn" @click="openAddModal">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <line x1="12" y1="5" x2="12" y2="19"/>
           <line x1="5" y1="12" x2="19" y2="12"/>
         </svg>
-        إضافة علامة تجارية
+        {{ tx('إضافة علامة تجارية', 'Add Brand') }}
       </button>
     </div>
 
@@ -24,7 +24,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">إجمالي العلامات التجارية</span>
+          <span class="stat-label">{{ tx('إجمالي العلامات التجارية', 'Total Brands') }}</span>
           <span class="stat-value">{{ brands.length }}</span>
         </div>
       </div>
@@ -36,7 +36,7 @@
           </svg>
         </div>
         <div class="stat-info">
-          <span class="stat-label">العلامات النشطة</span>
+          <span class="stat-label">{{ tx('العلامات النشطة', 'Active Brands') }}</span>
           <span class="stat-value">{{ activeBrandsCount }}</span>
         </div>
       </div>
@@ -49,13 +49,13 @@
           <circle cx="11" cy="11" r="8"/>
           <line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        <input type="text" v-model="searchQuery" placeholder="البحث عن اسم العلامة..." class="search-input" />
+        <input type="text" v-model="searchQuery" :placeholder="tx('البحث عن اسم العلامة...', 'Search brand name...')" class="search-input" />
       </div>
       <div class="filter-select">
         <select v-model="statusFilter" class="form-select">
-          <option value="">جميع الحالات</option>
-          <option value="1">نشط</option>
-          <option value="0">غير نشط</option>
+          <option value="">{{ tx('جميع الحالات', 'All Statuses') }}</option>
+          <option value="1">{{ tx('نشط', 'Active') }}</option>
+          <option value="0">{{ tx('غير نشط', 'Inactive') }}</option>
         </select>
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="select-icon">
           <polyline points="6 9 12 15 18 9"/>
@@ -68,19 +68,19 @@
       <table class="data-table">
         <thead>
           <tr>
-            <th class="col-logo">اللوجو</th>
-            <th class="col-name">اسم العلامة التجارية</th>
-            <th class="col-status">الحالة</th>
-            <th class="col-order">الترتيب</th>
-            <th class="col-actions">الإجراءات</th>
+            <th class="col-logo">{{ tx('اللوجو', 'Logo') }}</th>
+            <th class="col-name">{{ tx('اسم العلامة التجارية', 'Brand Name') }}</th>
+            <th class="col-status">{{ tx('الحالة', 'Status') }}</th>
+            <th class="col-order">{{ tx('الترتيب', 'Sort Order') }}</th>
+            <th class="col-actions">{{ tx('الإجراءات', 'Actions') }}</th>
           </tr>
         </thead>
         <tbody>
           <tr v-if="loading" class="state-row">
-            <td colspan="5">جاري التحميل...</td>
+            <td colspan="5">{{ tx('جاري التحميل...', 'Loading...') }}</td>
           </tr>
           <tr v-else-if="filteredBrands.length === 0" class="state-row">
-            <td colspan="5">لا توجد علامات تجارية مطابقة للبحث</td>
+            <td colspan="5">{{ tx('لا توجد علامات تجارية مطابقة للبحث', 'No brands match your search') }}</td>
           </tr>
           <template v-else>
             <tr v-for="brand in filteredBrands" :key="brand.id" class="data-row">
@@ -96,7 +96,7 @@
               </td>
               <td class="col-status">
                 <span class="status-badge" :class="brand.is_active ? 'active' : 'inactive'">
-                  {{ brand.is_active ? 'نشط' : 'غير نشط' }}
+                  {{ brand.is_active ? tx('نشط', 'Active') : tx('غير نشط', 'Inactive') }}
                 </span>
               </td>
               <td class="col-order">
@@ -104,12 +104,12 @@
               </td>
               <td class="col-actions">
                 <div class="actions-group">
-                  <button class="action-btn delete-btn" @click="confirmDelete(brand)" title="حذف">
+                  <button class="action-btn delete-btn" @click="confirmDelete(brand)" :title="tx('حذف', 'Delete')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                       <path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/>
                     </svg>
                   </button>
-                  <button class="action-btn edit-btn" @click="openEditModal(brand)" title="تعديل">
+                  <button class="action-btn edit-btn" @click="openEditModal(brand)" :title="tx('تعديل', 'Edit')">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
                       <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
                     </svg>
@@ -127,15 +127,15 @@
       <div class="modal-content">
         <div class="modal-header">
           <div class="modal-header-text">
-            <h3 class="modal-title">{{ isEdit ? 'تعديل علامة تجارية' : 'إضافة علامة تجارية جديدة' }}</h3>
-            <p class="modal-subtitle">أدخل معلومات العلامة التجارية لإتمام العملية</p>
+            <h3 class="modal-title">{{ isEdit ? tx('تعديل علامة تجارية', 'Edit Brand') : tx('إضافة علامة تجارية جديدة', 'Add New Brand') }}</h3>
+            <p class="modal-subtitle">{{ tx('أدخل معلومات العلامة التجارية لإتمام العملية', 'Enter brand information to continue') }}</p>
           </div>
-          <button class="modal-close" @click="closeModal" aria-label="إغلاق">
+          <button class="modal-close" @click="closeModal" :aria-label="tx('إغلاق', 'Close')">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
           </button>
         </div>
 
-        <div class="i18n-toggle" role="tablist" aria-label="Language">
+        <div class="i18n-toggle" role="tablist" aria-label="Language" dir="ltr">
           <button type="button" class="i18n-btn" :class="{ active: activeLang === 'en' }" @click="activeLang = 'en'">English</button>
           <button type="button" class="i18n-btn" :class="{ active: activeLang === 'ar' }" @click="activeLang = 'ar'">العربية</button>
         </div>
@@ -143,11 +143,13 @@
         <form @submit.prevent="submitForm" class="brand-form">
           <!-- Logo Upload -->
           <div class="form-group" style="text-align: center;">
-            <label class="form-label">الشعار (اللوجو) <span class="req">*</span></label>
-            <div class="image-upload-box" @click="triggerFileInput">
+            <label class="form-label">{{ tx('الشعار (اللوجو)', 'Logo') }} <span class="req">*</span></label>
+            <div class="image-upload-box" @click="triggerFileInput" @dragover.prevent @drop.prevent="handleDrop">
               <input type="file" ref="fileInput" @change="handleFileChange" accept="image/*" class="hidden-input" />
+              <ImageCropModal v-bind="cropModal" @close="closeCrop" @cropped="finishCrop" />
               <div v-if="imagePreview" class="preview-area">
                 <img :src="imagePreview" class="preview-img" />
+                <div style="margin-top: 0.625rem;"><ImageCropButton @crop="recropCurrentImage" /></div>
               </div>
               <div v-else class="upload-placeholder">
                 <div class="upload-icon">
@@ -155,16 +157,16 @@
                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>
                   </svg>
                 </div>
-                <p>إسحب وأفلت الشعار هنا</p>
-                <span>أو انقر للاختيار من جهازك</span>
+                <p>{{ tx('إسحب وأفلت الشعار هنا', 'Drag and drop the logo here') }}</p>
+                <span>{{ tx('أو انقر للاختيار من جهازك', 'or click to choose from your device') }}</span>
               </div>
             </div>
           </div>
 
           <!-- Name -->
           <div class="form-group" v-show="activeLang === 'ar'">
-            <label class="form-label">الاسم (عربي) <span class="req">*</span></label>
-            <input type="text" v-model="form.name_ar" class="form-control" placeholder="اسم العلامة التجارية بالعربي" required />
+            <label class="form-label">{{ tx('الاسم (عربي)', 'Name (Arabic)') }} <span class="req">*</span></label>
+            <input type="text" v-model="form.name_ar" class="form-control" :placeholder="tx('اسم العلامة التجارية بالعربي', 'Brand name in Arabic')" required />
           </div>
 
           <div class="form-group" v-show="activeLang === 'en'">
@@ -174,32 +176,32 @@
 
           <!-- URL -->
           <div class="form-group">
-            <label class="form-label">الرابط (اختياري)</label>
-            <input type="url" v-model="form.url" class="form-control" placeholder="رابط موقع العلامة (مثل: https://example.com)" />
+            <label class="form-label">{{ tx('الرابط (اختياري)', 'URL (Optional)') }}</label>
+            <input type="url" v-model="form.url" class="form-control" :placeholder="tx('رابط موقع العلامة (مثل: https://example.com)', 'Brand website URL (e.g. https://example.com)')" />
           </div>
 
           <!-- Sort Order -->
           <div class="form-group">
-            <label class="form-label">الترتيب</label>
-            <input type="number" v-model="form.sort_order" class="form-control" placeholder="رقم الترتيب (0, 1, 2...)" />
+            <label class="form-label">{{ tx('الترتيب', 'Sort Order') }}</label>
+            <input type="number" v-model="form.sort_order" class="form-control" :placeholder="tx('رقم الترتيب (0, 1, 2...)', 'Sort number (0, 1, 2...)')" />
           </div>
 
           <!-- Status -->
           <div class="form-group">
-            <label class="form-label">الحالة</label>
+            <label class="form-label">{{ tx('الحالة', 'Status') }}</label>
             <div class="select-wrapper">
               <select v-model="form.is_active" class="form-control">
-                <option :value="true">نشط</option>
-                <option :value="false">غير نشط</option>
+                <option :value="true">{{ tx('نشط', 'Active') }}</option>
+                <option :value="false">{{ tx('غير نشط', 'Inactive') }}</option>
               </select>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="select-icon"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
           </div>
 
           <div class="form-actions">
-            <button type="button" class="btn-secondary" @click="closeModal" :disabled="isSubmitting">إلغاء</button>
+            <button type="button" class="btn-secondary" @click="closeModal" :disabled="isSubmitting">{{ tx('إلغاء', 'Cancel') }}</button>
             <button type="submit" class="btn-submit" :disabled="isSubmitting">
-              {{ isSubmitting ? 'جاري الحفظ...' : (isEdit ? 'حفظ التعديلات' : 'إضافة العلامة') }}
+              {{ isSubmitting ? tx('جاري الحفظ...', 'Saving...') : (isEdit ? tx('حفظ التعديلات', 'Save Changes') : tx('إضافة العلامة', 'Add Brand')) }}
             </button>
           </div>
         </form>
@@ -218,8 +220,18 @@
 </template>
 
 <script setup>
+import { localizeMessage } from '../utils/uiMessages';
+import { apiErrorMessage } from '../utils/apiMessage';
 import { ref, computed, onMounted } from 'vue';
 import api from '../config/axios';
+import { useAdminText } from '../composables/useAdminText';
+import { safeObjectUrl } from '../utils/adminSecurity';
+import ImageCropModal from '../components/ImageCropModal.vue';
+import ImageCropButton from '../components/ImageCropButton.vue';
+import { useImageCrop } from '../composables/useImageCrop';
+
+const { tx, locale } = useAdminText();
+const { cropModal, closeCrop, finishCrop, prepareImage, recropImage } = useImageCrop();
 
 // State
 const brands = ref([]);
@@ -227,7 +239,11 @@ const loading = ref(false);
 const searchQuery = ref('');
 const statusFilter = ref('');
 
-const activeLang = ref('ar');
+// The form opens on the dashboard's language; Arabic tab sits on the right, English on the left.
+
+const formLang = () => (locale.value === 'en' ? 'en' : 'ar');
+
+const activeLang = ref(formLang());
 
 // Computed
 const activeBrandsCount = computed(() => brands.value.filter(b => b.is_active).length);
@@ -266,7 +282,7 @@ const alertMessage = ref('');
 const alertType = ref('success');
 
 const triggerAlert = (msg, type = 'success') => {
-  alertMessage.value = msg;
+  alertMessage.value = localizeMessage(msg);
   alertType.value = type;
   showAlert.value = true;
   setTimeout(() => { showAlert.value = false; }, 3000);
@@ -311,7 +327,7 @@ const openAddModal = () => {
     sort_order: 0
   };
   imagePreview.value = null;
-  activeLang.value = 'ar';
+  activeLang.value = formLang();
   showFormModal.value = true;
 };
 
@@ -328,7 +344,7 @@ const openEditModal = (brand) => {
     sort_order: brand.sort_order || 0
   };
   imagePreview.value = brand.logo ? getImageUrl(brand.logo) : null;
-  activeLang.value = 'ar';
+  activeLang.value = formLang();
   showFormModal.value = true;
 };
 
@@ -336,18 +352,40 @@ const closeModal = () => {
   showFormModal.value = false;
   imagePreview.value = null;
   if (fileInput.value) fileInput.value.value = '';
-  activeLang.value = 'ar';
+  activeLang.value = formLang();
+};
+
+const handleDrop = (e) => {
+  const picked = e.dataTransfer?.files?.[0];
+  if (picked) handleFileChange({ target: { files: [picked], value: '' } });
 };
 
 const triggerFileInput = () => {
   fileInput.value.click();
 };
 
-const handleFileChange = (e) => {
-  const file = e.target.files[0];
+const cropOptions = () => ({ maxSizeMB: 2, defaultRatio: '1:1', fileName: 'brand_logo', title: tx('قص وضبط أبعاد شعار البراند (Crop & Resize)', 'Crop & resize brand logo') });
+
+// Every picked image goes through the crop modal before it is staged for upload.
+const handleFileChange = async (e) => {
+  const picked = e.target.files?.[0];
+  e.target.value = '';
+  if (!picked) return;
+  const { file, error } = await prepareImage(picked, cropOptions());
+  if (error) {
+    triggerAlert(error, 'error');
+    return;
+  }
+  form.value.logo = file;
+  imagePreview.value = safeObjectUrl(file, imagePreview.value);
+};
+
+const recropCurrentImage = async () => {
+  const { file, error } = await recropImage(form.value.logo || imagePreview.value, cropOptions());
+  if (error) triggerAlert(error, 'error');
   if (!file) return;
   form.value.logo = file;
-  imagePreview.value = URL.createObjectURL(file);
+  imagePreview.value = safeObjectUrl(file, imagePreview.value);
 };
 
 const submitForm = async () => {
@@ -388,7 +426,7 @@ const submitForm = async () => {
     closeModal();
     fetchBrands();
   } catch (error) {
-    const msg = error.response?.data?.message || 'حدث خطأ أثناء الحفظ';
+    const msg = apiErrorMessage(error, 'حدث خطأ أثناء الحفظ');
     triggerAlert(msg, 'error');
   } finally {
     isSubmitting.value = false;
@@ -413,7 +451,7 @@ const confirmDelete = async (brand) => {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
-  direction: rtl;
+  direction: inherit;
 }
 
 /* Page Header */
@@ -445,7 +483,7 @@ const confirmDelete = async (brand) => {
 }
 
 .i18n-btn.active {
-  background: #000000;
+  background: #660033;
   color: #fff;
 }
 .page-title { font-size: 1.4rem; font-weight: 800; color: #111827; }
@@ -454,7 +492,7 @@ const confirmDelete = async (brand) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #000000;
+  background: #660033;
   color: #fff;
   border: none;
   padding: 0.65rem 1.1rem;
@@ -465,7 +503,7 @@ const confirmDelete = async (brand) => {
   cursor: pointer;
   transition: all 0.2s;
 }
-.add-btn:hover { background: #262626; }
+.add-btn:hover { background: #4d0026; }
 
 /* Stats */
 .stats-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
@@ -490,7 +528,7 @@ const confirmDelete = async (brand) => {
 .stat-value { font-size: 1.5rem; font-weight: 800; color: #1f2937; margin-top: 2px; }
 .stat-icon-wrapper { width: 46px; height: 46px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 .total-icon { background: #f0fdf4; color: #16a34a; }
-.active-icon { background: #f3f4f6; color: #000000; }
+.active-icon { background: #f3f4f6; color: #660033; }
 
 /* Filters */
 .filters-row { display: flex; gap: 1rem; }
@@ -532,7 +570,7 @@ const confirmDelete = async (brand) => {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(15, 23, 42, 0.55);
+  background: rgba(0, 0, 0, 0.7);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
@@ -591,10 +629,11 @@ const confirmDelete = async (brand) => {
 .form-label { display: block; font-size: 0.8rem; font-weight: 700; margin-bottom: 6px; }
 .form-control { width: 100%; padding: 0.75rem; border: 1px solid #e2e8f0; border-radius: 10px; font-family: 'IBM Plex Sans Arabic'; outline: none; }
 .form-control:focus {
-  border-color: rgba(0,0,0, 0.6);
+  border-color: rgba(0, 0, 0, 0.6);
   box-shadow: 0 0 0 4px rgba(0,0,0, 0.12);
 }
 .image-upload-box { border: 2px dashed #e2e8f0; border-radius: 12px; padding: 1.5rem; text-align: center; cursor: pointer; background: #f8fafc; }
+.hidden-input { display: none; }
 .preview-img { max-height: 100px; border-radius: 8px; }
 
 .form-actions {
@@ -621,7 +660,7 @@ const confirmDelete = async (brand) => {
 .btn-submit {
   width: 100%;
   padding: 0.8rem;
-  background: linear-gradient(135deg, #000000, #a53c76);
+  background: linear-gradient(135deg, #660033, #a53c76);
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -659,7 +698,5 @@ const confirmDelete = async (brand) => {
 }
 
 /* Alerts */
-.alert-toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: #fff; padding: 0.75rem 1.5rem; border-radius: 12px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 0.75rem; transition: transform 0.3s; z-index: 2000; border-right: 4px solid #10b981; }
-.alert-toast.show { transform: translateX(-50%) translateY(0); }
 .error { border-right-color: #ef4444; }
 </style>

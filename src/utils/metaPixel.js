@@ -50,9 +50,9 @@ export function trackCustomEvent(eventName, params = {}) {
 /**
  * Track ViewContent event (Product Details View)
  * @param {object} product - { id, name, price, category }
- * @param {string} [currency='JOD']
+ * @param {string} [currency='SAR']
  */
-export function trackViewContent(product, currency = 'JOD') {
+export function trackViewContent(product, currency = 'SAR') {
   if (!product) return;
   trackEvent('ViewContent', {
     content_name: product.name || product.arabic_name || product.english_name || '',
@@ -68,9 +68,9 @@ export function trackViewContent(product, currency = 'JOD') {
  * Track AddToCart event
  * @param {object} product - { id, name, price }
  * @param {number} [quantity=1]
- * @param {string} [currency='JOD']
+ * @param {string} [currency='SAR']
  */
-export function trackAddToCart(product, quantity = 1, currency = 'JOD') {
+export function trackAddToCart(product, quantity = 1, currency = 'SAR') {
   if (!product) return;
   const price = parseFloat(product.sale_price || product.price || 0);
   trackEvent('AddToCart', {
@@ -86,9 +86,9 @@ export function trackAddToCart(product, quantity = 1, currency = 'JOD') {
  * Track InitiateCheckout event
  * @param {Array} items - List of cart items
  * @param {number} totalValue - Total amount
- * @param {string} [currency='JOD']
+ * @param {string} [currency='SAR']
  */
-export function trackInitiateCheckout(items = [], totalValue = 0, currency = 'JOD') {
+export function trackInitiateCheckout(items = [], totalValue = 0, currency = 'SAR') {
   const contentIds = items.map(item => String(item.id || item.product_id || ''));
   trackEvent('InitiateCheckout', {
     content_ids: contentIds,
@@ -102,9 +102,9 @@ export function trackInitiateCheckout(items = [], totalValue = 0, currency = 'JO
 /**
  * Track Purchase event
  * @param {object} orderDetails - { orderId, totalValue, items }
- * @param {string} [currency='JOD']
+ * @param {string} [currency='SAR']
  */
-export function trackPurchase(orderDetails = {}, currency = 'JOD') {
+export function trackPurchase(orderDetails = {}, currency = 'SAR') {
   const { orderId, totalValue, items = [] } = orderDetails;
   const contentIds = items.map(item => String(item.id || item.product_id || ''));
   trackEvent('Purchase', {
